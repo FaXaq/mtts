@@ -1,0 +1,49 @@
+'use strict';
+var expect = require('chai').expect;
+var index = require('../dist/index.js');
+var Pitch = index.Pitch;
+
+describe("Pitch Class", () => {
+    describe("Constructor", () => {
+        it("Should create a pitch with a default of 4", () => {
+            let pitch = new Pitch();
+            expect(pitch.value).to.equal(4);
+        })
+
+        it("Should accept a number as a parameter", () => {
+            let pitch = new Pitch(5);
+            expect(pitch.value).to.equal(5);
+        })
+
+        it("Should not accept negative integers as parameters", () => {
+            expect(() => { new Pitch(-3) }).to.throw();
+        })
+    })
+
+    describe("Inc & Dec", () => {
+        var pitch;
+
+        beforeEach(() => {
+            pitch = new Pitch();
+        })
+
+        describe("Inc", () => {
+            it("Should be able to increment a pitch", () => {
+                pitch.inc();
+                expect(pitch.value).to.equal(5);
+            })
+        })
+
+        describe("Dec", () => {
+            it("Should be able to decrement a pitch", () => {
+                pitch.dec();
+                expect(pitch.value).to.equal(3);
+            })
+
+            it("Should error when the result of decrement is negative", () => {
+                pitch = new Pitch(0);
+                expect(() => { pitch.dec() }).to.throw();
+            })
+        })
+    })
+})
