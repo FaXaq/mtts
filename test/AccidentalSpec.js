@@ -7,11 +7,11 @@ var ACCIDENTAL = index.ACCIDENTAL;
 describe("Accidental class", () => {
     describe("Constructor", () => {
         it("Should check if the name is valid before creating an accidental", () => {
-            expect(() => { new Accidental(-3)}).to.throw();
+            expect(() => { new Accidental({ semitones: -3 }) }).to.throw();
         })
     
         it("Should create an accidental if the name is valid", () => {
-            expect(() => { new Accidental(ACCIDENTAL.SHARP) }).to.not.throw();
+            expect(() => { new Accidental({ semitones: ACCIDENTAL.SHARP }) }).to.not.throw();
         });
     
         it("Should create a note with a default value of n (for natural)", () => {
@@ -21,7 +21,9 @@ describe("Accidental class", () => {
     })
 
     describe("Setters", () => {
-        let accidental = new Accidental(-1);
+        let accidental = new Accidental({ 
+            semitones: ACCIDENTAL.FLAT 
+        });
 
         it("Should be able to set accidental through semitones", () => {
             accidental.semitones = -2;

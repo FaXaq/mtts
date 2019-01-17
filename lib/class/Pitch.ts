@@ -1,8 +1,12 @@
+interface PitchParams {
+    value: number
+}
+
 export class Pitch {
     private _value!: number;
 
-    constructor(pitch: number = 4) {
-        this.value = pitch;
+    constructor(params: PitchParams = { value: 4 }) {
+        this.value = params.value;
     }
 
     public inc() {

@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 class Pitch {
-    constructor(pitch = 4) {
-        this.value = pitch;
+    constructor(params = { value: 4 }) {
+        this.value = params.value;
     }
     inc() {
         this.value++;

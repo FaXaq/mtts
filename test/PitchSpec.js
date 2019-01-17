@@ -6,22 +6,26 @@ var Pitch = index.Pitch;
 describe("Pitch Class", () => {
     describe("Constructor", () => {
         it("Should create a pitch with a default of 4", () => {
-            let pitch = new Pitch();
+            const pitch = new Pitch();
             expect(pitch.value).to.equal(4);
         })
 
         it("Should accept a number as a parameter", () => {
-            let pitch = new Pitch(5);
+            const pitch = new Pitch({
+                value: 5
+            });
             expect(pitch.value).to.equal(5);
         })
 
         it("Should not accept negative integers as parameters", () => {
-            expect(() => { new Pitch(-3) }).to.throw();
+            expect(() => { new Pitch({
+                value: -3
+            }) }).to.throw();
         })
     })
 
     describe("Inc & Dec", () => {
-        var pitch;
+        let pitch;
 
         beforeEach(() => {
             pitch = new Pitch();
@@ -41,7 +45,9 @@ describe("Pitch Class", () => {
             })
 
             it("Should error when the result of decrement is negative", () => {
-                pitch = new Pitch(0);
+                pitch = new Pitch({
+                    value: 0
+                });
                 expect(() => { pitch.dec() }).to.throw();
             })
         })

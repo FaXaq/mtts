@@ -9,8 +9,8 @@ var ACCIDENTAL;
     ACCIDENTAL[ACCIDENTAL["DOUBLE_SHARP"] = 2] = "DOUBLE_SHARP";
 })(ACCIDENTAL = exports.ACCIDENTAL || (exports.ACCIDENTAL = {}));
 class Accidental {
-    constructor(semitones = 0) {
-        this.semitones = semitones;
+    constructor(params = { semitones: 0 }) {
+        this.semitones = params.semitones;
     }
     addSharp() {
         switch (this.semitones) {

@@ -10,7 +10,7 @@ exports.SCALES = {
     }
 };
 class Scale {
-    constructor(name = "major", key = new __1.Note("C")) {
+    constructor(name = "major", key = new __1.Note({ name: "C" })) {
         this._notes = {};
         this.name = name;
         this.key = key;

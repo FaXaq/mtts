@@ -2,16 +2,22 @@ import { Pitch } from "./Pitch";
 import { Accidental, ACCIDENTAL } from "./Accidental";
 
 export const NOTES: Array<string> = ["C", "D", "E", "F", "G", "A", "B"];
-    
+
+interface NoteParams {
+    name: string, 
+    pitch?: Pitch,
+    accidental?: Accidental
+}
+
 export class Note {
     private _name!: string;
     private _pitch!: Pitch;
     private _accidental!: Accidental;
 
-    constructor(name: string, pitch: Pitch = new Pitch(), accidental?: Accidental) {
-        this.name = name;
-        this.pitch = pitch;
-        if (accidental) this.accidental = accidental;
+    constructor(params: NoteParams = { name: "C" }) {
+        this.name = params.name;
+        this.pitch = params.pitch || new Pitch();
+        if (params.accidental) this.accidental = params.accidental;
     }
 
     /**
@@ -19,7 +25,7 @@ export class Note {
      */
     public addSharp() {
         if (!this.accidental) {
-            this.accidental = new Accidental(ACCIDENTAL.SHARP)
+            this.accidental = new Accidental({ semitones: ACCIDENTAL.SHARP })
         } else {
             this.accidental.addSharp()
         }
@@ -37,7 +43,7 @@ export class Note {
      */
     public addFlat() {
         if (!this.accidental) {
-            this.accidental = new Accidental(ACCIDENTAL.FLAT)
+            this.accidental = new Accidental({ semitones: ACCIDENTAL.FLAT })
         } else {
             this.accidental.addFlat()
         }
@@ -71,11 +77,13 @@ export class Note {
     }
 
     public duplicate() {
-        return new Note(
-            this.name,
-            new Pitch(this.pitch.value),
-            this.accidental ? new Accidental(this.accidental.semitones) : undefined
-        )
+        return new Note({
+            name: this.name,
+            pitch: new Pitch({
+                value: this.pitch.value
+            }),
+            accidental: this.accidental ? new Accidental({ semitones: this.accidental.semitones }) : undefined
+        })
     }
 
     // getters & setters

@@ -4,18 +4,18 @@ const Pitch_1 = require("./Pitch");
 const Accidental_1 = require("./Accidental");
 exports.NOTES = ["C", "D", "E", "F", "G", "A", "B"];
 class Note {
-    constructor(name, pitch = new Pitch_1.Pitch(), accidental) {
-        this.name = name;
-        this.pitch = pitch;
-        if (accidental)
-            this.accidental = accidental;
+    constructor(params = { name: "C" }) {
+        this.name = params.name;
+        this.pitch = params.pitch || new Pitch_1.Pitch();
+        if (params.accidental)
+            this.accidental = params.accidental;
     }
     /**
      * Adds a sharp accidental (if one is already there, adds a second one)
      */
     addSharp() {
         if (!this.accidental) {
-            this.accidental = new Accidental_1.Accidental(Accidental_1.ACCIDENTAL.SHARP);
+            this.accidental = new Accidental_1.Accidental({ semitones: Accidental_1.ACCIDENTAL.SHARP });
         }
         else {
             this.accidental.addSharp();
@@ -32,7 +32,7 @@ class Note {
      */
     addFlat() {
         if (!this.accidental) {
-            this.accidental = new Accidental_1.Accidental(Accidental_1.ACCIDENTAL.FLAT);
+            this.accidental = new Accidental_1.Accidental({ semitones: Accidental_1.ACCIDENTAL.FLAT });
         }
         else {
             this.accidental.addFlat();
@@ -64,7 +64,13 @@ class Note {
         return Note.getSemitonesBetween(this, note);
     }
     duplicate() {
-        return new Note(this.name, new Pitch_1.Pitch(this.pitch.value), this.accidental ? new Accidental_1.Accidental(this.accidental.semitones) : undefined);
+        return new Note({
+            name: this.name,
+            pitch: new Pitch_1.Pitch({
+                value: this.pitch.value
+            }),
+            accidental: this.accidental ? new Accidental_1.Accidental({ semitones: this.accidental.semitones }) : undefined
+        });
     }
     // getters & setters
     // name

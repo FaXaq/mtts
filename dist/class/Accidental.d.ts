@@ -5,11 +5,15 @@ export declare enum ACCIDENTAL {
     SHARP = 1,
     DOUBLE_SHARP = 2
 }
+interface AccidentalParams {
+    semitones: number;
+}
 export declare class Accidental {
     private _semitones;
-    constructor(semitones?: number);
+    constructor(params?: AccidentalParams);
     addSharp(): void;
     addFlat(): void;
     semitones: number;
     readonly name: string;
 }
+export {};

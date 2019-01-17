@@ -6,11 +6,15 @@ export enum ACCIDENTAL {
     DOUBLE_SHARP = 2
 }
 
+interface AccidentalParams {
+    semitones: number
+}
+
 export class Accidental {
     private _semitones!: ACCIDENTAL;
 
-    constructor(semitones: number = 0) {
-        this.semitones = semitones;
+    constructor(params: AccidentalParams = { semitones: 0 }) {
+        this.semitones = params.semitones;
     }
 
     public addSharp() {

@@ -8,21 +8,26 @@ var Accidental = index.Accidental;
 describe("Note class", () => {
     describe("Constructor", () => {
         it("Should check if the name is valid before creating a note", () => {
-            expect(() => { new Note()}).to.throw();
-            expect(() => { new Note("H")}).to.throw();
+            expect(() => { new Note({ name: "H" }) }).to.throw();
         })
     
         it("Should create a note if the name is valid", () => {
-            expect(() => new Note("A")).to.not.throw();
+            expect(() => new Note({ name: "A" })).to.not.throw();
         });
     
         it("Should create a note with a default pitch of 4", () => {
-            let note = new Note("A");
+            let note = new Note({ name: "A" });
             expect(note.pitch.value).to.equal(4);
         })
     
         it("Should accept a pitch as a second arg", () => {
-            let note = new Note("A", new Pitch(0));
+            let note = new Note({ 
+                name: "A", 
+                pitch: new Pitch({
+                    value: 0
+                }) 
+            });
+
             expect(note.pitch.value).to.equal(0);
         })
     })
@@ -31,7 +36,9 @@ describe("Note class", () => {
         var note;
 
         beforeEach(() => {
-            note = new Note("A");
+            note = new Note({ 
+                name: "A" 
+            });
         })
 
         describe("Previous & Next", () => {
@@ -41,14 +48,10 @@ describe("Note class", () => {
                     expect(note.name).to.equal("B");
                 })
 
-                it("Should not error when next from G to A", () => {
-                    note = new Note("G");
-                    expect(() => { note.next() }).to.not.throw()
-                    expect(note.name).to.equal("A");
-                })
-
                 it("Should increment the pitch when next from B to C", () => {
-                    note = new Note("B");
+                    note = new Note({ 
+                        name: "B" 
+                    });
                     note.next();
                     // default pitch is 4
                     expect(note.name).to.equal("C")
@@ -58,18 +61,19 @@ describe("Note class", () => {
 
             describe("Should be able to change the note to the previous one", () => {
                 it("Should not error when previous from A to G", () => {
-                    expect(() => { note.previous() }).to.not.throw()
-                    expect(note.name).to.equal("G");
-                })
+                    note = new Note({ 
+                        name: "A"
+                    });
 
-                it("Should not error when previous from A to G", () => {
-                    note = new Note("A");
                     expect(() => { note.previous() }).to.not.throw()
+
                     expect(note.name).to.equal("G");
                 })
 
                 it("Should decrement the pitch when previous from C to B", () => {
-                    note = new Note("C");
+                    note = new Note({ 
+                        name: "C" 
+                    });
                     note.previous();
                     // default pitch is 4
                     expect(note.name).to.equal("B")
@@ -83,27 +87,63 @@ describe("Note class", () => {
         describe("Semitones between two notes (note1, note2)", () => {
             describe("note2 > note1", () => {
                 it("Should retrieve semitones between two notes of the same pitch", () => {
-                    let note1 = new Note("C")
-                    let note2 = new Note("D")
+                    const note1 = new Note({ 
+                        name: "C"
+                    })
+                    const note2 = new Note({ 
+                        name: "D" 
+                    })
     
                     expect(Note.getSemitonesBetween(note1, note2)).to.equal(2)
                 })
 
                 it("Should retrieve semitones between two notes of different pitch", () => {
-                    let note1 = new Note("C")
-                    let note2 = new Note("D", new Pitch(5))
+                    let note1 = new Note({ 
+                        name: "C" 
+                    })
+                    let note2 = new Note({
+                        name: "D", 
+                        pitch: new Pitch({
+                            value: 5
+                        }) 
+                    })
 
                     expect(Note.getSemitonesBetween(note1, note2)).to.equal(14)
 
-                    note1 = new Note("C", new Pitch(0))
-                    note2 = new Note("D", new Pitch(5))
+                    note1 = new Note({
+                        name: "C",
+                        pitch: new Pitch({
+                            value: 0
+                        }) 
+                    })
+
+                    note2 = new Note({ 
+                        name: "D",
+                        pitch: new Pitch({
+                            value: 5
+                        })
+                    })
 
                     expect(Note.getSemitonesBetween(note1, note2)).to.equal(62)
                 })
 
                 it("Should count accidentals in it", () => {
-                    let note1 = new Note("D",  new Pitch(4), new Accidental(-2));
-                    let note2 = new Note("C", new Pitch(4));
+                    const note1 = new Note({
+                        name: "D", 
+                        pitch: new Pitch({
+                            value: 4
+                        }),
+                        accidental: new Accidental({
+                            semitones: -2
+                        })
+                    });
+
+                    const note2 = new Note({ 
+                        name: "C", 
+                        pitch: new Pitch({
+                            value: 4
+                        })
+                    });
 
                     expect(Note.getSemitonesBetween(note1, note2)).to.equal(0)
                 })
@@ -111,20 +151,38 @@ describe("Note class", () => {
 
             describe("note1 > note2", () => {
                 it("Should retrieve semitones between two notes of the same pitch", () => {
-                    let note1 = new Note("D")
-                    let note2 = new Note("C")
+                    const note1 = new Note({
+                        name: "D"
+                    })
+                    const note2 = new Note({
+                        name: "C"
+                    })
     
                     expect(Note.getSemitonesBetween(note1, note2)).to.equal(-2)
                 })
 
                 it("Should retrieve semitones between two notes of different pitch", () => {
-                    let note1 = new Note("C")
-                    let note2 = new Note("B", new Pitch(2))
+                    let note1 = new Note({
+                        name: "C"
+                    })
+                    let note2 = new Note({
+                        name: "B",
+                        pitch: new Pitch({
+                            value: 2
+                        })
+                    })
     
                     expect(Note.getSemitonesBetween(note1, note2)).to.equal(-13)
 
-                    note1 = new Note("E")
-                    note2 = new Note("B", new Pitch(2))
+                    note1 = new Note({
+                        name: "E"
+                    })
+                    note2 = new Note({
+                        name: "B",
+                        pitch: new Pitch({
+                            value: 2
+                        })
+                    })
     
                     expect(Note.getSemitonesBetween(note1, note2)).to.equal(-17)
                 })

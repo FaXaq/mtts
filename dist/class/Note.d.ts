@@ -1,11 +1,16 @@
 import { Pitch } from "./Pitch";
 import { Accidental } from "./Accidental";
 export declare const NOTES: Array<string>;
+interface NoteParams {
+    name: string;
+    pitch?: Pitch;
+    accidental?: Accidental;
+}
 export declare class Note {
     private _name;
     private _pitch;
     private _accidental;
-    constructor(name: string, pitch?: Pitch, accidental?: Accidental);
+    constructor(params?: NoteParams);
     /**
      * Adds a sharp accidental (if one is already there, adds a second one)
      */
@@ -30,3 +35,4 @@ export declare class Note {
     static validateName(name: string): boolean;
     static getSemitonesBetween(note1: Note, note2: Note): number;
 }
+export {};

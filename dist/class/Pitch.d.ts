@@ -1,7 +1,11 @@
+interface PitchParams {
+    value: number;
+}
 export declare class Pitch {
     private _value;
-    constructor(pitch?: number);
+    constructor(params?: PitchParams);
     inc(): void;
     dec(): void;
     value: number;
 }
+export {};

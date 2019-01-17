@@ -18,7 +18,7 @@ export class Scale {
     private _key!: Note;
     private _notes: { [key: number] : Note } = {};
 
-    constructor(name: string = "major", key: Note = new Note("C")) {
+    constructor(name: string = "major", key: Note = new Note({ name: "C" })) {
         this.name = name;
         this.key = key;
         this.compute();

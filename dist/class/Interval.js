@@ -225,7 +225,6 @@ class Interval {
         }
         /* check if new note has the correct interval semitones difference as the one requested */
         let semitonesDifference = Interval.getSemitones(name) - note.getSemitonesTo(newNote);
-        console.log(semitonesDifference);
         if (semitonesDifference < 0) {
             newNote.flattenTo(semitonesDifference);
         }
