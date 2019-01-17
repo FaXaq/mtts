@@ -1,49 +1,58 @@
-import { Interval } from "./Interval";
+import { Note, INTERVALS, Interval } from "..";
 
-export const scales = {
-    "chromatic": {
-        "intervals": ["P1","A1","M2","A2","M3","P4","A4","P5","A5","M6","A6","M7"],
-        "name": "Chromatic",
-    },
+interface IScale {
+    intervals: Array<keyof typeof INTERVALS>
+}
+
+export const SCALES: { [key: string] : IScale } = {
     "major": {
-        "intervals": ["P1","M2","M3","P4","P5","M6","M7"],
-        "minAlt": "maj",
-        "name": "Major",
+        "intervals": ["P1", "M2", "M3", "P4", "P5", "M6", "M7"]
     },
-    "major-pentatonic": {
-        "intervals": ["P1","M2","M3","P5","M6"],
-        "name": "Major Pentatonic"
-    },
-    "minor": {
-        "intervals": ["P1","M2","m3","P4","P5","m6","m7"],
-        "alt": "natural minor",
-        "name": "Minor",
-    },
-    "blues": {
-        "intervals": ["P1","M2","M3","d5","P5","M6"],
-        "name": "Blues"
-    },
-    "minor-pentatonic": {
-        "intervals": ["P1","m3","P4","P5","m7"],
-        "name": "Minor Pentatonic"
-    },
+    "minor" : {
+        "intervals": ["P1", "M2", "m3", "P4", "P5", "M6", "m7"]
+    }   
 }
 
 export class Scale {
     private _name!: string;
-    private _intervals!: Interval[];
+    private _key!: Note;
+    private _notes: { [key: number] : Note } = {};
 
-    constructor(name: string) {
+    constructor(name: string = "major", key: Note = new Note("C")) {
         this.name = name;
+        this.key = key;
+        this.compute();
     }
 
-    // getters & setters
-    // name
-    set name(name: string) {
-        this._name = name;
+    public compute() {
+        let scaleIntervals = SCALES[this.name].intervals;
+
+        for (let i = 0; i < scaleIntervals.length; i++) {
+            let intervalValue = Interval.getValue(scaleIntervals[i])
+        }
     }
 
-    get name() {
+    public addNote(intervalValue: number, note: Note) {
+        this._notes[intervalValue] = note;
+    }
+
+    get name(): string {
         return this._name;
+    }
+
+    set name(name: string) {
+        if (SCALES[name]) { 
+            this._name = name;
+        } else {
+            throw new Error(`Couldn't create scale ${name}. Available scales are "${Object.keys(SCALES)}"`);
+        }
+    }
+
+    get key(): Note {
+        return this._key;
+    }
+
+    set key(note: Note) {
+        this._key = note;
     }
 }

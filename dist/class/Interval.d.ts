@@ -1,30 +1,15 @@
-export interface IntervalProps {
-    parent?: string;
+import { Note } from "./Note";
+interface IInterval {
+    value: number;
     semitones: number;
-    direct?: boolean;
-    name: string;
-    alt?: string[];
-    altShort?: string;
-    number: string;
 }
-export declare const intervals: {
-    [key: string]: IntervalProps | any;
+export declare const INTERVALS: {
+    [key: string]: IInterval;
 };
 export declare class Interval {
-    private _id;
-    private _semitones;
-    private _direct;
-    private _name;
-    private _alt;
-    private _altShort;
-    private _number;
-    constructor(id: string);
-    private populateProps;
-    id: string;
-    semitones: number;
-    direct: boolean;
-    name: string;
-    alt: string[];
-    altShort: string;
-    number: string;
+    constructor();
+    static getSemitones(name: keyof typeof INTERVALS): number;
+    static getNote(note: Note, name: keyof typeof INTERVALS): Note;
+    static getValue(name: keyof typeof INTERVALS): number;
 }
+export {};

@@ -2,11 +2,11 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const Pitch_1 = require("./Pitch");
 const Accidental_1 = require("./Accidental");
-exports.NOTES = ["A", "B", "C", "D", "E", "F", "G"];
+exports.NOTES = ["C", "D", "E", "F", "G", "A", "B"];
 class Note {
-    constructor(name, pitch, accidental) {
+    constructor(name, pitch = new Pitch_1.Pitch(), accidental) {
         this.name = name;
-        this.pitch = new Pitch_1.Pitch(pitch);
+        this.pitch = pitch;
         if (accidental)
             this.accidental = accidental;
     }
@@ -18,7 +18,13 @@ class Note {
             this.accidental = new Accidental_1.Accidental(Accidental_1.ACCIDENTAL.SHARP);
         }
         else {
-            // this.accidental.addSharp()
+            this.accidental.addSharp();
+        }
+    }
+    sharpenTo(n) {
+        while (n > 0) {
+            this.addSharp();
+            n--;
         }
     }
     /**
@@ -26,16 +32,17 @@ class Note {
      */
     addFlat() {
         if (!this.accidental) {
-            this.accidental = new Accidental_1.Accidental(Accidental_1.ACCIDENTAL.DOUBLE_SHARP);
+            this.accidental = new Accidental_1.Accidental(Accidental_1.ACCIDENTAL.FLAT);
         }
         else {
-            // this.accidental.addFlat()
+            this.accidental.addFlat();
         }
     }
-    // 
-    semitonesTo(note) {
-        let s = 0;
-        let noteIndex = exports.NOTES.indexOf(this.name);
+    flattenTo(n) {
+        while (n < 0) {
+            this.addFlat();
+            n++;
+        }
     }
     /**
      *
@@ -44,13 +51,20 @@ class Note {
         // if note was B, next one will be a pitch higher
         if (this.name === "B")
             this.pitch.inc();
-        this.name = exports.NOTES[(this.noteIndex + 1) % exports.NOTES.length];
+        this.name = exports.NOTES[(this.index + 1) % exports.NOTES.length];
     }
     previous() {
         // if note was C, previous one will be a pitch lower
         if (this.name === "C")
             this.pitch.dec();
-        this.name = exports.NOTES[((this.noteIndex - 1) + exports.NOTES.length) % exports.NOTES.length];
+        this.name = exports.NOTES[((this.index - 1) + exports.NOTES.length) % exports.NOTES.length];
+    }
+    // Get semitones between this note and the one passed as parameter
+    getSemitonesTo(note) {
+        return Note.getSemitonesBetween(this, note);
+    }
+    duplicate() {
+        return new Note(this.name, new Pitch_1.Pitch(this.pitch.value), this.accidental ? new Accidental_1.Accidental(this.accidental.semitones) : undefined);
     }
     // getters & setters
     // name
@@ -73,7 +87,7 @@ class Note {
         return this._pitch;
     }
     // note index
-    get noteIndex() {
+    get index() {
         return exports.NOTES.indexOf(this.name);
     }
     // accidental
@@ -86,6 +100,26 @@ class Note {
     // static methods
     static validateName(name) {
         return exports.NOTES.indexOf(name) > -1;
+    }
+    static getSemitonesBetween(note1, note2) {
+        let semitones = 0;
+        let noteIndex = note1.index;
+        /* get semitones between two notes (don't care about the pitch or the notes order) */
+        while (exports.NOTES[noteIndex] != note2.name) {
+            if (exports.NOTES[noteIndex] == "B" || exports.NOTES[noteIndex] == "E")
+                semitones++;
+            else
+                semitones += 2;
+            noteIndex = (noteIndex + 1) % exports.NOTES.length;
+        }
+        /* if note1 is previous to note2, substract 12 (octave semitones, since we counted up) to result  */
+        if (note2.index < note1.index)
+            semitones -= 12;
+        /* count octaves and ADD OR SUBSTRACT semitones of octaves difference (12 * octaveDifference) to the result */
+        semitones += (note2.pitch.value - note1.pitch.value) * 12;
+        /* count semitones difference between accidentals */
+        semitones += (note2.accidental ? note2.accidental.semitones : 0) - (note1.accidental ? note1.accidental.semitones : 0);
+        return semitones;
     }
 }
 exports.Note = Note;

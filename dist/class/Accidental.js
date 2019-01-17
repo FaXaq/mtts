@@ -23,7 +23,7 @@ class Accidental {
     addFlat() {
         switch (this.semitones) {
             case -2:
-                throw new Error(`Cannot add sharp to a DOUBLE_FLAT.`);
+                throw new Error(`Cannot add flat to a DOUBLE_FLAT.`);
             default:
                 this.semitones--;
         }

@@ -1,519 +1,253 @@
-export interface IntervalProps {
-    parent?: string,
-    semitones: number,
-    direct?: boolean,
-    name: string,
-    alt?: string[],
-    altShort?: string,
-    number: string
+import { Note } from "./Note";
+
+interface IInterval {
+    value: number,
+    semitones: number
 }
 
-export const intervals: {
-    [key: string]: IntervalProps | any
-} = {
+export const INTERVALS: { [ key: string ]: IInterval } = {
     "P1": {
-        "semitones": 0,
-        "direct": true,
-        "name": "Perfect unison",
-        "alt": [],
-        "altShort": "",
-        "number": "root"
+        "value": 1,
+        "semitones": 0
     },
     "d2": {
-        "parent": "M2",
-        "semitones": -2,
-        "name": "Diminished second",
-        "alt": [],
-        "altShort": "",
-        "number": "second"
+        "value": 2,
+        "semitones": 0
     },
     "m2": {
-        "parent": "M2",
-        "semitones": -1,
-        "name": "Minor second",
-        "alt": ["Semitone", "half tone", "half step"],
-        "altShort": "S",
-        "number": "second"
+        "value": 2,
+        "semitones": 1
     },
     "A1": {
-        "parent": "P1",
-        "semitones": 1,
-        "name": "Augmented unison",
-        "alt": ["Semitone", "half tone", "half step"],
-        "altShort": "S",
-        "number": "root"
+        "value": 1,
+        "semitones": 1
     },
     "M2": {
-        "parent": "P1",
-        "direct": true,
-        "semitones": 2,
-        "name": "Major second",
-        "alt": ["Tone", "whole tone", "whole step"],
-        "altShort": "T",
-        "number": "second"
+        "value": 2,
+        "semitones": 2
     },
     "d3": {
-        "parent": "M3",
-        "semitones": -2,
-        "name": "Diminished third",
-        "alt": ["Tone", "whole tone", "whole step"],
-        "altShort": "T",
-        "number": "third"
+        "value": 3,
+        "semitones": 2
     },
     "m3": {
-        "parent": "M3",
-        "semitones": -1,
-        "name": "Minor third",
-        "alt": [],
-        "altShort": "",
-        "number": "third"
+        "value": 3,
+        "semitones": 3
     },
     "A2": {
-        "parent": "M2",
-        "semitones": 1,
-        "name": "Augmented second",
-        "alt": [],
-        "altShort": "",
-        "number": "second"
+        "value": 2,
+        "semitones": 3
     },
     "M3": {
-        "parent": "M2",
-        "direct": true,
-        "semitones": 2,
-        "name": "Major third",
-        "alt": [],
-        "altShort": "",
-        "number": "third"
+        "value": 3,
+        "semitones": 4
     },
     "d4": {
-        "parent": "P4",
-        "semitones": -1,
-        "name": "Diminished fourth",
-        "alt": [],
-        "altShort": "",
-        "number": "fourth"
+        "value": 4,
+        "semitones": 4
     },
     "P4": {
-        "parent": "M3",
-        "direct": true,
-        "semitones": 1,
-        "name": "Perfect fourth",
-        "alt": [],
-        "altShort": "",
-        "number": "fourth"
+        "value": 4,
+        "semitones": 5
     },
     "A3": {
-        "parent": "M3",
-        "semitones": 1,
-        "name": "Augmented third",
-        "alt": [],
-        "altShort": "",
-        "number": "third"
+        "value": 3,
+        "semitones": 5
     },
     "d5": {
-        "parent": "P5",
-        "semitones": -1,
-        "name": "Diminished fifth",
-        "alt": ["Tritone"],
-        "altShort": "TT",
-        "number": "fifth"
+        "value": 5,
+        "semitones": 6
     },
     "A4": {
-        "parent": "P4",
-        "semitones": 1,
-        "name": "Augmented fourth",
-        "alt": ["Tritone"],
-        "altShort": "TT",
-        "number": "fourth"
+        "value": 4,
+        "semitones": 6
     },
     "P5": {
-        "parent": "P4",
-        "direct": true,
-        "semitones": 2,
-        "name": "Perfect fifth",
-        "alt": [],
-        "altShort": "",
-        "number": "fifth"
+        "value": 5,
+        "semitones": 7
     },
     "d6": {
-        "parent": "M6",
-        "semitones": -2,
-        "name": "Diminished sixth",
-        "alt": [],
-        "altShort": "",
-        "number": "sixth"
+        "value": 6,
+        "semitones": 7
     },
     "m6": {
-        "parent": "M6",
-        "semitones": -1,
-        "name": "Minor sixth",
-        "alt": [],
-        "altShort": "",
-        "number": "sixth"
+        "value": 6,
+        "semitones": 8
     },
     "A5": {
-        "parent": "P5",
-        "semitones": 1,
-        "name": "Augmented fifth",
-        "alt": [],
-        "altShort": "",
-        "number": "fifth"
+        "value": 5,
+        "semitones": 8
     },
     "M6": {
-        "parent": "P5",
-        "direct": true,
-        "semitones": 2,
-        "name": "Major sixth",
-        "alt": [],
-        "altShort": "",
-        "number": "sixth"
+        "value": 6,
+        "semitones": 9
     },
     "d7": {
-        "parent": "M7",
-        "semitones": -2,
-        "name": "Diminished seventh",
-        "alt": [],
-        "altShort": "",
-        "number": "seventh"
+        "value": 7,
+        "semitones": 9
     },
     "m7": {
-        "parent": "M7",
-        "semitones": -1,
-        "name": "Minor seventh",
-        "alt": [],
-        "altShort": "",
-        "number": "seventh"
+        "value": 7,
+        "semitones": 10
     },
     "A6": {
-        "parent": "M6",
-        "semitones": 1,
-        "name": "Augmented sixth",
-        "alt": [],
-        "altShort": "",
-        "number": "sixth"
+        "value": 6,
+        "semitones": 10
     },
     "M7": {
-        "parent": "M6",
-        "direct": true,
-        "semitones": 2,
-        "name": "Major seventh",
-        "alt": [],
-        "altShort": "",
-        "number": "seventh"
+        "value": 7,
+        "semitones": 11
     },
     "d8": {
-        "parent": "P8",
-        "semitones": -1,
-        "name": "Diminished octave",
-        "alt": [],
-        "altShort": "",
-        "number": "eighth"
+        "value": 8,
+        "semitones": 11
     },
     "P8": {
-        "parent": "P1",
-        "direct": true,
-        "semitones": 12,
-        "name": "Perfect octave",
-        "alt": [],
-        "altShort": "",
-        "number": "eighth"
+        "value": 8,
+        "semitones": 12
     },
     "A7": {
-        "parent": "M7",
-        "semitones": 1,
-        "name": "Augmented seventh",
-        "alt": [],
-        "altShort": "",
-        "number": "seventh"
+        "value": 7,
+        "semitones": 12
     },
     "d9": {
-        "parent": "M9",
-        "semitones": -2,
-        "name": "Diminished ninth",
-        "alt": [],
-        "altShort": "",
-        "number": "ninth"
+        "value": 9,
+        "semitones": 12
     },
     "m9": {
-        "parent": "M9",
-        "semitones": -1,
-        "name": "Minor ninth",
-        "alt": [],
-        "altShort": "",
-        "number": "ninth"
+        "value": 9,
+        "semitones": 13
     },
     "A8": {
-        "parent": "P8",
-        "semitones": 1,
-        "name": "Augmented octave",
-        "alt": [],
-        "altShort": "",
-        "number": "eighth"
+        "value": 8,
+        "semitones": 13
     },
     "M9": {
-        "parent": "P8",
-        "direct": true,
-        "semitones": 2,
-        "name": "Minor ninth",
-        "alt": [],
-        "altShort": "",
-        "number": "ninth"
+        "value": 9,
+        "semitones": 14
     },
     "d10": {
-        "parent": "M10",
-        "semitones": -2,
-        "name": "Diminished tenth",
-        "alt": [],
-        "altShort": "",
-        "number": "tenth"
+        "value": 10,
+        "semitones": 14
     },
     "m10": {
-        "parent": "M10",
-        "semitones": -1,
-        "name": "Minor tenth",
-        "alt": [],
-        "altShort": "",
-        "number": "tenth"
+        "value": 10,
+        "semitones": 15
     },
     "A9": {
-        "parent": "M9",
-        "semitones": 1,
-        "name": "Augmented ninth",
-        "alt": [],
-        "altShort": "",
-        "number": "ninth"
+        "value": 9,
+        "semitones": 15
     },
     "M10": {
-        "parent": "M9",
-        "direct": true,
-        "semitones": 2,
-        "name": "Major tenth",
-        "alt": [],
-        "altShort": "",
-        "number": "tenth"
+        "value": 10,
+        "semitones": 16
     },
     "d11": {
-        "parent": "P11",
-        "semitones": -1,
-        "name": "Diminished eleventh",
-        "alt": [],
-        "altShort": "",
-        "number": "eleventh"
+        "value": 11,
+        "semitones": 16
+    },
+    "A10": {
+        "value": 10,
+        "semitones": 17
     },
     "P11": {
-        "parent": "M10",
-        "direct": true,
-        "semitones": 1,
-        "name": "Perfect eleventh",
-        "alt": [],
-        "altShort": "",
-        "number": "eleventh"
+        "value": 11,
+        "semitones": 17
     },
     "d12": {
-        "parent": "P12",
-        "semitones": -1,
-        "name": "Diminished eleventh",
-        "alt": [],
-        "altShort": "",
-        "number": "twelfth"
+        "value": 12,
+        "semitones": 18
     },
     "A11": {
-        "parent": "P11",
-        "semitones": 1,
-        "name": "Augmented eleventh",
-        "alt": [],
-        "altShort": "",
-        "number": "eleventh"
+        "value": 11,
+        "semitones": 18
     },
     "P12": {
-        "parent": "P11",
-        "direct": true,
-        "semitones": 2,
-        "name": "Perfect eleventh",
-        "alt": ["Tritave"],
-        "altShort": "",
-        "number": "twelfth"
+        "value": 12,
+        "semitones": 19
     },
     "d13": {
-        "parent": "M13",
-        "semitones": -2,
-        "name": "Diminished thirteen",
-        "alt": [],
-        "altShort": "",
-        "number": "thirteenth"
+        "value": 13,
+        "semitones": 19
     },
     "m13": {
-        "parent": "M13",
-        "semitones": -1,
-        "name": "Minor thirteen",
-        "alt": [],
-        "altShort": "",
-        "number": "thirteenth"
+        "value": 13,
+        "semitones": 20
     },
     "A12": {
-        "parent": "P12",
-        "semitones": 1,
-        "name": "Augmented twelfth",
-        "alt": [],
-        "altShort": "",
-        "number": "twelfth"
+        "value": 12,
+        "semitones": 20
     },
     "M13": {
-        "parent": "P12",
-        "direct": true,
-        "semitones": 2,
-        "name": "Major thirteenth",
-        "alt": [],
-        "altShort": "",
-        "number": "thirteenth"
+        "value": 13,
+        "semitones": 21
     },
     "d14": {
-        "parent": "M14",
-        "semitones": -2,
-        "name": "Diminished fourteenth",
-        "alt": [],
-        "altShort": "",
-        "number": "fourteenth"
+        "value": 14,
+        "semitones": 21
     },
     "m14": {
-        "parent": "M14",
-        "semitones": -1,
-        "name": "Minor fourteenth",
-        "alt": [],
-        "altShort": "",
-        "number": "fourteenth"
+        "value": 14,
+        "semitones": 22
     },
     "A13": {
-        "parent": "M13",
-        "semitones": 1,
-        "name": "Augmented thirteen",
-        "alt": [],
-        "altShort": "",
-        "number": "thirteenth"
+        "value": 13,
+        "semitones": 22
     },
     "M14": {
-        "parent": "M13",
-        "direct": true,
-        "semitones": 2,
-        "name": "Major fourteenth",
-        "alt": [],
-        "altShort": "",
-        "number": "fourteenth"
+        "value": 14,
+        "semitones": 23
     },
     "d15": {
-        "parent": "P15",
-        "semitones": -1,
-        "name": "Diminished fifteenth",
-        "alt": [],
-        "altShort": "",
-        "number": "fifteenth"
+        "value": 15,
+        "semitones": 23
     },
     "P15": {
-        "parent": "M14",
-        "direct": true,
-        "semitones": 1,
-        "name": "Perfect fifteenth",
-        "alt": ["Double octave"],
-        "altShort": "",
-        "number": "fifteenth"
+        "value": 15,
+        "semitones": 24
     },
     "A14": {
-        "parent": "M14",
-        "semitones": 1,
-        "name": "Augmented fourteenth",
-        "alt": [],
-        "altShort": "",
-        "number": "fourteenth"
+        "value": 14,
+        "semitones": 24
     },
     "A15": {
-        "parent": "P15",
-        "semitones": 1,
-        "name": "Augmented fifteenth",
-        "alt": [],
-        "altShort": "",
-        "number": "fifteenth"
+        "value": 15,
+        "semitones": 25
     }
 }
 
 export class Interval {
-    private _id!: string;
-    private _semitones!: number;
-    private _direct!: boolean;
-    private _name!: string;
-    private _alt!: string[];
-    private _altShort!: string;
-    private _number!: string;
+    constructor() { }
 
-    constructor(id: string) {
-        this.id = id;
+    static getSemitones(name: keyof typeof INTERVALS) {
+        return INTERVALS[name].semitones
     }
 
-    // privates
-    private populateProps(interval: IntervalProps) {
-        
-    }
+    static getNote(note: Note, name: keyof typeof INTERVALS): Note {
+        let newNote = note.duplicate();
+        let intervalValue = Interval.getValue(name);
 
-    // getters & setters
-    // id
-    set id(id: string) {
-        if (Object.keys(intervals).indexOf(id) > -1) {
-            this._id = id;
-            this.populateProps(intervals[id])
-        } else {
-            throw new Error(`Provided wrong name for interval : ${name}`)
+        /* skip to next note until interval value is reached */
+        while (intervalValue > 1) {
+            newNote.next()
+            intervalValue--
         }
+
+        /* check if new note has the correct interval semitones difference as the one requested */
+        let semitonesDifference =  Interval.getSemitones(name) - note.getSemitonesTo(newNote);
+
+        console.log(semitonesDifference)
+
+        if (semitonesDifference < 0) {
+            newNote.flattenTo(semitonesDifference)
+        } else if (semitonesDifference > 0) {
+            newNote.sharpenTo(semitonesDifference)
+        }
+
+        return newNote;
     }
 
-    get id() {
-        return this._id;
-    }
-
-    //semitones
-    set semitones(semitones: number) {
-        this._semitones = semitones;
-    }
-
-    get semitones() {
-        return this._semitones;
-    }
-
-    set direct(direct: boolean) {
-        this._direct = direct;
-    }
-
-    get direct(): boolean {
-        return this._direct;
-    }
-
-    set name(name: string) {
-        this._name = name;
-    }
-
-    get name(): string {
-        return this._name;
-    }
-
-    set alt(alt: string[]) {
-        this._alt = alt; 
-    }
-
-    get alt(): string[] {
-        return this._alt;
-    }
-
-    set altShort(altShort: string) {
-        this._altShort = altShort;
-    }
-
-    get altShort(): string {
-        return this._altShort;
-    }
-
-    set number(number: string) {
-        this._number = number;
-    }
-
-    get number(): string {
-        return this._number;
+    static getValue(name: keyof typeof INTERVALS): number {
+        return INTERVALS[name].value;
     }
 }
