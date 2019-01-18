@@ -37,12 +37,28 @@ describe("Accidental class", () => {
                 let accidental = new Accidental();
                 expect(() => { accidental.addSharp() }).to.not.throw();
             })
+
+            it("Should error if the accidental is already a double sharp", () => {
+                let accidental = new Accidental({
+                    semitones: ACCIDENTAL.DOUBLE_SHARP
+                })
+
+                expect(() => { accidental.addSharp() }).to.throw()
+            })
         })
 
         describe("Add Flat", () => {
             it("Should be able to add a flat to an existing accidental", () => {
                 let accidental = new Accidental();
                 expect(() => { accidental.addFlat() }).to.not.throw();
+            })
+
+            it("Should error if the accidental is already a double flat", () => {
+                let accidental = new Accidental({
+                    semitones: ACCIDENTAL.DOUBLE_FLAT
+                })
+
+                expect(() => { accidental.addFlat() }).to.throw()
             })
         })
     })

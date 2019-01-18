@@ -4,6 +4,7 @@ var index = require('../dist/index.js');
 var Note = index.Note;
 var Pitch = index.Pitch;
 var Accidental = index.Accidental;
+var ACCIDENTAL = index.ACCIDENTAL;
 
 describe("Note class", () => {
     describe("Constructor", () => {
@@ -78,6 +79,59 @@ describe("Note class", () => {
                     // default pitch is 4
                     expect(note.name).to.equal("B")
                     expect(note.pitch.value).to.equal(3)
+                })
+            })
+        })
+
+        describe("Add an accidental", () => {
+            describe("Add sharp", () => {
+                it("Should add sharp to a note without accidental", () => {
+                    let note = new Note({
+                        name: "A"
+                    })
+
+                    note.addSharp()
+
+                    expect(note.accidental).to.deep.equal(new Accidental({ semitones: ACCIDENTAL.SHARP }))
+                })
+
+                it("Should add sharp to a note with already an accidental", () => {
+                    let note = new Note({
+                        name: "A",
+                        accidental: new Accidental({
+                            semitones: ACCIDENTAL.FLAT
+                        })
+                    })
+
+                    note.addSharp()
+
+                    expect(note.accidental).to.deep.equal(new Accidental({ semitones: ACCIDENTAL.NATURAL }))
+                })
+            })
+
+
+            describe("Add flat", () => {
+                it("Should add flat to a note without accidental", () => {
+                    let note = new Note({
+                        name: "A"
+                    })
+
+                    note.addFlat()
+
+                    expect(note.accidental).to.deep.equal(new Accidental({ semitones: ACCIDENTAL.FLAT }))
+                })
+
+                it("Should add flat to a note with already an accidental", () => {
+                    let note = new Note({
+                        name: "A",
+                        accidental: new Accidental({
+                            semitones: ACCIDENTAL.SHARP
+                        })
+                    })
+
+                    note.addFlat()
+
+                    expect(note.accidental).to.deep.equal(new Accidental({ semitones: ACCIDENTAL.NATURAL }))
                 })
             })
         })

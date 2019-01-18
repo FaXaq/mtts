@@ -215,7 +215,7 @@ class Interval {
     static getSemitones(name) {
         return exports.INTERVALS[name].semitones;
     }
-    static getNote(note, name) {
+    static apply(note, name) {
         let newNote = note.duplicate();
         let intervalValue = Interval.getValue(name);
         /* skip to next note until interval value is reached */

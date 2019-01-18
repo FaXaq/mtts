@@ -14,5 +14,8 @@ export declare class Scale {
     addNote(intervalValue: number, note: Note): void;
     name: string;
     key: Note;
+    readonly notes: {
+        [key: string]: Note;
+    };
 }
 export {};

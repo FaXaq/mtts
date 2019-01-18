@@ -5,6 +5,7 @@ var Interval = index.Interval;
 var Note = index.Note;
 var Pitch = index.Pitch;
 var Accidental = index.Accidental;
+var ACCIDENTAL = index.ACCIDENTAL;
 
 describe("Interval class", () => {
     describe("Constructor", () => {
@@ -24,7 +25,7 @@ describe("Interval class", () => {
                     name: "C" 
                 })
 
-                expect(Interval.getNote(note1, "P1")).to.deep.equal(expected)
+                expect(Interval.apply(note1, "P1")).to.deep.equal(expected)
             })
 
             it("Should work with the perfect octave", () => {
@@ -39,7 +40,37 @@ describe("Interval class", () => {
                     })
                 })
 
-                expect(Interval.getNote(note1, "P8")).to.deep.equal(expected)
+                expect(Interval.apply(note1, "P8")).to.deep.equal(expected)
+            })
+
+            it("Should work when obtaining a note with a lesser accidental", () => {
+                let note1 = new Note({ 
+                    name: "C"
+                })
+
+                const expected = new Note({ 
+                    name: "D",
+                    accidental: new Accidental({
+                        semitones: ACCIDENTAL.FLAT
+                    })
+                })
+
+                expect(Interval.apply(note1, "m2")).to.deep.equal(expected)
+            })
+
+            it("Should work when obtaining a note with a higher", () => {
+                let note1 = new Note({ 
+                    name: "C"
+                })
+
+                const expected = new Note({ 
+                    name: "D",
+                    accidental: new Accidental({
+                        semitones: ACCIDENTAL.SHARP
+                    })
+                })
+
+                expect(Interval.apply(note1, "A2")).to.deep.equal(expected)
             })
         })
 
@@ -65,7 +96,7 @@ describe("Interval class", () => {
                     }) 
                 })
 
-                expect(Interval.getNote(note1, "P1")).to.deep.equal(expected)
+                expect(Interval.apply(note1, "P1")).to.deep.equal(expected)
             })
 
             it("Should work with the perfect octave", () => {
@@ -89,7 +120,7 @@ describe("Interval class", () => {
                     }) 
                 })
 
-                expect(Interval.getNote(note1, "P8")).to.deep.equal(expected)
+                expect(Interval.apply(note1, "P8")).to.deep.equal(expected)
             })
         })
     })

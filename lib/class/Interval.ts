@@ -223,7 +223,7 @@ export class Interval {
         return INTERVALS[name].semitones
     }
 
-    static getNote(note: Note, name: keyof typeof INTERVALS): Note {
+    static apply(note: Note, name: keyof typeof INTERVALS): Note {
         let newNote = note.duplicate();
         let intervalValue = Interval.getValue(name);
 

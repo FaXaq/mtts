@@ -28,7 +28,10 @@ export class Scale {
         let scaleIntervals = SCALES[this.name].intervals;
 
         for (let i = 0; i < scaleIntervals.length; i++) {
-            let intervalValue = Interval.getValue(scaleIntervals[i])
+            this.addNote(
+                Interval.getValue(scaleIntervals[i]),
+                Interval.apply(this.key, scaleIntervals[i])
+            )
         }
     }
 
@@ -54,5 +57,9 @@ export class Scale {
 
     set key(note: Note) {
         this._key = note;
+    }
+
+    get notes(): { [key: string] : Note } {
+        return this._notes;
     }
 }

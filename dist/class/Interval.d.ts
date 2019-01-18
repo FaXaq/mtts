@@ -9,7 +9,7 @@ export declare const INTERVALS: {
 export declare class Interval {
     constructor();
     static getSemitones(name: keyof typeof INTERVALS): number;
-    static getNote(note: Note, name: keyof typeof INTERVALS): Note;
+    static apply(note: Note, name: keyof typeof INTERVALS): Note;
     static getValue(name: keyof typeof INTERVALS): number;
 }
 export {};
