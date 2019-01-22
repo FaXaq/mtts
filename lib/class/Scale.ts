@@ -1,4 +1,5 @@
 import { Note, INTERVALS, Interval } from "..";
+import { IntervalHandler } from "../super/IntervalHandler";
 
 interface IScale {
     intervals: Array<keyof typeof INTERVALS>
@@ -13,30 +14,20 @@ export const SCALES: { [key: string] : IScale } = {
     }   
 }
 
-export class Scale {
+interface IScaleParams {
+    name?: string,
+    key: Note
+}
+
+export class Scale extends IntervalHandler {
     private _name!: string;
     private _key!: Note;
-    private _notes: { [key: number] : Note } = {};
 
-    constructor(name: string = "major", key: Note = new Note({ name: "C" })) {
-        this.name = name;
-        this.key = key;
-        this.compute();
-    }
-
-    public compute() {
-        let scaleIntervals = SCALES[this.name].intervals;
-
-        for (let i = 0; i < scaleIntervals.length; i++) {
-            this.addNote(
-                Interval.getValue(scaleIntervals[i]),
-                Interval.apply(this.key, scaleIntervals[i])
-            )
-        }
-    }
-
-    public addNote(intervalValue: number, note: Note) {
-        this._notes[intervalValue] = note;
+    constructor(params: IScaleParams = { key: new Note({ name: "C" }) }) {
+        super()
+        this.name = params.name || "major";
+        this.key = params.key;
+        this.compute(SCALES[this.name].intervals, this.key);
     }
 
     get name(): string {

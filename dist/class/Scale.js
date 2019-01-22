@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const __1 = require("..");
+const IntervalHandler_1 = require("../super/IntervalHandler");
 exports.SCALES = {
     "major": {
         "intervals": ["P1", "M2", "M3", "P4", "P5", "M6", "M7"]
@@ -9,21 +10,12 @@ exports.SCALES = {
         "intervals": ["P1", "M2", "m3", "P4", "P5", "M6", "m7"]
     }
 };
-class Scale {
-    constructor(name = "major", key = new __1.Note({ name: "C" })) {
-        this._notes = {};
-        this.name = name;
-        this.key = key;
-        this.compute();
-    }
-    compute() {
-        let scaleIntervals = exports.SCALES[this.name].intervals;
-        for (let i = 0; i < scaleIntervals.length; i++) {
-            this.addNote(__1.Interval.getValue(scaleIntervals[i]), __1.Interval.apply(this.key, scaleIntervals[i]));
-        }
-    }
-    addNote(intervalValue, note) {
-        this._notes[intervalValue] = note;
+class Scale extends IntervalHandler_1.IntervalHandler {
+    constructor(params = { key: new __1.Note({ name: "C" }) }) {
+        super();
+        this.name = params.name || "major";
+        this.key = params.key;
+        this.compute(exports.SCALES[this.name].intervals, this.key);
     }
     get name() {
         return this._name;

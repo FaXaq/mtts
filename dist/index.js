@@ -14,3 +14,6 @@ exports.SCALES = Scale_1.SCALES;
 const Interval_1 = require("./class/Interval");
 exports.INTERVALS = Interval_1.INTERVALS;
 exports.Interval = Interval_1.Interval;
+const Chord_1 = require("./class/Chord");
+exports.CHORDS = Chord_1.CHORDS;
+exports.Chord = Chord_1.Chord;

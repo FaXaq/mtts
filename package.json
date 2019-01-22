@@ -14,7 +14,7 @@
     "build": "tsc"
   },
   "author": "Marin Procureur",
-  "license": "GNU GPL v3",
+  "license": "GPL-3.0-only",
   "bugs": {
     "url": "https://github.com/FaXaq/mtts/issues"
   },

@@ -79,7 +79,7 @@ class Note {
             this._name = name;
         }
         else {
-            throw new Error(`Trying to set a name that doesn't exist as a note ${name}. Possible notes : ${exports.NOTES}`);
+            throw new Error(`Trying to set a name that doesn't exist to a note : ${name}. Possible notes : ${exports.NOTES}`);
         }
     }
     get name() {
