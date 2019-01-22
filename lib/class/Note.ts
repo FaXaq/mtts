@@ -4,7 +4,7 @@ import { Accidental, ACCIDENTAL } from "./Accidental";
 export const NOTES: Array<string> = ["C", "D", "E", "F", "G", "A", "B"];
 
 interface NoteParams {
-    name: string, 
+    name: string,
     pitch?: Pitch,
     accidental?: Accidental
 }
@@ -92,7 +92,7 @@ export class Note {
         if (Note.validateName(name)) {
             this._name = name;
         } else {
-            throw new Error(`Trying to set a name that doesn't exist as a note ${name}. Possible notes : ${NOTES}`);
+            throw new Error(`Trying to set a name that doesn't exist to a note : ${name}. Possible notes : ${NOTES}`);
         }
     }
 

@@ -1,17 +1,19 @@
 import { Note, INTERVALS } from "..";
+import { IntervalHandler } from "../super/IntervalHandler";
 interface IScale {
     intervals: Array<keyof typeof INTERVALS>;
 }
 export declare const SCALES: {
     [key: string]: IScale;
 };
-export declare class Scale {
+interface IScaleParams {
+    name?: string;
+    key: Note;
+}
+export declare class Scale extends IntervalHandler {
     private _name;
     private _key;
-    private _notes;
-    constructor(name?: string, key?: Note);
-    compute(): void;
-    addNote(intervalValue: number, note: Note): void;
+    constructor(params?: IScaleParams);
     name: string;
     key: Note;
     readonly notes: {
