@@ -1,6 +1,7 @@
-import { Note } from "./Note";
+import { Note, DEFAULT_NOTE_VALUE } from "./Note";
 import { INTERVALS } from "./Interval";
 import { IntervalHandler } from "../super/IntervalHandler";
+import { NOTE_VALUE } from "./NoteValue";
 
 interface IChords {
     intervals: Array<keyof typeof INTERVALS>
@@ -14,17 +15,20 @@ export const CHORDS: { [key: string]: IChords } = {
 
 interface ChordParams {
     root: Note,
-    intervals?: Array<keyof typeof INTERVALS>
+    intervals?: Array<keyof typeof INTERVALS>,
+    value: NOTE_VALUE
 }
 
 export class Chord extends IntervalHandler {
     private _root!: Note;
     private _intervals!: Array<keyof typeof INTERVALS>
+    private _value!: NOTE_VALUE
 
-    constructor(params: ChordParams = { root: new Note({ name: "C" }) }) {
+    constructor(params: ChordParams = { root: new Note({ name: "C" }), value: DEFAULT_NOTE_VALUE }) {
         super()
         this.root = params.root;
         this.intervals = params.intervals || CHORDS.major.intervals;
+        this.value = params.value || DEFAULT_NOTE_VALUE;
         this.compute(this.intervals, this.root);
     }
 
@@ -64,5 +68,13 @@ export class Chord extends IntervalHandler {
 
     get notes(): { [key: number]: Note } {
         return this._notes;
+    }
+
+    get value(): NOTE_VALUE {
+        return this._value;
+    }
+
+    set value(value: NOTE_VALUE) {
+        
     }
 }

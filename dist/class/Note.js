@@ -3,10 +3,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const Pitch_1 = require("./Pitch");
 const Accidental_1 = require("./Accidental");
 exports.NOTES = ["C", "D", "E", "F", "G", "A", "B"];
+exports.DEFAULT_NOTE_VALUE = 0.25 /* QUARTER */;
 class Note {
     constructor(params = { name: "C" }) {
         this.name = params.name;
+        this.value = params.value ? params.value : exports.DEFAULT_NOTE_VALUE;
         this.pitch = params.pitch || new Pitch_1.Pitch();
+        this.dots = params.dots || 0;
         if (params.accidental)
             this.accidental = params.accidental;
     }
@@ -102,6 +105,20 @@ class Note {
     }
     get accidental() {
         return this._accidental;
+    }
+    // value
+    set value(value) {
+        this._value = value;
+    }
+    get value() {
+        return this._value;
+    }
+    // dotted
+    set dots(dots) {
+        this._dots = dots;
+    }
+    get dots() {
+        return this._dots;
     }
     // static methods
     static validateName(name) {

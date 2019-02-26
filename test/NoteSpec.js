@@ -243,4 +243,8 @@ describe("Note class", () => {
             })
         })
     })
+
+    describe('Note values', () => {
+        
+    })
 })

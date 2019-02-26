@@ -6,4 +6,5 @@ install:
 script:
  - npm test
  # Send coverage data to Coveralls
-after_script: "npm run cover && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js"
+after_script: 
+  - npm run cover && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js

@@ -1,22 +1,30 @@
 import { Pitch } from "./Pitch";
 import { Accidental, ACCIDENTAL } from "./Accidental";
+import { NOTE_VALUE } from "./NoteValue";
 
 export const NOTES: Array<string> = ["C", "D", "E", "F", "G", "A", "B"];
+export const DEFAULT_NOTE_VALUE: NOTE_VALUE = NOTE_VALUE.QUARTER;
 
 interface NoteParams {
     name: string,
     pitch?: Pitch,
-    accidental?: Accidental
+    accidental?: Accidental,
+    value?: NOTE_VALUE,
+    dots?: number
 }
 
 export class Note {
     private _name!: string;
     private _pitch!: Pitch;
     private _accidental!: Accidental;
+    private _value!: NOTE_VALUE;
+    private _dots!: number;
 
     constructor(params: NoteParams = { name: "C" }) {
         this.name = params.name;
+        this.value = params.value ? params.value : DEFAULT_NOTE_VALUE;
         this.pitch = params.pitch || new Pitch();
+        this.dots = params.dots || 0;
         if (params.accidental) this.accidental = params.accidental;
     }
 
@@ -121,6 +129,24 @@ export class Note {
 
     get accidental(): Accidental {
         return this._accidental;
+    }
+
+    // value
+    set value(value: NOTE_VALUE) {
+        this._value = value;
+    }
+
+    get value(): NOTE_VALUE {
+        return this._value;
+    }
+
+    // dotted
+    set dots(dots: number) {
+        this._dots = dots;
+    }
+
+    get dots(): number {
+        return this._dots;
     }
 
     // static methods

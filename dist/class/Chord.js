@@ -3,16 +3,19 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const Note_1 = require("./Note");
 const Interval_1 = require("./Interval");
 const IntervalHandler_1 = require("../super/IntervalHandler");
+const ValuedBarContent_1 = require("../super/ValuedBarContent");
+const applyMixins_1 = require("../misc/applyMixins");
 exports.CHORDS = {
     "major": {
         "intervals": ["P1", "M3", "P5"]
     }
 };
-class Chord extends IntervalHandler_1.IntervalHandler {
-    constructor(params = { root: new Note_1.Note({ name: "C" }) }) {
+class Chord {
+    constructor(params = { root: new Note_1.Note({ name: "C" }), value: Note_1.DEFAULT_NOTE_VALUE }) {
         super();
         this.root = params.root;
         this.intervals = params.intervals || exports.CHORDS.major.intervals;
+        this.value = params.value || Note_1.DEFAULT_NOTE_VALUE;
         this.compute(this.intervals, this.root);
     }
     get root() {
@@ -47,5 +50,11 @@ class Chord extends IntervalHandler_1.IntervalHandler {
     get notes() {
         return this._notes;
     }
+    get value() {
+        return this._value;
+    }
+    set value(value) {
+    }
 }
 exports.Chord = Chord;
+applyMixins_1.applyMixins(Chord, [IntervalHandler_1.IntervalHandler, ValuedBarContent_1.ValuedBarContent]);
