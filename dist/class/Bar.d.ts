@@ -38,13 +38,14 @@ export declare class Bar {
     typeStart: BAR_TYPE_START;
     typeEnd: BAR_TYPE_END;
     autoFill: boolean;
-    addContent(content: BAR_CONTENT): void;
+    readonly value: number;
+    readonly expectedValue: number;
+    readonly emptySpace: number;
+    addContent(content: BAR_CONTENT, fillEmptySpace?: boolean): void;
     modifyContent(contentIndex: number, newContent: BAR_CONTENT): BAR_CONTENT | null;
     fillEmptySpace(): void;
     isFull(): boolean;
     static fillEmptySpace(bar: Bar): void;
     static isFull(bar: Bar): boolean;
-    static getBarValue(bar: Bar): number;
-    static getExpectedBarValue(bar: Bar): number;
     static isBarContent(content: any): boolean;
 }

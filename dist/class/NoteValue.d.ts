@@ -1,4 +1,4 @@
-export declare const enum NOTE_VALUE {
+export declare enum NOTE_VALUE {
     LARGE = 8,
     LONG = 4,
     DOUBLE_WHOLE = 2,
@@ -12,3 +12,5 @@ export declare const enum NOTE_VALUE {
     HUNDRED_TWENTY_EIGHTH = 0.0078125,
     TWO_HUNDRED_FIFTY_SIXTH = 0.00390625
 }
+export declare const SORTED_NOTE_VALUES: number[];
+export declare const REVERSE_SORTED_NOTE_VALUES: number[];

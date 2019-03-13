@@ -1,4 +1,4 @@
-export const enum NOTE_VALUE {
+export enum NOTE_VALUE {
   LARGE = 8,
   LONG = 4,
   DOUBLE_WHOLE = 2,
@@ -12,3 +12,6 @@ export const enum NOTE_VALUE {
   HUNDRED_TWENTY_EIGHTH = 1/128,
   TWO_HUNDRED_FIFTY_SIXTH = 1/256
 }
+
+export const SORTED_NOTE_VALUES = Object.keys(NOTE_VALUE).filter(v => !isNaN(parseInt(v))).map(v => parseFloat(v)).sort();
+export const REVERSE_SORTED_NOTE_VALUES = SORTED_NOTE_VALUES.reverse();

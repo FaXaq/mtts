@@ -38,14 +38,16 @@ export class Bar {
   private _autoFill: boolean = true;
 
   constructor(params: IBarParams = {}) {
+    // setup autofill parameter before content assignation to prevent first autofill
+    if (params.autoFill !== undefined) this.autoFill = params.autoFill;
+
     this.timeSignature = params.timeSignature || new TimeSignature();
     this.content = params.content || [];
     this.staff = params.staff || SCORE_STAFF.TREBLE;
     this.typeStart = params.typeStart || BAR_TYPE_START.STANDARD;
     this.typeEnd = params.typeEnd || BAR_TYPE_END.STANDARD;
-    if (params.autoFill !== undefined) this.autoFill = params.autoFill;
 
-    if (this.autoFill) this.autoFill;
+    if (this.autoFill) this.fillEmptySpace();
   }
 
   // getters & setters
@@ -70,8 +72,11 @@ export class Bar {
       throw new Error(`Tying to set the content of a bar with something else than an array : ${content}`);
     }
 
+    // reset content
+    this._content = [];
+
     for (let i = 0; i < content.length; i++) {
-      this.addContent(content[i]);
+      this.addContent(content[i], false);
     }
 
     if (this.autoFill) {
@@ -111,15 +116,42 @@ export class Bar {
     this._autoFill = autoFill;
   }
 
-  addContent(content: BAR_CONTENT) {
+  // get the current value of bar
+  get value(): number {
+    let barValue = 0;
+    for (let i = 0; i < this.content.length; i++) {
+      barValue += this.content[i].value
+    }
+    return barValue;
+  }
+
+  // get expected bar value
+  get expectedValue() {
+    return this.timeSignature.beatsType / this.timeSignature.beats;
+  }
+
+  // get remaining empty space in bar
+  get emptySpace(): number {
+    return this.expectedValue - this.value;
+  }
+
+  addContent(content: BAR_CONTENT, fillEmptySpace: boolean = true) {
+    if (this.isFull()) {
+      throw new Error(`Trying to add content to a bar that is already full. Try modifyContent instead.`);
+    }
+
     if (Bar.isBarContent(content)) {
-      this.content.push(content);
+      if (content.value <= this.emptySpace) {
+        this._content.push(content);
+      } else {
+        throw new Error(`Trying to add a content with a note value greater than the remaining space in bar. ${content}`);
+      }
     } else {
-      throw new Error(`Trying to add a content to a bar that is not a Note, Chord or Rest : ${content}`)
+      throw new Error(`Trying to add a content to a bar that either is not a Note, Chord or Rest or : ${content}`);
     }
 
     // auto fill empty space in bar
-    if (this.autoFill) {
+    if (this.autoFill && fillEmptySpace) {
       this.fillEmptySpace();
     }
   }
@@ -128,6 +160,10 @@ export class Bar {
   modifyContent(contentIndex: number, newContent: BAR_CONTENT): BAR_CONTENT | null {
     if (this.content[contentIndex] !== undefined) {
       // modify it
+      this.content[contentIndex] = newContent;
+      this.content.splice(contentIndex + 1);
+
+      console.log(this.content);
 
       // auto fill empty space in bar
       if (this.autoFill) {
@@ -148,28 +184,28 @@ export class Bar {
     return Bar.isFull(this);
   }
 
+  // fill empty space with rests
   static fillEmptySpace(bar: Bar) {
-    let barValue = Bar.getBarValue(bar);
-    
+    if (bar.isFull()) return;
+    // when the bar is not full, fill it with the greater rests starting from the end
+    let rests: Array<Rest> = [];
+    // calculate sum of rests note_values
+    let restsValue = rests.map(r => r.value).reduce((p, r) => p + r, 0);
+    // while there is remaining space in bar + rests
+    while (restsValue < bar.emptySpace) {
+      // add largest possible rest
+      rests.unshift(Rest.findLargest(bar.emptySpace - restsValue));
+      restsValue = rests.map(r => r.value).reduce((p, r) => p + r, 0);
+    }
+
+    for (let i = 0; i < rests.length; i++) {
+      // add each rest without triggering autoFill
+      bar.addContent(rests[i], false);
+    }
   }
 
   static isFull(bar: Bar): boolean {
-    let barValue = Bar.getBarValue(bar);
-    // if measure is full do not fill it
-    return barValue === (bar.timeSignature.beats / bar.timeSignature.beatsType);
-  }
-
-  static getBarValue(bar: Bar) {
-    let barValue = 0;
-    for (let i = 0; i < bar.content.length; i++) {
-      barValue += bar.content[i].value
-    }
-
-    return barValue;
-  }
-
-  static getExpectedBarValue(bar: Bar) {
-    return bar.timeSignature.beats * bar.timeSignature.beatsType;
+    return bar.value === bar.expectedValue;
   }
 
   static isBarContent(content: any): boolean {

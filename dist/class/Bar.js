@@ -23,15 +23,16 @@ class Bar {
     constructor(params = {}) {
         this._content = [];
         this._autoFill = true;
+        // setup autofill parameter before content assignation to prevent first autofill
+        if (params.autoFill !== undefined)
+            this.autoFill = params.autoFill;
         this.timeSignature = params.timeSignature || new TimeSignature_1.TimeSignature();
         this.content = params.content || [];
         this.staff = params.staff || Score_1.SCORE_STAFF.TREBLE;
         this.typeStart = params.typeStart || BAR_TYPE_START.STANDARD;
         this.typeEnd = params.typeEnd || BAR_TYPE_END.STANDARD;
-        if (params.autoFill !== undefined)
-            this.autoFill = params.autoFill;
         if (this.autoFill)
-            this.autoFill;
+            this.fillEmptySpace();
     }
     // getters & setters
     get timeSignature() {
@@ -52,8 +53,10 @@ class Bar {
         if (!(content instanceof Array)) {
             throw new Error(`Tying to set the content of a bar with something else than an array : ${content}`);
         }
+        // reset content
+        this._content = [];
         for (let i = 0; i < content.length; i++) {
-            this.addContent(content[i]);
+            this.addContent(content[i], false);
         }
         if (this.autoFill) {
             this.fillEmptySpace();
@@ -83,15 +86,39 @@ class Bar {
     set autoFill(autoFill) {
         this._autoFill = autoFill;
     }
-    addContent(content) {
+    // get the current value of bar
+    get value() {
+        let barValue = 0;
+        for (let i = 0; i < this.content.length; i++) {
+            barValue += this.content[i].value;
+        }
+        return barValue;
+    }
+    // get expected bar value
+    get expectedValue() {
+        return this.timeSignature.beatsType / this.timeSignature.beats;
+    }
+    // get remaining empty space in bar
+    get emptySpace() {
+        return this.expectedValue - this.value;
+    }
+    addContent(content, fillEmptySpace = true) {
+        if (this.isFull()) {
+            throw new Error(`Trying to add content to a bar that is already full. Try modifyContent instead.`);
+        }
         if (Bar.isBarContent(content)) {
-            this.content.push(content);
+            if (content.value <= this.emptySpace) {
+                this._content.push(content);
+            }
+            else {
+                throw new Error(`Trying to add a content with a note value greater than the remaining space in bar. ${content}`);
+            }
         }
         else {
-            throw new Error(`Trying to add a content to a bar that is not a Note, Chord or Rest : ${content}`);
+            throw new Error(`Trying to add a content to a bar that either is not a Note, Chord or Rest or : ${content}`);
         }
         // auto fill empty space in bar
-        if (this.autoFill) {
+        if (this.autoFill && fillEmptySpace) {
             this.fillEmptySpace();
         }
     }
@@ -99,6 +126,9 @@ class Bar {
     modifyContent(contentIndex, newContent) {
         if (this.content[contentIndex] !== undefined) {
             // modify it
+            this.content[contentIndex] = newContent;
+            this.content.splice(contentIndex + 1);
+            console.log(this.content);
             // auto fill empty space in bar
             if (this.autoFill) {
                 this.fillEmptySpace();
@@ -115,23 +145,27 @@ class Bar {
     isFull() {
         return Bar.isFull(this);
     }
+    // fill empty space with rests
     static fillEmptySpace(bar) {
-        let barValue = Bar.getBarValue(bar);
+        if (bar.isFull())
+            return;
+        // when the bar is not full, fill it with the greater rests starting from the end
+        let rests = [];
+        // calculate sum of rests note_values
+        let restsValue = rests.map(r => r.value).reduce((p, r) => p + r, 0);
+        // while there is remaining space in bar + rests
+        while (restsValue < bar.emptySpace) {
+            // add largest possible rest
+            rests.unshift(Rest_1.Rest.findLargest(bar.emptySpace - restsValue));
+            restsValue = rests.map(r => r.value).reduce((p, r) => p + r, 0);
+        }
+        for (let i = 0; i < rests.length; i++) {
+            // add each rest without triggering autoFill
+            bar.addContent(rests[i], false);
+        }
     }
     static isFull(bar) {
-        let barValue = Bar.getBarValue(bar);
-        // if measure is full do not fill it
-        return barValue === (bar.timeSignature.beats / bar.timeSignature.beatsType);
-    }
-    static getBarValue(bar) {
-        let barValue = 0;
-        for (let i = 0; i < bar.content.length; i++) {
-            barValue += bar.content[i].value;
-        }
-        return barValue;
-    }
-    static getExpectedBarValue(bar) {
-        return bar.timeSignature.beats * bar.timeSignature.beatsType;
+        return bar.value === bar.expectedValue;
     }
     static isBarContent(content) {
         return content instanceof Note_1.Note ||

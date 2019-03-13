@@ -1,6 +1,7 @@
 import { Pitch } from "./Pitch";
 import { Accidental, ACCIDENTAL } from "./Accidental";
 import { NOTE_VALUE } from "./NoteValue";
+import { ValuedBarContent } from "../super/ValuedBarContent";
 
 export const NOTES: Array<string> = ["C", "D", "E", "F", "G", "A", "B"];
 export const DEFAULT_NOTE_VALUE: NOTE_VALUE = NOTE_VALUE.QUARTER;
@@ -13,14 +14,13 @@ interface NoteParams {
     dots?: number
 }
 
-export class Note {
+export class Note extends ValuedBarContent {
     private _name!: string;
     private _pitch!: Pitch;
     private _accidental!: Accidental;
-    private _value!: NOTE_VALUE;
-    private _dots!: number;
 
     constructor(params: NoteParams = { name: "C" }) {
+        super(params);
         this.name = params.name;
         this.value = params.value ? params.value : DEFAULT_NOTE_VALUE;
         this.pitch = params.pitch || new Pitch();
@@ -129,24 +129,6 @@ export class Note {
 
     get accidental(): Accidental {
         return this._accidental;
-    }
-
-    // value
-    set value(value: NOTE_VALUE) {
-        this._value = value;
-    }
-
-    get value(): NOTE_VALUE {
-        return this._value;
-    }
-
-    // dotted
-    set dots(dots: number) {
-        this._dots = dots;
-    }
-
-    get dots(): number {
-        return this._dots;
     }
 
     // static methods

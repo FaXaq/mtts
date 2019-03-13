@@ -75,6 +75,6 @@ export class Chord extends IntervalHandler {
     }
 
     set value(value: NOTE_VALUE) {
-        
+        this._value = value;
     }
 }

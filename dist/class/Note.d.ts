@@ -1,6 +1,7 @@
 import { Pitch } from "./Pitch";
 import { Accidental } from "./Accidental";
 import { NOTE_VALUE } from "./NoteValue";
+import { ValuedBarContent } from "../super/ValuedBarContent";
 export declare const NOTES: Array<string>;
 export declare const DEFAULT_NOTE_VALUE: NOTE_VALUE;
 interface NoteParams {
@@ -10,12 +11,10 @@ interface NoteParams {
     value?: NOTE_VALUE;
     dots?: number;
 }
-export declare class Note {
+export declare class Note extends ValuedBarContent {
     private _name;
     private _pitch;
     private _accidental;
-    private _value;
-    private _dots;
     constructor(params?: NoteParams);
     /**
      * Adds a sharp accidental (if one is already there, adds a second one)
@@ -38,8 +37,6 @@ export declare class Note {
     pitch: Pitch;
     readonly index: number;
     accidental: Accidental;
-    value: NOTE_VALUE;
-    dots: number;
     static validateName(name: string): boolean;
     static getSemitonesBetween(note1: Note, note2: Note): number;
 }

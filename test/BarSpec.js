@@ -18,7 +18,9 @@ chai.use(spies);
 describe('Bar Class', () => {
   describe('Constructor', () => {
     it('Should work without parameters', () => {
-      let bar = new Bar();
+      let bar = new Bar({
+        autoFill: false
+      });
       expect(bar.timeSignature instanceof TimeSignature).to.be.true;
       expect(bar.content instanceof Array).to.be.true;
       expect(bar.content.length).to.be.equal(0)
@@ -32,7 +34,9 @@ describe('Bar Class', () => {
     let bar = new Bar();
 
     beforeEach(() => {
-      bar = new Bar();
+      bar = new Bar({
+        autoFill: false,
+      });
     })
 
     it('Should be able to add a Chord', () => {
@@ -82,7 +86,9 @@ describe('Bar Class', () => {
 
     describe('Content', () => {
       it('Should get & set with error handling', () => {
-        let bar = new Bar();
+        let bar = new Bar({
+          autoFill: false
+        });
 
         expect(bar.content.length === 0).to.be.true;
 
@@ -108,25 +114,32 @@ describe('Bar Class', () => {
       let bar = new Bar({
         autoFill: false
       });
+
       expect(bar.isFull()).to.be.false;
     })
 
-    it('Should trigger fill empty space by default on setting content, modifying and adding', () => {
-      let bar = new Bar()
+    it('Should trigger fill empty space by default on setting content', () => {
+      let bar = new Bar();
       // create spy function
       let spy = chai.spy(bar.fillEmptySpace);
       // replace it in original object
       bar.fillEmptySpace = spy;
       // content assignement should trigger fillEmptySpace
       bar.content = []
-
       expect(spy).to.have.been.called.exactly(1);
-      // adding content should trigger fillEmptySpace
-      bar.addContent(new Note());
-      expect(spy).to.have.been.called.exactly(2);
+      expect(bar.isFull()).to.be.true;
+    })
+
+    it('Should trigger fill empty space by default on modifying content', () => {
+      let bar = new Bar();
+      // create spy function
+      let spy = chai.spy(bar.fillEmptySpace);
+      // replace it in original object
+      bar.fillEmptySpace = spy;
       // content modification should trigger fillEmptySpace
       bar.modifyContent(0, new Note());
-      expect(spy).to.have.been.called.exactly(3);
+      expect(spy).to.have.been.called.exactly(1);
+      expect(bar.isFull()).to.be.true;
     })
 
     it('Shouldn\'t trigger fill empty space on setting content, modifying and adding if autoFill false is provided at instanciation', () => {
@@ -148,14 +161,15 @@ describe('Bar Class', () => {
 
     it('Should fill empty space in a bar at instanciation by default', () => {
       let bar = new Bar();
-
       expect(bar.isFull()).to.be.true;
     })
   })
 
   describe('Can modify content of a bar', () => {
     it('Should error when there is no content at the index provided', () => {
-      let bar = new Bar()
+      let bar = new Bar({
+        autoFill: false,
+      })
 
       expect(() => bar.modifyContent(0, new Note())).to.throw();
     })
