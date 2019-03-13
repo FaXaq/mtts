@@ -1,9 +1,7 @@
 import { Note } from '../class/Note';
 import { INTERVALS } from '../class/Interval';
 export declare class IntervalHandler {
-    protected _notes: {
+    compute(intervals: Array<keyof typeof INTERVALS>, note: Note): {
         [key: number]: Note;
     };
-    compute(intervals: Array<keyof typeof INTERVALS>, note: Note): void;
-    addNote(intervalValue: number, note: Note): void;
 }
