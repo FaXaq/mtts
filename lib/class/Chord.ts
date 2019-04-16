@@ -1,6 +1,10 @@
-import { Note } from "./Note";
+import { Note, DEFAULT_NOTE_VALUE } from "./Note";
 import { INTERVALS } from "./Interval";
 import { IntervalHandler } from "../super/IntervalHandler";
+import { NOTE_VALUE } from "./NoteValue";
+import { ValuedBarContent } from "../super/ValuedBarContent";
+import { Interval } from "..";
+import { applyMixins } from "../misc/applyMixins";
 
 interface IChords {
     intervals: Array<keyof typeof INTERVALS>
@@ -14,18 +18,21 @@ export const CHORDS: { [key: string]: IChords } = {
 
 interface ChordParams {
     root: Note,
-    intervals?: Array<keyof typeof INTERVALS>
+    intervals?: Array<keyof typeof INTERVALS>,
+    value: NOTE_VALUE
 }
 
-export class Chord extends IntervalHandler {
+export class Chord extends ValuedBarContent implements IntervalHandler {
     private _root!: Note;
-    private _intervals!: Array<keyof typeof INTERVALS>
+    private _intervals!: Array<keyof typeof INTERVALS>;
+    private _notes: { [key: number] : Note } = {};
 
-    constructor(params: ChordParams = { root: new Note({ name: "C" }) }) {
+    constructor(params: ChordParams = { root: new Note({ name: "C" }), value: DEFAULT_NOTE_VALUE }) {
         super()
         this.root = params.root;
         this.intervals = params.intervals || CHORDS.major.intervals;
-        this.compute(this.intervals, this.root);
+        this.value = params.value || DEFAULT_NOTE_VALUE;
+        this.notes = this.compute(this.intervals, this.root);
     }
 
     get root(): Note {
@@ -62,7 +69,16 @@ export class Chord extends IntervalHandler {
         this._intervals = intervals;
     }
 
+    set notes(notes: { [key: number]: Note }) {
+        this._notes = notes;
+    }
+
     get notes(): { [key: number]: Note } {
         return this._notes;
     }
+
+    // IntervalHandler mixin
+    compute!:(intervals: Array<keyof typeof INTERVALS>, note: Note) => { [key: number]: Note };
 }
+
+applyMixins(Chord, [IntervalHandler]);

@@ -10,14 +10,18 @@ interface IScaleParams {
     name?: string;
     key: Note;
 }
-export declare class Scale extends IntervalHandler {
+export declare class Scale implements IntervalHandler {
     private _name;
     private _key;
+    private _notes;
     constructor(params?: IScaleParams);
     name: string;
     key: Note;
-    readonly notes: {
+    notes: {
         [key: string]: Note;
+    };
+    compute: (intervals: Array<keyof typeof INTERVALS>, note: Note) => {
+        [key: number]: Note;
     };
 }
 export {};

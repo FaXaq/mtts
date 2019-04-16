@@ -1,5 +1,6 @@
 import { Note, INTERVALS, Interval } from "..";
 import { IntervalHandler } from "../super/IntervalHandler";
+import { applyMixins } from "../misc/applyMixins";
 
 interface IScale {
     intervals: Array<keyof typeof INTERVALS>
@@ -19,15 +20,15 @@ interface IScaleParams {
     key: Note
 }
 
-export class Scale extends IntervalHandler {
+export class Scale implements IntervalHandler {
     private _name!: string;
     private _key!: Note;
+    private _notes: { [key: number] : Note } = {};
 
     constructor(params: IScaleParams = { key: new Note({ name: "C" }) }) {
-        super()
         this.name = params.name || "major";
         this.key = params.key;
-        this.compute(SCALES[this.name].intervals, this.key);
+        this.notes = this.compute(SCALES[this.name].intervals, this.key);
     }
 
     get name(): string {
@@ -50,7 +51,16 @@ export class Scale extends IntervalHandler {
         this._key = note;
     }
 
+    set notes(notes: { [key: string] : Note }) {
+        this._notes = notes;
+    }
+
     get notes(): { [key: string] : Note } {
         return this._notes;
     }
+
+    // IntervalHandler mixin
+    compute!:(intervals: Array<keyof typeof INTERVALS>, note: Note) => { [key: number]: Note };
 }
+
+applyMixins(Scale, [IntervalHandler]);

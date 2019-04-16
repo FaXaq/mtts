@@ -2,11 +2,17 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const Pitch_1 = require("./Pitch");
 const Accidental_1 = require("./Accidental");
+const NoteValue_1 = require("./NoteValue");
+const ValuedBarContent_1 = require("../super/ValuedBarContent");
 exports.NOTES = ["C", "D", "E", "F", "G", "A", "B"];
-class Note {
-    constructor(params = { name: "C" }) {
-        this.name = params.name;
+exports.DEFAULT_NOTE_VALUE = NoteValue_1.NOTE_VALUE.QUARTER;
+class Note extends ValuedBarContent_1.ValuedBarContent {
+    constructor(params = { name: 'C' }) {
+        super(params);
+        this.name = params.name || 'C';
+        this.value = params.value ? params.value : exports.DEFAULT_NOTE_VALUE;
         this.pitch = params.pitch || new Pitch_1.Pitch();
+        this.dots = params.dots || 0;
         if (params.accidental)
             this.accidental = params.accidental;
     }
