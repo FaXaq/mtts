@@ -60,11 +60,6 @@ describe("Chord class", () => {
         describe("Notes", () => {
             it("Should be able to get notes", () => {
                 let c = new Chord();
-                console.log(c.notes, {
-                    1: new Note({ name: "C" }),
-                    3: new Note({ name: "E" }),
-                    5: new Note({ name: "G" })
-                });
                 expect(c.notes).to.deep.equals({
                     1: new Note({ name: "C" }),
                     3: new Note({ name: "E" }),

@@ -2,6 +2,7 @@
 var expect = require('chai').expect;
 var index = require('../dist/index.js');
 var Score = index.Score;
+var Note = index.Note;
 var TimeSignature = index.TimeSignature;
 var Scale = index.Scale;
 var Bar = index.Bar;
@@ -22,13 +23,13 @@ describe('Score Class', () => {
 
     it('Should error when trying to set the staff to a non supported one', () => {
       let s = new Score();
-      expect(() => { s.staff = 'G' }).to.throw()
+      expect(() => { s.staff = 'G' }).to.throw();
     })
 
     it('Should provide measure alternative to bars', () => {
       let s = new Score();
       expect(s.measures instanceof Array).to.be.true;
-      expect(() => { s.measures = [] }).to.not.throw()
+      expect(() => { s.measures = [] }).to.not.throw();
     })
   })
 
@@ -36,12 +37,15 @@ describe('Score Class', () => {
     describe('Last Bar', () => {
       it("Should get last bar of the score (create it if none exists)", () => {
         let s = new Score();
-        expect(s.lastBar instanceof Bar).to.be.true;
+        expect(() => { s.lastBar }).to.throw();
       })
     })
   })
 
   describe('Add Content', () => {
-    
+    it('Should add content to the last bar', () => {
+      let s = new Score();
+      expect(() => { s.addContent(new Note()) }).to.not.throw();
+    })
   })
 })

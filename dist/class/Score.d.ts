@@ -35,7 +35,7 @@ export declare class Score {
     keySignature: Scale;
     readonly defaultNoteValue: NOTE_VALUE;
     readonly lastBar: Bar;
-    addBar(typeStart: BAR_TYPE_START, typeEnd: BAR_TYPE_END): Bar;
+    addBar(typeStart: BAR_TYPE_START, typeEnd: BAR_TYPE_END, content?: Array<BAR_CONTENT>): Bar;
     addContent(content: BAR_CONTENT): void;
     modifyContent(bar: number, contentIndex: number, newContent: BAR_CONTENT): void;
 }

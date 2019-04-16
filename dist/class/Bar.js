@@ -102,7 +102,7 @@ class Bar {
     get emptySpace() {
         return this.expectedValue - this.value;
     }
-    addContent(content, fillEmptySpace = true) {
+    addContent(content, fillEmptySpace = false) {
         if (this.isFull()) {
             throw new Error(`Trying to add content to a bar that is already full. Try modifyContent instead.`);
         }
@@ -118,7 +118,7 @@ class Bar {
             throw new Error(`Trying to add a content to a bar that either is not a Note, Chord or Rest or : ${content}`);
         }
         // auto fill empty space in bar
-        if (this.autoFill && fillEmptySpace) {
+        if (fillEmptySpace) {
             this.fillEmptySpace();
         }
     }
@@ -128,7 +128,6 @@ class Bar {
             // modify it
             this.content[contentIndex] = newContent;
             this.content.splice(contentIndex + 1);
-            console.log(this.content);
             // auto fill empty space in bar
             if (this.autoFill) {
                 this.fillEmptySpace();
@@ -152,7 +151,7 @@ class Bar {
         // when the bar is not full, fill it with the greater rests starting from the end
         let rests = [];
         // calculate sum of rests note_values
-        let restsValue = rests.map(r => r.value).reduce((p, r) => p + r, 0);
+        let restsValue = 0;
         // while there is remaining space in bar + rests
         while (restsValue < bar.emptySpace) {
             // add largest possible rest

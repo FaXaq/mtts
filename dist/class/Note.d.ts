@@ -5,7 +5,7 @@ import { ValuedBarContent } from "../super/ValuedBarContent";
 export declare const NOTES: Array<string>;
 export declare const DEFAULT_NOTE_VALUE: NOTE_VALUE;
 interface NoteParams {
-    name: string;
+    name?: string;
     pitch?: Pitch;
     accidental?: Accidental;
     value?: NOTE_VALUE;

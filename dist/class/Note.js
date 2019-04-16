@@ -7,9 +7,9 @@ const ValuedBarContent_1 = require("../super/ValuedBarContent");
 exports.NOTES = ["C", "D", "E", "F", "G", "A", "B"];
 exports.DEFAULT_NOTE_VALUE = NoteValue_1.NOTE_VALUE.QUARTER;
 class Note extends ValuedBarContent_1.ValuedBarContent {
-    constructor(params = { name: "C" }) {
+    constructor(params = { name: 'C' }) {
         super(params);
-        this.name = params.name;
+        this.name = params.name || 'C';
         this.value = params.value ? params.value : exports.DEFAULT_NOTE_VALUE;
         this.pitch = params.pitch || new Pitch_1.Pitch();
         this.dots = params.dots || 0;

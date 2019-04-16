@@ -11,6 +11,7 @@ var TimeSignature = index.TimeSignature;
 var SCORE_STAFF = index.SCORE_STAFF;
 var BAR_TYPE_START = index.BAR_TYPE_START;
 var BAR_TYPE_END = index.BAR_TYPE_END;
+var NOTE_VALUE = index.NOTE_VALUE;
 
 // add spies
 chai.use(spies);
@@ -162,6 +163,34 @@ describe('Bar Class', () => {
     it('Should fill empty space in a bar at instanciation by default', () => {
       let bar = new Bar();
       expect(bar.isFull()).to.be.true;
+    })
+  })
+
+  describe('Add content to bar', () => {
+    it('Should error when trying to add content to a bar that is already full', () => {
+      let bar = new Bar();
+      expect(() => bar.addContent(new Note())).to.throw();
+    })
+
+    it('Should error when trying to add not allowed content to a bar', () => {
+      let bar = new Bar({
+        autoFill: false
+      });
+      expect(() => bar.addContent(new Note({
+        value: NOTE_VALUE.DOUBLE_WHOLE
+      }))).to.throw();
+    })
+
+    it('Should fill empty space when asked for it', () => {
+      let bar = new Bar({
+        autoFill: false
+      })
+      // create spy function
+      let spy = chai.spy(bar.fillEmptySpace);
+      // replace it in original object
+      bar.fillEmptySpace = spy;
+      bar.addContent(new Note(), true);
+      expect(spy).to.have.been.called(1);
     })
   })
 

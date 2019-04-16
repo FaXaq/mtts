@@ -68,14 +68,14 @@ class Score {
     }
     get lastBar() {
         if (this.bars.length === 0) {
-            this.addBar(Bar_1.BAR_TYPE_START.NONE, Bar_1.BAR_TYPE_END.STANDARD);
+            throw new Error('Score has no bar.');
         }
         return this.bars[this.bars.length - 1];
     }
-    addBar(typeStart, typeEnd) {
+    addBar(typeStart, typeEnd, content = []) {
         this.bars.push(new Bar_1.Bar({
             timeSignature: this.timeSignature,
-            content: [],
+            content: content,
             typeStart: typeStart || Bar_1.BAR_TYPE_START.STANDARD,
             typeEnd: typeEnd || Bar_1.BAR_TYPE_END.STANDARD,
             staff: this.staff
@@ -84,16 +84,15 @@ class Score {
     }
     addContent(content) {
         try {
-            this.lastBar.addContent(content);
+            this.lastBar.addContent(content, true);
         }
         catch (err) {
-            // if error, it means that the bar is full, add a bar then add content to it
-            this.addBar(Bar_1.BAR_TYPE_START.STANDARD, Bar_1.BAR_TYPE_END.STANDARD);
+            // if error, it means that the bar is full, add a bar with content to it
             try {
-                this.lastBar.addContent(content);
+                this.addBar(Bar_1.BAR_TYPE_START.STANDARD, Bar_1.BAR_TYPE_END.STANDARD, [content]);
             }
             catch (err) {
-                throw new Error(`Trying to add content to Score. ${err}`);
+                throw new Error(`Trying to add content ${content} to Score. ${err}`);
             }
         }
     }
