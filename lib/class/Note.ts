@@ -5,6 +5,7 @@ import { ValuedBarContent } from "../super/ValuedBarContent";
 
 export const NOTES: Array<string> = ["C", "D", "E", "F", "G", "A", "B"];
 export const DEFAULT_NOTE_VALUE: NOTE_VALUE = NOTE_VALUE.QUARTER;
+export const BASE_FREQUENCY: number = 440;
 
 interface NoteParams {
     name?: string,
@@ -64,9 +65,6 @@ export class Note extends ValuedBarContent {
         }
     }
 
-    /**
-     * 
-     */
     public next() {
         // if note was B, next one will be a pitch higher
         if (this.name === "B") this.pitch.inc()
@@ -92,6 +90,23 @@ export class Note extends ValuedBarContent {
             }),
             accidental: this.accidental ? new Accidental({ semitones: this.accidental.semitones }) : undefined
         })
+    }
+
+    public removeAccidental() {
+        delete this._accidental;
+    }
+
+    // checks
+    public hasAccidental(): boolean {
+        return this._accidental !== undefined;
+    }
+
+    public isBorE() {
+        return this.name === 'B' || this.name === 'E';
+    }
+
+    public isCorF() {
+        return this.name === 'C' || this.name === 'F';
     }
 
     // getters & setters
@@ -129,6 +144,13 @@ export class Note extends ValuedBarContent {
 
     get accidental(): Accidental {
         return this._accidental;
+    }
+
+    // frequency
+    // Base frequency times 2 pow (semitones to A440 / 12)
+    get frequency(): number {
+        const baseA: Note = new Note({ name: 'A', pitch: new Pitch({ value: 5 }) });
+        return BASE_FREQUENCY * Math.pow(2, baseA.getSemitonesTo(this) / 12);
     }
 
     // static methods
