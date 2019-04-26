@@ -1,4 +1,4 @@
-import { Note, NOTES } from "./class/Note";
+import { Note, NOTES, BASE_FREQUENCY } from "./class/Note";
 import { Pitch } from "./class/Pitch";
 import { Accidental, ACCIDENTAL } from "./class/Accidental";
 import { Scale, SCALES } from "./class/Scale";
@@ -7,7 +7,7 @@ import { CHORDS, Chord } from "./class/Chord";
 import { NOTE_VALUE } from "./class/NoteValue";
 import { Rest } from './class/Rest';
 import { Score, SCORE_STAFF } from './class/Score';
-import { TimeSignature } from './class/TimeSignature';
+import { TimeSignature, BEATS_TYPE } from './class/TimeSignature';
 import { Bar, BAR_TYPE_START, BAR_TYPE_END } from './class/Bar';
 
 export { 
@@ -15,6 +15,7 @@ export {
   ACCIDENTAL,
 
   Note,
+  BASE_FREQUENCY,
   NOTES,
   NOTE_VALUE,
 
@@ -37,5 +38,6 @@ export {
   Score,
   SCORE_STAFF,
 
-  TimeSignature
+  TimeSignature,
+  BEATS_TYPE
 };

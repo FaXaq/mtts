@@ -6,6 +6,7 @@ const NoteValue_1 = require("./NoteValue");
 const ValuedBarContent_1 = require("../super/ValuedBarContent");
 exports.NOTES = ["C", "D", "E", "F", "G", "A", "B"];
 exports.DEFAULT_NOTE_VALUE = NoteValue_1.NOTE_VALUE.QUARTER;
+exports.BASE_FREQUENCY = 440;
 class Note extends ValuedBarContent_1.ValuedBarContent {
     constructor(params = { name: 'C' }) {
         super(params);
@@ -50,9 +51,6 @@ class Note extends ValuedBarContent_1.ValuedBarContent {
             n++;
         }
     }
-    /**
-     *
-     */
     next() {
         // if note was B, next one will be a pitch higher
         if (this.name === "B")
@@ -77,6 +75,19 @@ class Note extends ValuedBarContent_1.ValuedBarContent {
             }),
             accidental: this.accidental ? new Accidental_1.Accidental({ semitones: this.accidental.semitones }) : undefined
         });
+    }
+    removeAccidental() {
+        delete this._accidental;
+    }
+    // checks
+    hasAccidental() {
+        return this._accidental !== undefined;
+    }
+    isBorE() {
+        return this.name === 'B' || this.name === 'E';
+    }
+    isCorF() {
+        return this.name === 'C' || this.name === 'F';
     }
     // getters & setters
     // name
@@ -108,6 +119,12 @@ class Note extends ValuedBarContent_1.ValuedBarContent {
     }
     get accidental() {
         return this._accidental;
+    }
+    // frequency
+    // Base frequency times 2 pow (semitones to A440 / 12)
+    get frequency() {
+        const baseA = new Note({ name: 'A', pitch: new Pitch_1.Pitch({ value: 5 }) });
+        return exports.BASE_FREQUENCY * Math.pow(2, baseA.getSemitonesTo(this) / 12);
     }
     // static methods
     static validateName(name) {
