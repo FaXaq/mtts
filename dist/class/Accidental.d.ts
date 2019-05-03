@@ -15,5 +15,6 @@ export declare class Accidental {
     addFlat(): void;
     semitones: number;
     readonly name: string;
+    static fromString(str: string): Accidental | undefined;
 }
 export {};

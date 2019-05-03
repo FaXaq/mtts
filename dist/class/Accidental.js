@@ -45,5 +45,35 @@ class Accidental {
     get name() {
         return ACCIDENTAL[this._semitones];
     }
+    static fromString(str) {
+        switch (str) {
+            case 'b':
+            case '♭':
+                return new Accidental({
+                    semitones: -1
+                });
+            case 'bb':
+            case '𝄫':
+                return new Accidental({
+                    semitones: -2
+                });
+            case '#':
+            case '♯':
+                return new Accidental({
+                    semitones: 1
+                });
+            case '𝄪':
+                return new Accidental({
+                    semitones: 2
+                });
+            case 'n':
+            case '♮':
+                return new Accidental({
+                    semitones: 0
+                });
+            default:
+                return;
+        }
+    }
 }
 exports.Accidental = Accidental;

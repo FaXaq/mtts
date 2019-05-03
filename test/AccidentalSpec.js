@@ -62,4 +62,31 @@ describe("Accidental class", () => {
             })
         })
     })
+
+    describe('Static', () => {
+        describe('fromString', () => {
+            it('Should detect accidental from string', () => {
+                let accidental = Accidental.fromString('#')
+                expect(accidental.semitones).to.equal(1)
+                accidental = Accidental.fromString('♯')
+                expect(accidental.semitones).to.equal(1)
+
+                accidental = Accidental.fromString('𝄪')
+                expect(accidental.semitones).to.equal(2)
+
+                accidental = Accidental.fromString('b')
+                expect(accidental.semitones).to.equal(-1)
+                accidental = Accidental.fromString('♭')
+                expect(accidental.semitones).to.equal(-1)
+
+                accidental = Accidental.fromString('bb')
+                expect(accidental.semitones).to.equal(-2)
+                accidental = Accidental.fromString('𝄫')
+                expect(accidental.semitones).to.equal(-2)
+
+                accidental = Accidental.fromString('♮')
+                expect(accidental.semitones).to.equal(0)
+            })
+        })
+    })
 })
