@@ -4,6 +4,7 @@ import { NOTE_VALUE } from "./NoteValue";
 import { ValuedBarContent } from "../super/ValuedBarContent";
 
 export const NOTES: Array<string> = ["C", "D", "E", "F", "G", "A", "B"];
+export const SEMITONES_NUMBER: number = 12;
 export const DEFAULT_NOTE_VALUE: NOTE_VALUE = NOTE_VALUE.QUARTER;
 export const BASE_FREQUENCY: number = 440;
 

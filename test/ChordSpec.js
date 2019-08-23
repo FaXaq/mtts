@@ -5,6 +5,7 @@ var Chord = index.Chord;
 var CHORDS = index.CHORDS;
 var Note = index.Note;
 var INTERVALS = index.INTERVALS;
+var Interval = index.Interval;
 
 describe("Chord class", () => {
     describe("Constructor", () => {
@@ -43,12 +44,12 @@ describe("Chord class", () => {
         describe("Intervals", () => {
             it("Should be able to get intervals", () => {
                 let c = new Chord();
-                expect(c.intervals).to.deep.equal(CHORDS.major.intervals)
+                expect(c.intervals).to.deep.equal(CHORDS.filter(c => c.name === 'major')[0].intervals)
             })
 
             it("Should be able to set intervals", () => {
                 let c = new Chord();
-                expect(() => c.intervals = [...Object.keys(INTERVALS)]).to.not.throw()
+                expect(() => c.intervals = [...Object.keys(INTERVALS).map(k => k = new Interval(k))]).to.not.throw()
             })
 
             it("Should check that intervals are defined in INTERVALS", () => {
@@ -60,11 +61,20 @@ describe("Chord class", () => {
         describe("Notes", () => {
             it("Should be able to get notes", () => {
                 let c = new Chord();
-                expect(c.notes).to.deep.equals({
-                    1: new Note({ name: "C" }),
-                    3: new Note({ name: "E" }),
-                    5: new Note({ name: "G" })
-                })
+                expect(c.notes).to.deep.equals([
+                    new Note({ name: "C" }),
+                    new Note({ name: "E" }),
+                    new Note({ name: "G" })
+                ])
+            })
+        })
+
+        describe("Name", () => {
+            it("Should give name for major chord", () => {
+                let c = new Chord();
+                expect(c.name).to.equal("C")
+                c.addInterval(new Interval("M7"))
+                expect(c.name).to.equal("CM7")
             })
         })
     })

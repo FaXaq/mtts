@@ -7,9 +7,16 @@ export declare const INTERVALS: {
     [key: string]: IInterval;
 };
 export declare class Interval {
-    constructor();
+    name: string;
+    semitones: number;
+    value: number;
+    constructor(name: string);
+    apply(note: Note): Note;
+    static fromSemitones(semitones: number): Interval[];
     static getSemitones(name: keyof typeof INTERVALS): number;
     static apply(note: Note, name: keyof typeof INTERVALS): Note;
     static getValue(name: keyof typeof INTERVALS): number;
+    static fromName(name: string): Interval;
+    static equals(interval1: Interval, interval2: Interval): boolean;
 }
 export {};

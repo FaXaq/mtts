@@ -1,17 +1,35 @@
-import { Note, INTERVALS, Interval } from "..";
+import { Note } from "./Note";
+import { Interval } from "./Interval";
 import { IntervalHandler } from "../super/IntervalHandler";
 import { applyMixins } from "../misc/applyMixins";
+import { Chord } from "./Chord";
 
 interface IScale {
-    intervals: Array<keyof typeof INTERVALS>
+    intervals: Interval[]
 }
 
 export const SCALES: { [key: string] : IScale } = {
     "major": {
-        "intervals": ["P1", "M2", "M3", "P4", "P5", "M6", "M7"]
+        "intervals": [
+            new Interval("P1"),
+            new Interval("M2"),
+            new Interval("M3"),
+            new Interval("P4"),
+            new Interval("P5"),
+            new Interval("M6"),
+            new Interval("M7")
+        ]
     },
     "minor" : {
-        "intervals": ["P1", "M2", "m3", "P4", "P5", "M6", "m7"]
+        "intervals": [
+            new Interval("P1"),
+            new Interval("M2"),
+            new Interval("m3"),
+            new Interval("P4"),
+            new Interval("P5"),
+            new Interval("M6"),
+            new Interval("m7")
+        ]
     }   
 }
 
@@ -23,7 +41,7 @@ interface IScaleParams {
 export class Scale implements IntervalHandler {
     private _name!: string;
     private _key!: Note;
-    private _notes: { [key: number] : Note } = {};
+    private _notes: Note[] = [];
 
     constructor(params: IScaleParams = { key: new Note({ name: "C" }) }) {
         this.name = params.name || "major";
@@ -51,16 +69,36 @@ export class Scale implements IntervalHandler {
         this._key = note;
     }
 
-    set notes(notes: { [key: string] : Note }) {
+    set notes(notes: Note[]) {
         this._notes = notes;
     }
 
-    get notes(): { [key: string] : Note } {
+    get notes(): Note[] {
         return this._notes;
     }
 
+    // Return all 7th chords from the scale
+    get scaleChords(): Chord[] {
+        let chords: Chord[] = [];
+        for (let i = 0; i < this.notes.length; i++) {
+            chords.push(
+                new Chord({
+                    root: this.notes[i],
+                    notes: [
+                        this.notes[i],
+                        this.notes[(i + 2) % this.notes.length], // 3rd
+                        this.notes[(i + 4) % this.notes.length], // 5th
+                        this.notes[(i + 6) % this.notes.length] // 7th
+                    ]
+                })
+            )
+        }
+
+        return chords;
+    }
+
     // IntervalHandler mixin
-    compute!:(intervals: Array<keyof typeof INTERVALS>, note: Note) => { [key: number]: Note };
+    compute!:(intervals: Interval[], note: Note) => Note[];
 }
 
 applyMixins(Scale, [IntervalHandler]);

@@ -12,23 +12,30 @@ describe("Scale class", () => {
             expect(s.key).to.deep.equal(new Note({
                 name: "C"
             }))
-            expect(s.notes).to.deep.equal({
-                1: new Note({ name: "C" }),
-                2: new Note({ name: "D" }),
-                3: new Note({ name: "E" }),
-                4: new Note({ name: "F" }),
-                5: new Note({ name: "G" }),
-                6: new Note({ name: "A" }),
-                7: new Note({ name: "B" }),
-            })
+            expect(s.notes).to.deep.equal([
+                new Note({ name: "C" }),
+                new Note({ name: "D" }),
+                new Note({ name: "E" }),
+                new Note({ name: "F" }),
+                new Note({ name: "G" }),
+                new Note({ name: "A" }),
+                new Note({ name: "B" }),
+            ])
         })
 
         it("Should reject any name unknown", () => {
-            expect(() => { 
+            expect(() => {
                 new Scale({
                     name: "wat"
                 })
             }).to.throw()
+        })
+    })
+
+    describe("Generate chords", () => {
+        it("Should generate default 7th chords from the current scale", () => {
+            let s = new Scale()
+            expect(s.scaleChords.length).to.equal(7)
         })
     })
 })

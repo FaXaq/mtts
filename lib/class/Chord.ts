@@ -1,38 +1,77 @@
-import { Note, DEFAULT_NOTE_VALUE } from "./Note";
-import { INTERVALS } from "./Interval";
+import { Note, DEFAULT_NOTE_VALUE, SEMITONES_NUMBER } from "./Note";
+import { Interval, INTERVALS } from "./Interval";
 import { IntervalHandler } from "../super/IntervalHandler";
 import { NOTE_VALUE } from "./NoteValue";
 import { ValuedBarContent } from "../super/ValuedBarContent";
-import { Interval } from "..";
 import { applyMixins } from "../misc/applyMixins";
+import { cloneInstanceObjectArray } from "../misc/utils";
 
-interface IChords {
-    intervals: Array<keyof typeof INTERVALS>
+interface IChordDefinition {
+    intervals: Interval[],
+    name: string,
+    code: string,
+    notation: string
 }
 
-export const CHORDS: { [key: string]: IChords } = {
-    "major": {
-        "intervals": ["P1", "M3", "P5"]
+export const CHORDS: IChordDefinition[] = [
+    {
+        "name": "major",
+        "intervals": [
+            new Interval("P1"),
+            new Interval("M3"),
+            new Interval("P5")
+        ],
+        "code": "M",
+        "notation": ""
+    },
+    {
+        "name": "major 7th",
+        "intervals": [
+            new Interval("P1"),
+            new Interval("M3"),
+            new Interval("P5"),
+            new Interval("M7")
+        ],
+        "code": "M7",
+        "notation": "M7"
+    },
+    {
+        "name": "minor",
+        "intervals": [
+            new Interval("P1"),
+            new Interval("m3"),
+            new Interval("P5")
+        ],
+        "code": "m",
+        "notation": "-"
     }
-}
+]
 
 interface ChordParams {
     root: Note,
-    intervals?: Array<keyof typeof INTERVALS>,
-    value: NOTE_VALUE
+    intervals?: Interval[],
+    value?: NOTE_VALUE,
+    notes?: Note[]
 }
 
 export class Chord extends ValuedBarContent implements IntervalHandler {
     private _root!: Note;
-    private _intervals!: Array<keyof typeof INTERVALS>;
-    private _notes: { [key: number] : Note } = {};
+    private _intervals!: Interval[];
+    private _notes: Note[] = [];
+    private _definitions: IChordDefinition[] = [];
 
     constructor(params: ChordParams = { root: new Note({ name: "C" }), value: DEFAULT_NOTE_VALUE }) {
         super()
         this.root = params.root;
-        this.intervals = params.intervals || CHORDS.major.intervals;
-        this.value = params.value || DEFAULT_NOTE_VALUE;
-        this.notes = this.compute(this.intervals, this.root);
+        if (params.notes && params.notes.length > 0) {
+            this.notes = params.notes;
+            this.value = params.value || DEFAULT_NOTE_VALUE;
+            this.intervals = this.computeIntervals();
+        } else {
+            this.intervals = params.intervals || cloneInstanceObjectArray(CHORDS[0].intervals);
+            this.value = params.value || DEFAULT_NOTE_VALUE;
+            this.notes = this.compute(this.intervals, this.root);
+        }
     }
 
     get root(): Note {
@@ -47,38 +86,69 @@ export class Chord extends ValuedBarContent implements IntervalHandler {
         }
     }
 
-    get intervals(): Array<keyof typeof INTERVALS> {
+    get intervals(): Interval[] {
         return this._intervals;
     }
 
-    set intervals(intervals: Array<keyof typeof INTERVALS>) {
-        let t = true;
-        for (let i = 0; i < intervals.length; i++) {
-            if (!INTERVALS[intervals[i]]) {
-                t = false;
-                // get out when there is an interval that is not defined in INTERVALS
-                break;
+    set intervals(intervals: Interval[]) {
+        intervals.forEach(i => {
+            if (!(i instanceof Interval)) {
+                throw new Error(`Trying to set interval for chords, but ${JSON.stringify(i)} is not an Interval.`);
             }
-        }
-        
-        if (!t) {
-            throw new Error(`Trying to set intervals for chord, with wrong keys : ${[...intervals.keys()]}.\
-            Allowed interval names : ${Object.keys(INTERVALS)}`)
-        }
-        
+        })
         this._intervals = intervals;
     }
 
-    set notes(notes: { [key: number]: Note }) {
+    set notes(notes: Note[]) {
         this._notes = notes;
     }
 
-    get notes(): { [key: number]: Note } {
+    get notes(): Note[] {
         return this._notes;
     }
 
+    get name(): string {
+        // For each chord defintion
+        let possibleChordDefinitions: IChordDefinition[] =  CHORDS.filter((chordDefinition: IChordDefinition) => {
+            // check if every chord instance interval
+            return this.intervals.every((chordInterval: Interval) => {
+                // is in the chord definition
+                return chordDefinition.intervals.filter((interval: Interval) => {
+                    return Interval.equals(interval, chordInterval)
+                }).length > 0
+            })
+        });
+
+        if (possibleChordDefinitions.length > 0) {
+            this._definitions = possibleChordDefinitions;
+            return this.root.name + possibleChordDefinitions[0].notation
+        }
+
+        throw new Error(`No name for this chord yet ${JSON.stringify(this)}`)
+    }
+
+    computeIntervals(): Interval[] {
+        let intervals: Interval[] = [];
+
+        this.notes.forEach((n: Note) => {
+            // for now choosing the first result of interval from semitones
+            // TODO: find algorithm to be sure semitone value is not currently in the chord
+            intervals.push(Interval.fromSemitones(
+                (Note.getSemitonesBetween(this.root, n) + SEMITONES_NUMBER ) % SEMITONES_NUMBER
+            )[0]
+        )
+        })
+
+        return intervals;
+    }
+
+    addInterval(interval: Interval) {
+        this._intervals.push(interval);
+        this.notes = this.compute(this.intervals, this.root);
+    }
+
     // IntervalHandler mixin
-    compute!:(intervals: Array<keyof typeof INTERVALS>, note: Note) => { [key: number]: Note };
+    compute!:(intervals: Interval[], note: Note) => Note[];
 }
 
 applyMixins(Chord, [IntervalHandler]);

@@ -217,7 +217,36 @@ export const INTERVALS: { [ key: string ]: IInterval } = {
 }
 
 export class Interval {
-    constructor() { }
+    name: string;
+    semitones: number;
+    value: number;
+
+    constructor(name: string) {
+        if (typeof INTERVALS[name] !== undefined) {
+            this.name = name;
+            this.semitones = INTERVALS[name].semitones;
+            this.value = INTERVALS[name].value;
+        } else {
+            throw new Error(`Interval with ${name} does not exist.`)
+        }
+    }
+
+    apply (note: Note) {
+        return Interval.apply(note, this.name)
+    }
+
+
+    static fromSemitones(semitones: number): Interval[] {
+        let intervals: Interval[] = [];
+
+        Object.keys(INTERVALS).forEach((k: string) => {
+            if (INTERVALS[k].semitones === semitones) {
+                intervals.push(new Interval(k))
+            }
+        })
+
+        return intervals;
+    }
 
     static getSemitones(name: keyof typeof INTERVALS) {
         return INTERVALS[name].semitones
@@ -247,5 +276,13 @@ export class Interval {
 
     static getValue(name: keyof typeof INTERVALS): number {
         return INTERVALS[name].value;
+    }
+
+    static fromName(name: string): Interval {
+        return new Interval(name);
+    }
+
+    static equals(interval1: Interval, interval2: Interval) {
+        return interval1.name === interval2.name;
     }
 }

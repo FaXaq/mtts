@@ -3,6 +3,7 @@ import { Accidental } from "./Accidental";
 import { NOTE_VALUE } from "./NoteValue";
 import { ValuedBarContent } from "../super/ValuedBarContent";
 export declare const NOTES: Array<string>;
+export declare const SEMITONES_NUMBER: number;
 export declare const DEFAULT_NOTE_VALUE: NOTE_VALUE;
 export declare const BASE_FREQUENCY: number;
 interface NoteParams {

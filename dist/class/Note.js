@@ -5,6 +5,7 @@ const Accidental_1 = require("./Accidental");
 const NoteValue_1 = require("./NoteValue");
 const ValuedBarContent_1 = require("../super/ValuedBarContent");
 exports.NOTES = ["C", "D", "E", "F", "G", "A", "B"];
+exports.SEMITONES_NUMBER = 12;
 exports.DEFAULT_NOTE_VALUE = NoteValue_1.NOTE_VALUE.QUARTER;
 exports.BASE_FREQUENCY = 440;
 class Note extends ValuedBarContent_1.ValuedBarContent {

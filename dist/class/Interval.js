@@ -211,7 +211,28 @@ exports.INTERVALS = {
     }
 };
 class Interval {
-    constructor() { }
+    constructor(name) {
+        if (typeof exports.INTERVALS[name] !== undefined) {
+            this.name = name;
+            this.semitones = exports.INTERVALS[name].semitones;
+            this.value = exports.INTERVALS[name].value;
+        }
+        else {
+            throw new Error(`Interval with ${name} does not exist.`);
+        }
+    }
+    apply(note) {
+        return Interval.apply(note, this.name);
+    }
+    static fromSemitones(semitones) {
+        let intervals = [];
+        Object.keys(exports.INTERVALS).forEach((k) => {
+            if (exports.INTERVALS[k].semitones === semitones) {
+                intervals.push(new Interval(k));
+            }
+        });
+        return intervals;
+    }
     static getSemitones(name) {
         return exports.INTERVALS[name].semitones;
     }
@@ -235,6 +256,12 @@ class Interval {
     }
     static getValue(name) {
         return exports.INTERVALS[name].value;
+    }
+    static fromName(name) {
+        return new Interval(name);
+    }
+    static equals(interval1, interval2) {
+        return interval1.name === interval2.name;
     }
 }
 exports.Interval = Interval;
