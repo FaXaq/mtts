@@ -182,4 +182,8 @@ export class Note extends ValuedBarContent {
 
         return semitones
     }
+
+    static getIndexDifferenceBetween(note1: Note, note2: Note) {
+        return 1 + (note2.index - note1.index + NOTES.length) % NOTES.length
+    }
 }

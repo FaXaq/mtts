@@ -9,7 +9,7 @@ interface IChordDefinition {
     code: string;
     notation: string;
 }
-export declare const CHORDS: IChordDefinition[];
+export declare const TRIADS: IChordDefinition[];
 interface ChordParams {
     root: Note;
     intervals?: Interval[];

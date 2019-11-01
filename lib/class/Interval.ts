@@ -248,6 +248,24 @@ export class Interval {
         return intervals;
     }
 
+    static fromValue(value: number): Interval[] {
+        let intervals: Interval[] = [];
+
+        Object.keys(INTERVALS).forEach((k: string) => {
+            if (INTERVALS[k].value === value) {
+                intervals.push(new Interval(k))
+            }
+        })
+
+        return intervals;
+    }
+
+    static fromSemitonesAndValue(semitones: number, value: number): Interval | undefined {
+        return Interval.fromSemitones(semitones).find((interval: Interval) => {
+            return interval.value === value
+        })
+    }
+
     static getSemitones(name: keyof typeof INTERVALS) {
         return INTERVALS[name].semitones
     }

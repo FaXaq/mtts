@@ -151,5 +151,8 @@ class Note extends ValuedBarContent_1.ValuedBarContent {
         semitones += (note2.accidental ? note2.accidental.semitones : 0) - (note1.accidental ? note1.accidental.semitones : 0);
         return semitones;
     }
+    static getIndexDifferenceBetween(note1, note2) {
+        return 1 + (note2.index - note1.index + exports.NOTES.length) % exports.NOTES.length;
+    }
 }
 exports.Note = Note;

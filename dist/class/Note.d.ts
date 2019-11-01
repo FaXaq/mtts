@@ -43,5 +43,6 @@ export declare class Note extends ValuedBarContent {
     readonly frequency: number;
     static validateName(name: string): boolean;
     static getSemitonesBetween(note1: Note, note2: Note): number;
+    static getIndexDifferenceBetween(note1: Note, note2: Note): number;
 }
 export {};

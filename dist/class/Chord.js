@@ -6,7 +6,7 @@ const IntervalHandler_1 = require("../super/IntervalHandler");
 const ValuedBarContent_1 = require("../super/ValuedBarContent");
 const applyMixins_1 = require("../misc/applyMixins");
 const utils_1 = require("../misc/utils");
-exports.CHORDS = [
+exports.TRIADS = [
     {
         "name": "major",
         "intervals": [
@@ -18,17 +18,6 @@ exports.CHORDS = [
         "notation": ""
     },
     {
-        "name": "major 7th",
-        "intervals": [
-            new Interval_1.Interval("P1"),
-            new Interval_1.Interval("M3"),
-            new Interval_1.Interval("P5"),
-            new Interval_1.Interval("M7")
-        ],
-        "code": "M7",
-        "notation": "M7"
-    },
-    {
         "name": "minor",
         "intervals": [
             new Interval_1.Interval("P1"),
@@ -37,6 +26,64 @@ exports.CHORDS = [
         ],
         "code": "m",
         "notation": "-"
+    },
+    {
+        "name": "augmented",
+        "intervals": [
+            new Interval_1.Interval("P1"),
+            new Interval_1.Interval("M3"),
+            new Interval_1.Interval("A5")
+        ],
+        "code": "aug",
+        "notation": "+"
+    },
+    {
+        "name": "diminished",
+        "intervals": [
+            new Interval_1.Interval("P1"),
+            new Interval_1.Interval("m3"),
+            new Interval_1.Interval("d5")
+        ],
+        "code": "dim",
+        "notation": "°"
+    },
+    {
+        "name": "suspended2",
+        "intervals": [
+            new Interval_1.Interval("P1"),
+            new Interval_1.Interval("M2"),
+            new Interval_1.Interval("P5")
+        ],
+        "code": "sus2",
+        "notation": "sus2"
+    },
+    {
+        "name": "suspended4",
+        "intervals": [
+            new Interval_1.Interval("P1"),
+            new Interval_1.Interval("P4"),
+            new Interval_1.Interval("P5")
+        ],
+        "code": "sus4",
+        "notation": "sus4"
+    }
+];
+const ADDED_TONES = [
+    {
+        "name": "major 7th",
+        "intervals": [
+            new Interval_1.Interval("M7")
+        ],
+        "code": "M7",
+        "notation": "M7"
+    },
+    {
+        "name": "minor 7th",
+        "intervals": [
+            new Interval_1.Interval("m7")
+        ],
+        "code": "m7",
+        "notation": "m7"
     }
 ];
 class Chord extends ValuedBarContent_1.ValuedBarContent {
@@ -51,7 +98,7 @@ class Chord extends ValuedBarContent_1.ValuedBarContent {
             this.intervals = this.computeIntervals();
         }
         else {
-            this.intervals = params.intervals || utils_1.cloneInstanceObjectArray(exports.CHORDS[0].intervals);
+            this.intervals = params.intervals || utils_1.cloneInstanceObjectArray(exports.TRIADS[0].intervals);
             this.value = params.value || Note_1.DEFAULT_NOTE_VALUE;
             this.notes = this.compute(this.intervals, this.root);
         }
@@ -85,19 +132,22 @@ class Chord extends ValuedBarContent_1.ValuedBarContent {
         return this._notes;
     }
     get name() {
-        // For each chord defintion
-        let possibleChordDefinitions = exports.CHORDS.filter((chordDefinition) => {
-            // check if every chord instance interval
-            return this.intervals.every((chordInterval) => {
-                // is in the chord definition
-                return chordDefinition.intervals.filter((interval) => {
-                    return Interval_1.Interval.equals(interval, chordInterval);
-                }).length > 0;
-            });
+        // Filter each triad defintion
+        let possibleTriad = exports.TRIADS.filter((triadDefinition) => {
+            // On intervals from the current chord
+            for (let i = 0; i < triadDefinition.intervals.length; i++) {
+                let foundIntervals = this.intervals.filter((interval) => {
+                    return Interval_1.Interval.equals(interval, triadDefinition.intervals[i]);
+                });
+                if (foundIntervals.length === 0) {
+                    return false;
+                }
+            }
+            return true;
         });
-        if (possibleChordDefinitions.length > 0) {
-            this._definitions = possibleChordDefinitions;
-            return this.root.name + possibleChordDefinitions[0].notation;
+        if (possibleTriad.length > 0) {
+            this._definitions = possibleTriad;
+            return this.root.name + possibleTriad[0].notation;
         }
         throw new Error(`No name for this chord yet ${JSON.stringify(this)}`);
     }
@@ -106,7 +156,9 @@ class Chord extends ValuedBarContent_1.ValuedBarContent {
         this.notes.forEach((n) => {
             // for now choosing the first result of interval from semitones
             // TODO: find algorithm to be sure semitone value is not currently in the chord
-            intervals.push(Interval_1.Interval.fromSemitones((Note_1.Note.getSemitonesBetween(this.root, n) + Note_1.SEMITONES_NUMBER) % Note_1.SEMITONES_NUMBER)[0]);
+            let possibleInterval = Interval_1.Interval.fromSemitonesAndValue(Note_1.Note.getSemitonesBetween(this.root, n), Note_1.Note.getIndexDifferenceBetween(this.root, n));
+            if (possibleInterval !== undefined)
+                intervals.push(possibleInterval);
         });
         return intervals;
     }

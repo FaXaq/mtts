@@ -78,7 +78,7 @@ describe('Bar Class', () => {
         expect(() => {
           bar.timeSignature = new TimeSignature()
         }).to.not.throw();
-  
+
         expect(() => {
           bar.timeSignature = 'toto';
         }).to.throw()

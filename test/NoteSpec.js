@@ -237,14 +237,30 @@ describe("Note class", () => {
                             value: 2
                         })
                     })
-    
+
                     expect(Note.getSemitonesBetween(note1, note2)).to.equal(-17)
                 })
             })
         })
     })
 
-    describe('Note values', () => {
-        
+    describe('Note index difference', () => {
+        it("Should get index difference between two notes", () => {
+            let note1 = new Note({
+                name: "D"
+            })
+            let note2 = new Note({
+                name: "E"
+            })
+            expect(Note.getIndexDifferenceBetween(note1, note2)).to.equal(2)
+            note2 = new Note({
+                name: "B"
+            })
+            expect(Note.getIndexDifferenceBetween(note1, note2)).to.equal(6)
+            note2 = new Note({
+                name: "C"
+            })
+            expect(Note.getIndexDifferenceBetween(note1, note2)).to.equal(7)
+        })
     })
 })

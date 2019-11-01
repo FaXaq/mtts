@@ -16,6 +16,26 @@ describe("Interval class", () => {
         })
     })
 
+    describe("Static", () => {
+        it("Should give intervals from semitones", () => {
+            expect(Interval.fromSemitones(1).length).to.equal(2)
+            expect(Interval.fromSemitones(3).length).to.equal(2)
+            expect(Interval.fromSemitones(10).length).to.equal(2)
+            expect(Interval.fromSemitones(12).length).to.equal(3)
+        })
+        it("Should give intervals from value", () => {
+            expect(Interval.fromValue(1).length).to.equal(2)
+            expect(Interval.fromValue(3).length).to.equal(4)
+            expect(Interval.fromValue(10).length).to.equal(4)
+            expect(Interval.fromValue(12).length).to.equal(3)
+        })
+        it("Should give interval from semitones and value", () => {
+            expect(Interval.fromSemitonesAndValue(1, 1)).to.not.equal(undefined)
+            expect(Interval.fromSemitonesAndValue(2, 3)).to.not.equal(undefined)
+            expect(Interval.fromSemitonesAndValue(1, 12)).to.equal(undefined)
+        })
+    })
+
     describe("Get new note from interval name and initial note", () => {
         describe("Should work with a note without accidental", () => {
             it("Should work with the perfect unison", () => {

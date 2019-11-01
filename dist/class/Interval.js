@@ -233,6 +233,20 @@ class Interval {
         });
         return intervals;
     }
+    static fromValue(value) {
+        let intervals = [];
+        Object.keys(exports.INTERVALS).forEach((k) => {
+            if (exports.INTERVALS[k].value === value) {
+                intervals.push(new Interval(k));
+            }
+        });
+        return intervals;
+    }
+    static fromSemitonesAndValue(semitones, value) {
+        return Interval.fromSemitones(semitones).find((interval) => {
+            return interval.value === value;
+        });
+    }
     static getSemitones(name) {
         return exports.INTERVALS[name].semitones;
     }

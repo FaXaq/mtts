@@ -2,14 +2,14 @@
 var expect = require('chai').expect;
 var index = require('../dist/index.js');
 var Chord = index.Chord;
-var CHORDS = index.CHORDS;
+var TRIADS = index.TRIADS;
 var Note = index.Note;
 var INTERVALS = index.INTERVALS;
 var Interval = index.Interval;
 
 describe("Chord class", () => {
     describe("Constructor", () => {
-        it("Should istanciate a chord without parameter, and define default values for root and intervals", () => {
+        it("Should instanciate a chord without parameter, and define default values for root and intervals", () => {
             let c;
             expect(() => c = new Chord()).to.not.throw()
         })
@@ -24,7 +24,7 @@ describe("Chord class", () => {
             it("Should be able to get root", () => {
                 let c = new Chord({
                     root: new Note({
-                        name: "C" 
+                        name: "C"
                     })
                 });
                 expect(c.root).to.deep.equal(new Note({ name: "C" }))
@@ -44,7 +44,7 @@ describe("Chord class", () => {
         describe("Intervals", () => {
             it("Should be able to get intervals", () => {
                 let c = new Chord();
-                expect(c.intervals).to.deep.equal(CHORDS.filter(c => c.name === 'major')[0].intervals)
+                expect(c.intervals).to.deep.equal(TRIADS.filter(c => c.name === 'major')[0].intervals)
             })
 
             it("Should be able to set intervals", () => {
@@ -73,8 +73,77 @@ describe("Chord class", () => {
             it("Should give name for major chord", () => {
                 let c = new Chord();
                 expect(c.name).to.equal("C")
-                c.addInterval(new Interval("M7"))
-                expect(c.name).to.equal("CM7")
+            })
+            it("Should give name for minor chord", () => {
+                let c = new Chord({
+                    root: new Note({
+                        name: "C"
+                    }),
+                    intervals: [
+                        new Interval("P1"),
+                        new Interval("m3"),
+                        new Interval("P5")
+                    ]
+                });
+                expect(c.name).to.equal("C-")
+            })
+            it("Should give name for diminished chord", () => {
+                let root = new Note({
+                    name: "C"
+                });
+                let c = new Chord({
+                    root,
+                    notes: [
+                        root,
+                        Interval.apply(root, "m3"),
+                        Interval.apply(root, "d5")
+                    ]
+                });
+                expect(c.name).to.equal("C°")
+            })
+            it("Should give name for augmented chord", () => {
+                let root = new Note({
+                    name: "C"
+                });
+                let c = new Chord({
+                    root,
+                    notes: [
+                        root,
+                        Interval.apply(root, "M3"),
+                        Interval.apply(root, "A5")
+                    ]
+                });
+                expect(c.name).to.equal("C+")
+            })
+            it("Should give name for suspended 2 chord", () => {
+                let root = new Note({
+                    name: "C"
+                });
+                let c = new Chord({
+                    root,
+                    notes: [
+                        root,
+                        Interval.apply(root, "M2"),
+                        Interval.apply(root, "P5")
+                    ]
+                });
+                console.log(JSON.stringify(c))
+                expect(c.name).to.equal("Csus2")
+            })
+            it("Should give name for suspended 2 chord", () => {
+                let root = new Note({
+                    name: "C"
+                });
+                let c = new Chord({
+                    root,
+                    notes: [
+                        root,
+                        Interval.apply(root, "P4"),
+                        Interval.apply(root, "P5")
+                    ]
+                });
+                console.log(JSON.stringify(c))
+                expect(c.name).to.equal("Csus4")
             })
         })
     })
