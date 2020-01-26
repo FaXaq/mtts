@@ -10,6 +10,8 @@ interface AccidentalParams {
     semitones: number
 }
 
+export const ACCIDENTALS = Object.keys(ACCIDENTAL)
+
 export class Accidental {
     private _semitones!: ACCIDENTAL;
 
