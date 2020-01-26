@@ -76,8 +76,8 @@ export const EXTENDED_CHORDS: { [key: string]: IChordDefinition } = {
   },
   "-7/5b": {
     addedTones: [new Interval("m7")],
-    name: "dominant 7",
-    notation: "7",
+    name: "minor 7 flat 5",
+    notation: "-7/5b",
     extends: TRIADS.dim
   },
   min7: {
