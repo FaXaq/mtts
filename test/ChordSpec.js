@@ -7,6 +7,7 @@ var Note = index.Note;
 var INTERVALS = index.INTERVALS;
 var Interval = index.Interval;
 var EXTENDED_CHORDS = index.EXTENDED_CHORDS;
+var Scale = index.Scale;
 
 describe("Chord class", () => {
     describe("Constructor", () => {
@@ -222,6 +223,33 @@ describe("Chord class", () => {
                         ]
                     });
                     expect(c.notation).to.equal("-7")
+                })
+
+                it("Should give notation for minor 7 flat 5 chord", () => {
+                    let root = new Note({
+                        name: "C"
+                    });
+                    let c = new Chord({
+                        root,
+                        notes: [
+                            root,
+                            Interval.apply(root, "m3"),
+                            Interval.apply(root, "d5"),
+                            Interval.apply(root, "m7")
+                        ]
+                    });
+                    expect(c.notation).to.equal("-7/5b")
+                })
+
+                it('Should have chords from scale', () => {
+                    let root = new Note({
+                        name: "C"
+                    })
+
+                    let s = new Scale({
+                        key: root
+                    })
+                    console.log(s.scaleChords.map(c => c.notation))
                 })
             })
         })
