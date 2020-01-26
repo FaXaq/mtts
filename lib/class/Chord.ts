@@ -204,7 +204,6 @@ export class Chord extends ValuedBarContent implements IntervalHandler {
         const possibleExtendedChords = this.possibleExtendedChords(
           perfectMatchedTriad
         );
-        console.log(possibleExtendedChords);
         return possibleExtendedChords[0].notation;
       }
     } else {
@@ -228,7 +227,6 @@ export class Chord extends ValuedBarContent implements IntervalHandler {
 
       if (possibleInterval !== undefined) intervals.push(possibleInterval);
     });
-    console.log(intervals);
     return intervals;
   }
 

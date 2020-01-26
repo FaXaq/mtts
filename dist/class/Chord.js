@@ -149,10 +149,8 @@ class Chord extends ValuedBarContent_1.ValuedBarContent {
                 this._definitions = possibleTriads;
                 return perfectMatchedTriad.notation;
             } else {
-                console.log(perfectMatchedTriad);
                 // it lacks a few intervals, find them and compute extended chord to find a match
                 const possibleExtendedChords = this.possibleExtendedChords(perfectMatchedTriad);
-                console.log(possibleExtendedChords);
                 return possibleExtendedChords[0].notation;
             }
         } else {
@@ -171,7 +169,6 @@ class Chord extends ValuedBarContent_1.ValuedBarContent {
             if (possibleInterval !== undefined)
                 intervals.push(possibleInterval);
         });
-        console.log(intervals);
         return intervals;
     }
     addInterval(interval) {

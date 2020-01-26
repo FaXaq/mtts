@@ -50,7 +50,6 @@ describe("Chord class", () => {
                     Interval.apply(root, "M7")
                 ]
             });
-            console.log(c);
         })
     })
 
@@ -239,17 +238,6 @@ describe("Chord class", () => {
                         ]
                     });
                     expect(c.notation).to.equal("-7/5b")
-                })
-
-                it('Should have chords from scale', () => {
-                    let root = new Note({
-                        name: "C"
-                    })
-
-                    let s = new Scale({
-                        key: root
-                    })
-                    console.log(s.scaleChords.map(c => c.notation))
                 })
             })
         })
