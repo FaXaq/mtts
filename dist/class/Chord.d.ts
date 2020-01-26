@@ -14,13 +14,13 @@ interface IPossibleTriad extends ITriadDefinition {
 interface IChordDefinition {
     name: string;
     notation: string;
-    extends: ITriadDefinition;
+    extends: ITriadDefinition | IChordDefinition;
     addedTones: Interval[];
 }
 export declare const TRIADS: {
     [key: string]: ITriadDefinition;
 };
-export declare const CHORDS: {
+export declare const EXTENDED_CHORDS: {
     [key: string]: IChordDefinition;
 };
 interface ChordParams {
@@ -39,10 +39,28 @@ export declare class Chord extends ValuedBarContent implements IntervalHandler {
     intervals: Interval[];
     notes: Note[];
     readonly _possibleTriads: IPossibleTriad[];
-    readonly name: string;
+    readonly notation: string;
     computeIntervals(): Interval[];
     addInterval(interval: Interval): void;
     possibleAddedTones(triad: ITriadDefinition): Interval[];
+    possibleExtendedChords(triad: ITriadDefinition): {
+        intervals: Interval[];
+        addedTones: Interval[];
+        name: string;
+        notation: string;
+        extends: ITriadDefinition | IChordDefinition;
+    }[];
+    static readonly extendedChordsIntervals: {
+        intervals: Interval[];
+        addedTones: Interval[];
+        name: string;
+        notation: string;
+        extends: ITriadDefinition | IChordDefinition;
+    }[];
+    static recursiveExtendedChordCompute(chord: ITriadDefinition | IChordDefinition, addedTones?: Interval[]): {
+        intervals: Interval[];
+        addedTones: Interval[];
+    };
     compute: (intervals: Interval[], note: Note) => Note[];
 }
 export {};

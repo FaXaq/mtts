@@ -19,12 +19,8 @@ interface IPossibleTriad extends ITriadDefinition {
 interface IChordDefinition {
   name: string;
   notation: string;
-  extends: ITriadDefinition;
+  extends: ITriadDefinition | IChordDefinition;
   addedTones: Interval[];
-}
-
-interface IPossibleChord extends IChordDefinition {
-  missingIntervals: Interval[];
 }
 
 export const TRIADS: { [key: string]: ITriadDefinition } = {
@@ -65,12 +61,30 @@ export const TRIADS: { [key: string]: ITriadDefinition } = {
   }
 };
 
-export const CHORDS: { [key: string]: IChordDefinition } = {
+export const EXTENDED_CHORDS: { [key: string]: IChordDefinition } = {
   M7: {
     addedTones: [new Interval("M7")],
-    name: "M7",
+    name: "major 7",
     notation: "M7",
     extends: TRIADS.maj
+  },
+  7: {
+    addedTones: [new Interval("m7")],
+    name: "dominant 7",
+    notation: "7",
+    extends: TRIADS.maj
+  },
+  "-7/5b": {
+    addedTones: [new Interval("m7")],
+    name: "dominant 7",
+    notation: "7",
+    extends: TRIADS.dim
+  },
+  min7: {
+    addedTones: [new Interval("m7")],
+    name: "minor 7",
+    notation: "-7",
+    extends: TRIADS.min
   }
 };
 
@@ -172,25 +186,27 @@ export class Chord extends ValuedBarContent implements IntervalHandler {
     return triads;
   }
 
-  get name(): string {
+  get notation(): string {
     // Filter each triad defintion
     let possibleTriads: IPossibleTriad[] = this._possibleTriads;
 
-    for (let i = 0; i < possibleTriads.length; i++) {
-      console.log(
-        "added tone",
-        possibleTriads[i].notation,
-        this.possibleAddedTones(possibleTriads[i])
-      );
-    }
-
+    // find a perfect match triad
     let perfectMatchedTriad = possibleTriads.find(
       p => p.missingIntervals.length === 0
     );
 
-    if (possibleTriads.length > 0 && perfectMatchedTriad) {
-      this._definitions = possibleTriads;
-      return this.root.name + perfectMatchedTriad.notation;
+    if (perfectMatchedTriad) {
+      if (perfectMatchedTriad.intervals.length === this.notes.length) {
+        this._definitions = possibleTriads;
+        return perfectMatchedTriad.notation;
+      } else {
+        // it lacks a few intervals, find them and compute extended chord to find a match
+        const possibleExtendedChords = this.possibleExtendedChords(
+          perfectMatchedTriad
+        );
+        console.log(possibleExtendedChords);
+        return possibleExtendedChords[0].notation;
+      }
     } else {
       throw new Error(`No name for this chord yet ${JSON.stringify(this)}`);
     }
@@ -212,7 +228,7 @@ export class Chord extends ValuedBarContent implements IntervalHandler {
 
       if (possibleInterval !== undefined) intervals.push(possibleInterval);
     });
-
+    console.log(intervals);
     return intervals;
   }
 
@@ -235,6 +251,68 @@ export class Chord extends ValuedBarContent implements IntervalHandler {
 
       return true;
     });
+  }
+
+  possibleExtendedChords(triad: ITriadDefinition) {
+    const extendedChords = Chord.extendedChordsIntervals;
+    const possibleAddedTones = this.possibleAddedTones(triad);
+    return extendedChords.filter(ec => {
+      if (ec.extends.name == triad.name) {
+        // for each interval in extended chord definition check
+        for (let i = 0; i < ec.addedTones.length; i++) {
+          const ECAddedTone = ec.addedTones[i];
+          // if there is only one added tone not found exit
+          let flag = false;
+          for (let j = 0; j < possibleAddedTones.length; j++) {
+            const addedTone = possibleAddedTones[j];
+            if (ECAddedTone.name === addedTone.name) {
+              flag = true;
+              break;
+            }
+          }
+
+          if (flag === false) return false;
+        }
+        return true;
+      }
+
+      return false;
+    });
+  }
+
+  static get extendedChordsIntervals() {
+    return Object.keys(EXTENDED_CHORDS).map(k => {
+      const EXTENDED_CHORD = EXTENDED_CHORDS[k];
+      // recursively compute chord, to flatten added tones & initial intervals of chord
+      const { intervals, addedTones } = Chord.recursiveExtendedChordCompute(
+        EXTENDED_CHORD
+      );
+      return {
+        ...EXTENDED_CHORD,
+        intervals,
+        addedTones
+      };
+    });
+  }
+
+  static recursiveExtendedChordCompute(
+    chord: ITriadDefinition | IChordDefinition,
+    addedTones: Interval[] = []
+  ): {
+    intervals: Interval[];
+    addedTones: Interval[];
+  } {
+    if ((chord as ITriadDefinition).intervals) {
+      return {
+        intervals: (chord as ITriadDefinition).intervals,
+        addedTones
+      };
+    }
+
+    return Chord.recursiveExtendedChordCompute(
+      (chord as IChordDefinition).extends,
+      [...(chord as IChordDefinition).addedTones, ...addedTones]
+    );
   }
 
   // IntervalHandler mixin

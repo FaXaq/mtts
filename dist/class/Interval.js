@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const Note_1 = require("./Note");
 exports.INTERVALS = {
     P1: {
         value: 1,
@@ -244,7 +245,7 @@ class Interval {
     }
     static fromSemitonesAndValue(semitones, value) {
         return Interval.fromSemitones(semitones).find((interval) => {
-            return interval.value === value;
+            return interval.value % Note_1.NOTES.length === value % Note_1.NOTES.length;
         });
     }
     static getSemitones(name) {

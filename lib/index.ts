@@ -3,7 +3,7 @@ import { Pitch } from "./class/Pitch";
 import { Accidental, ACCIDENTAL, ACCIDENTALS } from "./class/Accidental";
 import { Scale, SCALES } from "./class/Scale";
 import { INTERVALS, Interval } from "./class/Interval";
-import { TRIADS, Chord } from "./class/Chord";
+import { TRIADS, Chord, EXTENDED_CHORDS } from "./class/Chord";
 import { NOTE_VALUE } from "./class/NoteValue";
 import { Rest } from "./class/Rest";
 import { Score, SCORE_STAFF } from "./class/Score";
@@ -27,6 +27,7 @@ export {
   Interval,
   INTERVALS,
   Chord,
+  EXTENDED_CHORDS,
   TRIADS,
   Rest,
   Score,

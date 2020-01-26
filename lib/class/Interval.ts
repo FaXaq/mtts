@@ -1,4 +1,4 @@
-import { Note } from "./Note";
+import { Note, NOTES } from "./Note";
 
 interface IInterval {
   value: number;
@@ -264,7 +264,7 @@ export class Interval {
     value: number
   ): Interval | undefined {
     return Interval.fromSemitones(semitones).find((interval: Interval) => {
-      return interval.value === value;
+      return interval.value % NOTES.length === value % NOTES.length;
     });
   }
 

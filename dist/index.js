@@ -19,6 +19,7 @@ exports.Interval = Interval_1.Interval;
 const Chord_1 = require("./class/Chord");
 exports.TRIADS = Chord_1.TRIADS;
 exports.Chord = Chord_1.Chord;
+exports.EXTENDED_CHORDS = Chord_1.EXTENDED_CHORDS;
 const NoteValue_1 = require("./class/NoteValue");
 exports.NOTE_VALUE = NoteValue_1.NOTE_VALUE;
 const Rest_1 = require("./class/Rest");

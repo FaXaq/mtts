@@ -43,12 +43,30 @@ exports.TRIADS = {
         notation: "5"
     }
 };
-exports.CHORDS = {
+exports.EXTENDED_CHORDS = {
     M7: {
         addedTones: [new Interval_1.Interval("M7")],
-        name: "M7",
+        name: "major 7",
         notation: "M7",
         extends: exports.TRIADS.maj
+    },
+    7: {
+        addedTones: [new Interval_1.Interval("m7")],
+        name: "dominant 7",
+        notation: "7",
+        extends: exports.TRIADS.maj
+    },
+    "-7/5b": {
+        addedTones: [new Interval_1.Interval("m7")],
+        name: "dominant 7",
+        notation: "7",
+        extends: exports.TRIADS.dim
+    },
+    min7: {
+        addedTones: [new Interval_1.Interval("m7")],
+        name: "minor 7",
+        notation: "-7",
+        extends: exports.TRIADS.min
     }
 };
 class Chord extends ValuedBarContent_1.ValuedBarContent {
@@ -117,16 +135,22 @@ class Chord extends ValuedBarContent_1.ValuedBarContent {
         });
         return triads;
     }
-    get name() {
+    get notation() {
         // Filter each triad defintion
         let possibleTriads = this._possibleTriads;
-        for (let i = 0; i < possibleTriads.length; i++) {
-            console.log("added tone", possibleTriads[i].notation, this.possibleAddedTones(possibleTriads[i]));
-        }
+        // find a perfect match triad
         let perfectMatchedTriad = possibleTriads.find(p => p.missingIntervals.length === 0);
-        if (possibleTriads.length > 0 && perfectMatchedTriad) {
-            this._definitions = possibleTriads;
-            return this.root.name + perfectMatchedTriad.notation;
+        if (perfectMatchedTriad) {
+            if (perfectMatchedTriad.intervals.length === this.notes.length) {
+                this._definitions = possibleTriads;
+                return perfectMatchedTriad.notation;
+            }
+            else {
+                // it lacks a few intervals, find them and compute extended chord to find a match
+                const possibleExtendedChords = this.possibleExtendedChords(perfectMatchedTriad);
+                console.log(possibleExtendedChords);
+                return possibleExtendedChords[0].notation;
+            }
         }
         else {
             throw new Error(`No name for this chord yet ${JSON.stringify(this)}`);
@@ -144,6 +168,7 @@ class Chord extends ValuedBarContent_1.ValuedBarContent {
             if (possibleInterval !== undefined)
                 intervals.push(possibleInterval);
         });
+        console.log(intervals);
         return intervals;
     }
     addInterval(interval) {
@@ -162,6 +187,49 @@ class Chord extends ValuedBarContent_1.ValuedBarContent {
             }
             return true;
         });
+    }
+    possibleExtendedChords(triad) {
+        const extendedChords = Chord.extendedChordsIntervals;
+        const possibleAddedTones = this.possibleAddedTones(triad);
+        return extendedChords.filter(ec => {
+            if (ec.extends.name == triad.name) {
+                // for each interval in extended chord definition check
+                for (let i = 0; i < ec.addedTones.length; i++) {
+                    const ECAddedTone = ec.addedTones[i];
+                    // if there is only one added tone not found exit
+                    let flag = false;
+                    for (let j = 0; j < possibleAddedTones.length; j++) {
+                        const addedTone = possibleAddedTones[j];
+                        if (ECAddedTone.name === addedTone.name) {
+                            flag = true;
+                            break;
+                        }
+                    }
+                    if (flag === false)
+                        return false;
+                }
+                return true;
+            }
+            return false;
+        });
+    }
+    static get extendedChordsIntervals() {
+        return Object.keys(exports.EXTENDED_CHORDS).map(k => {
+            const EXTENDED_CHORD = exports.EXTENDED_CHORDS[k];
+            // recursively compute chord, to flatten added tones & initial intervals of chord
+            const { intervals, addedTones } = Chord.recursiveExtendedChordCompute(EXTENDED_CHORD);
+            return Object.assign({}, EXTENDED_CHORD, { intervals,
+                addedTones });
+        });
+    }
+    static recursiveExtendedChordCompute(chord, addedTones = []) {
+        if (chord.intervals) {
+            return {
+                intervals: chord.intervals,
+                addedTones
+            };
+        }
+        return Chord.recursiveExtendedChordCompute(chord.extends, [...chord.addedTones, ...addedTones]);
     }
 }
 exports.Chord = Chord;

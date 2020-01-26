@@ -6,6 +6,7 @@ var TRIADS = index.TRIADS;
 var Note = index.Note;
 var INTERVALS = index.INTERVALS;
 var Interval = index.Interval;
+var EXTENDED_CHORDS = index.EXTENDED_CHORDS;
 
 describe("Chord class", () => {
     describe("Constructor", () => {
@@ -20,6 +21,15 @@ describe("Chord class", () => {
                     name: "A"
                 })
             })).to.not.throw()
+        })
+    })
+
+    describe("static", () => {
+        it("Recursively compute chords & chords extension", () => {
+            expect(Chord.extendedChordsIntervals).to.deep.include({
+                ...EXTENDED_CHORDS["M7"],
+                intervals: EXTENDED_CHORDS["M7"].extends.intervals
+            })
         })
     })
 
@@ -106,11 +116,11 @@ describe("Chord class", () => {
         describe("Name", () => {
             describe("Triads", () => {
 
-                it("Should give name for major chord", () => {
+                it("Should give notation for major chord", () => {
                     let c = new Chord();
-                    expect(c.name).to.equal("C")
+                    expect(c.notation).to.equal("")
                 })
-                it("Should give name for minor chord", () => {
+                it("Should give notation for minor chord", () => {
                     let c = new Chord({
                         root: new Note({
                             name: "C"
@@ -121,9 +131,9 @@ describe("Chord class", () => {
                             new Interval("P5")
                         ]
                     });
-                    expect(c.name).to.equal("C-")
+                    expect(c.notation).to.equal("-")
                 })
-                it("Should give name for diminished chord", () => {
+                it("Should give notation for diminished chord", () => {
                     let root = new Note({
                         name: "C"
                     });
@@ -135,9 +145,9 @@ describe("Chord class", () => {
                             Interval.apply(root, "d5")
                         ]
                     });
-                    expect(c.name).to.equal("C°")
+                    expect(c.notation).to.equal("°")
                 })
-                it("Should give name for augmented chord", () => {
+                it("Should give notation for augmented chord", () => {
                     let root = new Note({
                         name: "C"
                     });
@@ -149,9 +159,9 @@ describe("Chord class", () => {
                             Interval.apply(root, "A5")
                         ]
                     });
-                    expect(c.name).to.equal("C+")
+                    expect(c.notation).to.equal("+")
                 })
-                it("Should give name for suspended 2 chord", () => {
+                it("Should give notation for suspended 2 chord", () => {
                     let root = new Note({
                         name: "C"
                     });
@@ -163,9 +173,9 @@ describe("Chord class", () => {
                             Interval.apply(root, "P5")
                         ]
                     });
-                    expect(c.name).to.equal("Csus2")
+                    expect(c.notation).to.equal("sus2")
                 })
-                it("Should give name for suspended 2 chord", () => {
+                it("Should give notation for suspended 2 chord", () => {
                     let root = new Note({
                         name: "C"
                     });
@@ -177,12 +187,12 @@ describe("Chord class", () => {
                             Interval.apply(root, "P5")
                         ]
                     });
-                    expect(c.name).to.equal("Csus4")
+                    expect(c.notation).to.equal("sus4")
                 })
             })
 
             describe("Extended", () => {
-                it("Should give name for Major 7 chord", () => {
+                it("Should give notation for Major 7 chord", () => {
                     let root = new Note({
                         name: "C"
                     });
@@ -195,7 +205,23 @@ describe("Chord class", () => {
                             Interval.apply(root, "M7")
                         ]
                     });
-                    expect(c.name).to.equal("C7")
+                    expect(c.notation).to.equal("M7")
+                })
+
+                it("Should give notation for minor 7 chord", () => {
+                    let root = new Note({
+                        name: "C"
+                    });
+                    let c = new Chord({
+                        root,
+                        notes: [
+                            root,
+                            Interval.apply(root, "m3"),
+                            Interval.apply(root, "P5"),
+                            Interval.apply(root, "m7")
+                        ]
+                    });
+                    expect(c.notation).to.equal("-7")
                 })
             })
         })
