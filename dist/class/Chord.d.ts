@@ -3,13 +3,26 @@ import { Interval } from "./Interval";
 import { IntervalHandler } from "../super/IntervalHandler";
 import { NOTE_VALUE } from "./NoteValue";
 import { ValuedBarContent } from "../super/ValuedBarContent";
-interface IChordDefinition {
-    intervals: Interval[];
+interface ITriadDefinition {
     name: string;
-    code: string;
+    intervals: Interval[];
     notation: string;
 }
-export declare const TRIADS: IChordDefinition[];
+interface IPossibleTriad extends ITriadDefinition {
+    missingIntervals: Interval[];
+}
+interface IChordDefinition {
+    name: string;
+    notation: string;
+    extends: ITriadDefinition;
+    addedTones: Interval[];
+}
+export declare const TRIADS: {
+    [key: string]: ITriadDefinition;
+};
+export declare const CHORDS: {
+    [key: string]: IChordDefinition;
+};
 interface ChordParams {
     root: Note;
     intervals?: Interval[];
@@ -25,9 +38,11 @@ export declare class Chord extends ValuedBarContent implements IntervalHandler {
     root: Note;
     intervals: Interval[];
     notes: Note[];
+    readonly _possibleTriads: IPossibleTriad[];
     readonly name: string;
     computeIntervals(): Interval[];
     addInterval(interval: Interval): void;
+    possibleAddedTones(triad: ITriadDefinition): Interval[];
     compute: (intervals: Interval[], note: Note) => Note[];
 }
 export {};

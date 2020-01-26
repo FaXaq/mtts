@@ -8,6 +8,7 @@ var ACCIDENTAL;
     ACCIDENTAL[ACCIDENTAL["SHARP"] = 1] = "SHARP";
     ACCIDENTAL[ACCIDENTAL["DOUBLE_SHARP"] = 2] = "DOUBLE_SHARP";
 })(ACCIDENTAL = exports.ACCIDENTAL || (exports.ACCIDENTAL = {}));
+exports.ACCIDENTALS = Object.keys(ACCIDENTAL);
 class Accidental {
     constructor(params = { semitones: 0 }) {
         this.semitones = params.semitones;
@@ -47,27 +48,27 @@ class Accidental {
     }
     static fromString(str) {
         switch (str) {
-            case 'b':
-            case '♭':
+            case "b":
+            case "♭":
                 return new Accidental({
                     semitones: -1
                 });
-            case 'bb':
-            case '𝄫':
+            case "bb":
+            case "𝄫":
                 return new Accidental({
                     semitones: -2
                 });
-            case '#':
-            case '♯':
+            case "#":
+            case "♯":
                 return new Accidental({
                     semitones: 1
                 });
-            case '𝄪':
+            case "𝄪":
                 return new Accidental({
                     semitones: 2
                 });
-            case 'n':
-            case '♮':
+            case "n":
+            case "♮":
                 return new Accidental({
                     semitones: 0
                 });

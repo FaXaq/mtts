@@ -15,7 +15,31 @@ describe("Chord class", () => {
         })
 
         it("Should be able to instanciate with only root", () => {
-            expect(() => new Chord({ root: new Note({ name: "A" }) })).to.not.throw()
+            expect(() => new Chord({
+                root: new Note({
+                    name: "A"
+                })
+            })).to.not.throw()
+        })
+    })
+
+    describe("Guess intervals", () => {
+        it("Should guess intervals from chord notes", () => {
+            let root = new Note({
+                name: "F"
+            });
+            let c = new Chord({
+                root,
+                notes: [
+                    root,
+                    Interval.apply(root, "M3"),
+                    new Note({
+                        name: "C"
+                    }),
+                    Interval.apply(root, "M7")
+                ]
+            });
+            console.log(c);
         })
     })
 
@@ -27,12 +51,16 @@ describe("Chord class", () => {
                         name: "C"
                     })
                 });
-                expect(c.root).to.deep.equal(new Note({ name: "C" }))
+                expect(c.root).to.deep.equal(new Note({
+                    name: "C"
+                }))
             })
 
             it("Should be able to set root", () => {
                 let c = new Chord()
-                expect(() => c.root = new Note({ name: "A" })).to.not.throw()
+                expect(() => c.root = new Note({
+                    name: "A"
+                })).to.not.throw()
             })
 
             it("Should check that the set root is a Note", () => {
@@ -44,7 +72,7 @@ describe("Chord class", () => {
         describe("Intervals", () => {
             it("Should be able to get intervals", () => {
                 let c = new Chord();
-                expect(c.intervals).to.deep.equal(TRIADS.filter(c => c.name === 'major')[0].intervals)
+                expect(c.intervals).to.deep.equal(TRIADS.maj.intervals)
             })
 
             it("Should be able to set intervals", () => {
@@ -62,88 +90,113 @@ describe("Chord class", () => {
             it("Should be able to get notes", () => {
                 let c = new Chord();
                 expect(c.notes).to.deep.equals([
-                    new Note({ name: "C" }),
-                    new Note({ name: "E" }),
-                    new Note({ name: "G" })
+                    new Note({
+                        name: "C"
+                    }),
+                    new Note({
+                        name: "E"
+                    }),
+                    new Note({
+                        name: "G"
+                    })
                 ])
             })
         })
 
         describe("Name", () => {
-            it("Should give name for major chord", () => {
-                let c = new Chord();
-                expect(c.name).to.equal("C")
-            })
-            it("Should give name for minor chord", () => {
-                let c = new Chord({
-                    root: new Note({
+            describe("Triads", () => {
+
+                it("Should give name for major chord", () => {
+                    let c = new Chord();
+                    expect(c.name).to.equal("C")
+                })
+                it("Should give name for minor chord", () => {
+                    let c = new Chord({
+                        root: new Note({
+                            name: "C"
+                        }),
+                        intervals: [
+                            new Interval("P1"),
+                            new Interval("m3"),
+                            new Interval("P5")
+                        ]
+                    });
+                    expect(c.name).to.equal("C-")
+                })
+                it("Should give name for diminished chord", () => {
+                    let root = new Note({
                         name: "C"
-                    }),
-                    intervals: [
-                        new Interval("P1"),
-                        new Interval("m3"),
-                        new Interval("P5")
-                    ]
-                });
-                expect(c.name).to.equal("C-")
-            })
-            it("Should give name for diminished chord", () => {
-                let root = new Note({
-                    name: "C"
-                });
-                let c = new Chord({
-                    root,
-                    notes: [
+                    });
+                    let c = new Chord({
                         root,
-                        Interval.apply(root, "m3"),
-                        Interval.apply(root, "d5")
-                    ]
-                });
-                expect(c.name).to.equal("C°")
-            })
-            it("Should give name for augmented chord", () => {
-                let root = new Note({
-                    name: "C"
-                });
-                let c = new Chord({
-                    root,
-                    notes: [
+                        notes: [
+                            root,
+                            Interval.apply(root, "m3"),
+                            Interval.apply(root, "d5")
+                        ]
+                    });
+                    expect(c.name).to.equal("C°")
+                })
+                it("Should give name for augmented chord", () => {
+                    let root = new Note({
+                        name: "C"
+                    });
+                    let c = new Chord({
                         root,
-                        Interval.apply(root, "M3"),
-                        Interval.apply(root, "A5")
-                    ]
-                });
-                expect(c.name).to.equal("C+")
-            })
-            it("Should give name for suspended 2 chord", () => {
-                let root = new Note({
-                    name: "C"
-                });
-                let c = new Chord({
-                    root,
-                    notes: [
+                        notes: [
+                            root,
+                            Interval.apply(root, "M3"),
+                            Interval.apply(root, "A5")
+                        ]
+                    });
+                    expect(c.name).to.equal("C+")
+                })
+                it("Should give name for suspended 2 chord", () => {
+                    let root = new Note({
+                        name: "C"
+                    });
+                    let c = new Chord({
                         root,
-                        Interval.apply(root, "M2"),
-                        Interval.apply(root, "P5")
-                    ]
-                });
-                console.log(JSON.stringify(c))
-                expect(c.name).to.equal("Csus2")
-            })
-            it("Should give name for suspended 2 chord", () => {
-                let root = new Note({
-                    name: "C"
-                });
-                let c = new Chord({
-                    root,
-                    notes: [
+                        notes: [
+                            root,
+                            Interval.apply(root, "M2"),
+                            Interval.apply(root, "P5")
+                        ]
+                    });
+                    expect(c.name).to.equal("Csus2")
+                })
+                it("Should give name for suspended 2 chord", () => {
+                    let root = new Note({
+                        name: "C"
+                    });
+                    let c = new Chord({
                         root,
-                        Interval.apply(root, "P4"),
-                        Interval.apply(root, "P5")
-                    ]
-                });
-                console.log(JSON.stringify(c))
-                expect(c.name).to.equal("Csus4")
+                        notes: [
+                            root,
+                            Interval.apply(root, "P4"),
+                            Interval.apply(root, "P5")
+                        ]
+                    });
+                    expect(c.name).to.equal("Csus4")
+                })
+            })
+
+            describe("Extended", () => {
+                it("Should give name for Major 7 chord", () => {
+                    let root = new Note({
+                        name: "C"
+                    });
+                    let c = new Chord({
+                        root,
+                        notes: [
+                            root,
+                            Interval.apply(root, "M3"),
+                            Interval.apply(root, "P5"),
+                            Interval.apply(root, "M7")
+                        ]
+                    });
+                    expect(c.name).to.equal("C7")
+                })
             })
         })
     })

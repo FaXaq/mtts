@@ -9,9 +9,9 @@ exports.SEMITONES_NUMBER = 12;
 exports.DEFAULT_NOTE_VALUE = NoteValue_1.NOTE_VALUE.QUARTER;
 exports.BASE_FREQUENCY = 440;
 class Note extends ValuedBarContent_1.ValuedBarContent {
-    constructor(params = { name: 'C' }) {
+    constructor(params = { name: "C" }) {
         super(params);
-        this.name = params.name || 'C';
+        this.name = params.name || "C";
         this.value = params.value ? params.value : exports.DEFAULT_NOTE_VALUE;
         this.pitch = params.pitch || new Pitch_1.Pitch();
         this.dots = params.dots || 0;
@@ -62,7 +62,7 @@ class Note extends ValuedBarContent_1.ValuedBarContent {
         // if note was C, previous one will be a pitch lower
         if (this.name === "C")
             this.pitch.dec();
-        this.name = exports.NOTES[((this.index - 1) + exports.NOTES.length) % exports.NOTES.length];
+        this.name = exports.NOTES[(this.index - 1 + exports.NOTES.length) % exports.NOTES.length];
     }
     // Get semitones between this note and the one passed as parameter
     getSemitonesTo(note) {
@@ -74,7 +74,9 @@ class Note extends ValuedBarContent_1.ValuedBarContent {
             pitch: new Pitch_1.Pitch({
                 value: this.pitch.value
             }),
-            accidental: this.accidental ? new Accidental_1.Accidental({ semitones: this.accidental.semitones }) : undefined
+            accidental: this.accidental
+                ? new Accidental_1.Accidental({ semitones: this.accidental.semitones })
+                : undefined
         });
     }
     removeAccidental() {
@@ -85,10 +87,10 @@ class Note extends ValuedBarContent_1.ValuedBarContent {
         return this._accidental !== undefined;
     }
     isBorE() {
-        return this.name === 'B' || this.name === 'E';
+        return this.name === "B" || this.name === "E";
     }
     isCorF() {
-        return this.name === 'C' || this.name === 'F';
+        return this.name === "C" || this.name === "F";
     }
     // getters & setters
     // name
@@ -124,7 +126,7 @@ class Note extends ValuedBarContent_1.ValuedBarContent {
     // frequency
     // Base frequency times 2 pow (semitones to A440 / 12)
     get frequency() {
-        const baseA = new Note({ name: 'A', pitch: new Pitch_1.Pitch({ value: 5 }) });
+        const baseA = new Note({ name: "A", pitch: new Pitch_1.Pitch({ value: 5 }) });
         return exports.BASE_FREQUENCY * Math.pow(2, baseA.getSemitonesTo(this) / 12);
     }
     // static methods
@@ -148,11 +150,13 @@ class Note extends ValuedBarContent_1.ValuedBarContent {
         /* count octaves and ADD OR SUBSTRACT semitones of octaves difference (12 * octaveDifference) to the result */
         semitones += (note2.pitch.value - note1.pitch.value) * 12;
         /* count semitones difference between accidentals */
-        semitones += (note2.accidental ? note2.accidental.semitones : 0) - (note1.accidental ? note1.accidental.semitones : 0);
+        semitones +=
+            (note2.accidental ? note2.accidental.semitones : 0) -
+                (note1.accidental ? note1.accidental.semitones : 0);
         return semitones;
     }
     static getIndexDifferenceBetween(note1, note2) {
-        return 1 + (note2.index - note1.index + exports.NOTES.length) % exports.NOTES.length;
+        return 1 + ((note2.index - note1.index + exports.NOTES.length) % exports.NOTES.length);
     }
 }
 exports.Note = Note;

@@ -9,6 +9,7 @@ exports.Pitch = Pitch_1.Pitch;
 const Accidental_1 = require("./class/Accidental");
 exports.Accidental = Accidental_1.Accidental;
 exports.ACCIDENTAL = Accidental_1.ACCIDENTAL;
+exports.ACCIDENTALS = Accidental_1.ACCIDENTALS;
 const Scale_1 = require("./class/Scale");
 exports.Scale = Scale_1.Scale;
 exports.SCALES = Scale_1.SCALES;
