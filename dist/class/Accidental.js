@@ -8,7 +8,7 @@ var ACCIDENTAL;
     ACCIDENTAL[ACCIDENTAL["SHARP"] = 1] = "SHARP";
     ACCIDENTAL[ACCIDENTAL["DOUBLE_SHARP"] = 2] = "DOUBLE_SHARP";
 })(ACCIDENTAL = exports.ACCIDENTAL || (exports.ACCIDENTAL = {}));
-exports.ACCIDENTALS = Object.keys(ACCIDENTAL);
+exports.ACCIDENTALS = Object.keys(ACCIDENTAL).filter(p => isNaN(parseInt(p)));
 class Accidental {
     constructor(params = { semitones: 0 }) {
         this.semitones = params.semitones;

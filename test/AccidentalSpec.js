@@ -8,15 +8,13 @@ var ACCIDENTALS = index.ACCIDENTALS;
 describe("Accidental class", () => {
     describe("Constants", () => {
         it("Should have all Accidental names", () => {
-            expect(() => {
-                expect(Object.keys(ACCIDENTALS)).to.equal([
-                    "DOUBLE_FLAT",
-                    "FLAT",
-                    "NATURAL",
-                    "SHARP",
-                    "DOUBLE_SHARP",
-                ])
-            })
+            expect(ACCIDENTALS).to.deep.equal([
+                "DOUBLE_FLAT",
+                "FLAT",
+                "NATURAL",
+                "SHARP",
+                "DOUBLE_SHARP",
+            ])
         })
     })
     describe("Constructor", () => {

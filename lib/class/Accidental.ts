@@ -10,7 +10,9 @@ interface AccidentalParams {
   semitones: number;
 }
 
-export const ACCIDENTALS = Object.keys(ACCIDENTAL);
+export const ACCIDENTALS = Object.keys(ACCIDENTAL).filter(p =>
+  isNaN(parseInt(p))
+);
 
 export class Accidental {
   private _semitones!: ACCIDENTAL;
