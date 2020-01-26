@@ -1,6 +1,6 @@
 import { Note, NOTES, BASE_FREQUENCY } from "./class/Note";
 import { Pitch } from "./class/Pitch";
-import { Accidental, ACCIDENTAL } from "./class/Accidental";
+import { Accidental, ACCIDENTAL, ACCIDENTALS } from "./class/Accidental";
 import { Scale, SCALES } from "./class/Scale";
 import { INTERVALS, Interval } from "./class/Interval";
 import { TRIADS, Chord } from "./class/Chord";
@@ -13,7 +13,7 @@ import { Bar, BAR_TYPE_START, BAR_TYPE_END } from './class/Bar';
 export {
   Accidental,
   ACCIDENTAL,
-
+  ACCIDENTALS,
   Note,
   BASE_FREQUENCY,
   NOTES,
