@@ -88,6 +88,40 @@ export const EXTENDED_CHORDS: { [key: string]: IChordDefinition } = {
   }
 };
 
+function _recursiveExtendedChordCompute(
+  chord: ITriadDefinition | IChordDefinition,
+  addedTones: Interval[] = []
+): {
+  intervals: Interval[];
+  addedTones: Interval[];
+} {
+  if ((chord as ITriadDefinition).intervals) {
+    return {
+      intervals: (chord as ITriadDefinition).intervals,
+      addedTones
+    };
+  }
+
+  return _recursiveExtendedChordCompute((chord as IChordDefinition).extends, [
+    ...(chord as IChordDefinition).addedTones,
+    ...addedTones
+  ]);
+}
+
+// flatten extended chords
+export const COMPUTED_EXTENDED_CHORDS = Object.keys(EXTENDED_CHORDS).map(k => {
+  const EXTENDED_CHORD = EXTENDED_CHORDS[k];
+  // recursively compute chord, to flatten added tones & initial intervals of chord
+  const { intervals, addedTones } = _recursiveExtendedChordCompute(
+    EXTENDED_CHORD
+  );
+  return {
+    ...EXTENDED_CHORD,
+    intervals,
+    addedTones
+  };
+});
+
 interface ChordParams {
   root: Note;
   intervals?: Interval[];
@@ -252,9 +286,8 @@ export class Chord extends ValuedBarContent implements IntervalHandler {
   }
 
   possibleExtendedChords(triad: ITriadDefinition) {
-    const extendedChords = Chord.extendedChordsIntervals;
     const possibleAddedTones = this.possibleAddedTones(triad);
-    return extendedChords.filter(ec => {
+    return COMPUTED_EXTENDED_CHORDS.filter(ec => {
       if (ec.extends.name == triad.name) {
         // for each interval in extended chord definition check
         for (let i = 0; i < ec.addedTones.length; i++) {
@@ -276,41 +309,6 @@ export class Chord extends ValuedBarContent implements IntervalHandler {
 
       return false;
     });
-  }
-
-  static get extendedChordsIntervals() {
-    return Object.keys(EXTENDED_CHORDS).map(k => {
-      const EXTENDED_CHORD = EXTENDED_CHORDS[k];
-      // recursively compute chord, to flatten added tones & initial intervals of chord
-      const { intervals, addedTones } = Chord.recursiveExtendedChordCompute(
-        EXTENDED_CHORD
-      );
-      return {
-        ...EXTENDED_CHORD,
-        intervals,
-        addedTones
-      };
-    });
-  }
-
-  static recursiveExtendedChordCompute(
-    chord: ITriadDefinition | IChordDefinition,
-    addedTones: Interval[] = []
-  ): {
-    intervals: Interval[];
-    addedTones: Interval[];
-  } {
-    if ((chord as ITriadDefinition).intervals) {
-      return {
-        intervals: (chord as ITriadDefinition).intervals,
-        addedTones
-      };
-    }
-
-    return Chord.recursiveExtendedChordCompute(
-      (chord as IChordDefinition).extends,
-      [...(chord as IChordDefinition).addedTones, ...addedTones]
-    );
   }
 
   // IntervalHandler mixin

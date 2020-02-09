@@ -25,15 +25,6 @@ describe("Chord class", () => {
         })
     })
 
-    describe("static", () => {
-        it("Recursively compute chords & chords extension", () => {
-            expect(Chord.extendedChordsIntervals).to.deep.include({
-                ...EXTENDED_CHORDS["M7"],
-                intervals: EXTENDED_CHORDS["M7"].extends.intervals
-            })
-        })
-    })
-
     describe("Guess intervals", () => {
         it("Should guess intervals from chord notes", () => {
             let root = new Note({

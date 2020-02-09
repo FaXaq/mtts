@@ -1,7 +1,5 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
+Object.defineProperty(exports, "__esModule", { value: true });
 const Note_1 = require("./Note");
 const Interval_1 = require("./Interval");
 const IntervalHandler_1 = require("../super/IntervalHandler");
@@ -71,11 +69,29 @@ exports.EXTENDED_CHORDS = {
         extends: exports.TRIADS.min
     }
 };
+function _recursiveExtendedChordCompute(chord, addedTones = []) {
+    if (chord.intervals) {
+        return {
+            intervals: chord.intervals,
+            addedTones
+        };
+    }
+    return _recursiveExtendedChordCompute(chord.extends, [
+        ...chord.addedTones,
+        ...addedTones
+    ]);
+}
+// flatten extended chords
+exports.COMPUTED_EXTENDED_CHORDS = Object.keys(exports.EXTENDED_CHORDS).map(k => {
+    const EXTENDED_CHORD = exports.EXTENDED_CHORDS[k];
+    // recursively compute chord, to flatten added tones & initial intervals of chord
+    const { intervals, addedTones } = _recursiveExtendedChordCompute(EXTENDED_CHORD);
+    return Object.assign({}, EXTENDED_CHORD, { intervals,
+        addedTones });
+});
 class Chord extends ValuedBarContent_1.ValuedBarContent {
     constructor(params = {
-        root: new Note_1.Note({
-            name: "C"
-        }),
+        root: new Note_1.Note({ name: "C" }),
         value: Note_1.DEFAULT_NOTE_VALUE
     }) {
         super();
@@ -86,7 +102,8 @@ class Chord extends ValuedBarContent_1.ValuedBarContent {
             this.notes = params.notes;
             this.value = params.value || Note_1.DEFAULT_NOTE_VALUE;
             this.intervals = this.computeIntervals();
-        } else {
+        }
+        else {
             this.intervals =
                 params.intervals || utils_1.cloneInstanceObjectArray(exports.TRIADS.maj.intervals);
             this.value = params.value || Note_1.DEFAULT_NOTE_VALUE;
@@ -99,7 +116,8 @@ class Chord extends ValuedBarContent_1.ValuedBarContent {
     set root(root) {
         if (root instanceof Note_1.Note) {
             this._root = root;
-        } else {
+        }
+        else {
             throw new Error(`Trying to set a root for a chord, with something that is note a Note`);
         }
     }
@@ -133,9 +151,7 @@ class Chord extends ValuedBarContent_1.ValuedBarContent {
                     missingIntervals.push(exports.TRIADS[t].intervals[i]);
                 }
             }
-            triads.push(Object.assign({}, exports.TRIADS[t], {
-                missingIntervals
-            }));
+            triads.push(Object.assign({}, exports.TRIADS[t], { missingIntervals }));
         });
         return triads;
     }
@@ -148,12 +164,14 @@ class Chord extends ValuedBarContent_1.ValuedBarContent {
             if (perfectMatchedTriad.intervals.length === this.notes.length) {
                 this._definitions = possibleTriads;
                 return perfectMatchedTriad.notation;
-            } else {
+            }
+            else {
                 // it lacks a few intervals, find them and compute extended chord to find a match
                 const possibleExtendedChords = this.possibleExtendedChords(perfectMatchedTriad);
                 return possibleExtendedChords[0].notation;
             }
-        } else {
+        }
+        else {
             throw new Error(`No name for this chord yet ${JSON.stringify(this)}`);
         }
     }
@@ -163,9 +181,9 @@ class Chord extends ValuedBarContent_1.ValuedBarContent {
             // for now choosing the first result of interval from semitones
             // TODO: find algorithm to be sure semitone value is not currently in the chord
             let semitonesBetweenNotes = Note_1.Note.getSemitonesBetween(this.root, n);
-            let possibleInterval = Interval_1.Interval.fromSemitonesAndValue(semitonesBetweenNotes < 0 ?
-                (semitonesBetweenNotes % Note_1.SEMITONES_NUMBER) + Note_1.SEMITONES_NUMBER :
-                semitonesBetweenNotes, Note_1.Note.getIndexDifferenceBetween(this.root, n));
+            let possibleInterval = Interval_1.Interval.fromSemitonesAndValue(semitonesBetweenNotes < 0
+                ? (semitonesBetweenNotes % Note_1.SEMITONES_NUMBER) + Note_1.SEMITONES_NUMBER
+                : semitonesBetweenNotes, Note_1.Note.getIndexDifferenceBetween(this.root, n));
             if (possibleInterval !== undefined)
                 intervals.push(possibleInterval);
         });
@@ -189,9 +207,8 @@ class Chord extends ValuedBarContent_1.ValuedBarContent {
         });
     }
     possibleExtendedChords(triad) {
-        const extendedChords = Chord.extendedChordsIntervals;
         const possibleAddedTones = this.possibleAddedTones(triad);
-        return extendedChords.filter(ec => {
+        return exports.COMPUTED_EXTENDED_CHORDS.filter(ec => {
             if (ec.extends.name == triad.name) {
                 // for each interval in extended chord definition check
                 for (let i = 0; i < ec.addedTones.length; i++) {
@@ -212,29 +229,6 @@ class Chord extends ValuedBarContent_1.ValuedBarContent {
             }
             return false;
         });
-    }
-    static get extendedChordsIntervals() {
-        return Object.keys(exports.EXTENDED_CHORDS).map(k => {
-            const EXTENDED_CHORD = exports.EXTENDED_CHORDS[k];
-            // recursively compute chord, to flatten added tones & initial intervals of chord
-            const {
-                intervals,
-                addedTones
-            } = Chord.recursiveExtendedChordCompute(EXTENDED_CHORD);
-            return Object.assign({}, EXTENDED_CHORD, {
-                intervals,
-                addedTones
-            });
-        });
-    }
-    static recursiveExtendedChordCompute(chord, addedTones = []) {
-        if (chord.intervals) {
-            return {
-                intervals: chord.intervals,
-                addedTones
-            };
-        }
-        return Chord.recursiveExtendedChordCompute(chord.extends, [...chord.addedTones, ...addedTones]);
     }
 }
 exports.Chord = Chord;

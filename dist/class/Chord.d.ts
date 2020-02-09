@@ -23,6 +23,13 @@ export declare const TRIADS: {
 export declare const EXTENDED_CHORDS: {
     [key: string]: IChordDefinition;
 };
+export declare const COMPUTED_EXTENDED_CHORDS: {
+    intervals: Interval[];
+    addedTones: Interval[];
+    name: string;
+    notation: string;
+    extends: ITriadDefinition | IChordDefinition;
+}[];
 interface ChordParams {
     root: Note;
     intervals?: Interval[];
@@ -50,17 +57,6 @@ export declare class Chord extends ValuedBarContent implements IntervalHandler {
         notation: string;
         extends: ITriadDefinition | IChordDefinition;
     }[];
-    static readonly extendedChordsIntervals: {
-        intervals: Interval[];
-        addedTones: Interval[];
-        name: string;
-        notation: string;
-        extends: ITriadDefinition | IChordDefinition;
-    }[];
-    static recursiveExtendedChordCompute(chord: ITriadDefinition | IChordDefinition, addedTones?: Interval[]): {
-        intervals: Interval[];
-        addedTones: Interval[];
-    };
     compute: (intervals: Interval[], note: Note) => Note[];
 }
 export {};
