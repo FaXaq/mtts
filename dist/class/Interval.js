@@ -213,7 +213,7 @@ exports.INTERVALS = {
 };
 class Interval {
     constructor(name) {
-        if (typeof exports.INTERVALS[name] !== undefined) {
+        if (exports.INTERVALS[name] !== undefined) {
             this.name = name;
             this.semitones = exports.INTERVALS[name].semitones;
             this.value = exports.INTERVALS[name].value;
@@ -226,7 +226,7 @@ class Interval {
         return Interval.apply(note, this.name);
     }
     static fromSemitones(semitones) {
-        let intervals = [];
+        const intervals = [];
         Object.keys(exports.INTERVALS).forEach((k) => {
             if (exports.INTERVALS[k].semitones === semitones) {
                 intervals.push(new Interval(k));
@@ -235,7 +235,7 @@ class Interval {
         return intervals;
     }
     static fromValue(value) {
-        let intervals = [];
+        const intervals = [];
         Object.keys(exports.INTERVALS).forEach((k) => {
             if (exports.INTERVALS[k].value === value) {
                 intervals.push(new Interval(k));
@@ -252,7 +252,7 @@ class Interval {
         return exports.INTERVALS[name].semitones;
     }
     static apply(note, name) {
-        let newNote = note.duplicate();
+        const newNote = note.duplicate();
         let intervalValue = Interval.getValue(name);
         /* skip to next note until interval value is reached */
         while (intervalValue > 1) {
@@ -260,7 +260,7 @@ class Interval {
             intervalValue--;
         }
         /* check if new note has the correct interval semitones difference as the one requested */
-        let semitonesDifference = Interval.getSemitones(name) - note.getSemitonesTo(newNote);
+        const semitonesDifference = Interval.getSemitones(name) - note.getSemitonesTo(newNote);
         if (semitonesDifference < 0) {
             newNote.flattenTo(semitonesDifference);
         }

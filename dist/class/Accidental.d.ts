@@ -12,10 +12,11 @@ export declare const ACCIDENTALS: string[];
 export declare class Accidental {
     private _semitones;
     constructor(params?: AccidentalParams);
-    addSharp(): void;
-    addFlat(): void;
-    semitones: number;
-    readonly name: string;
+    addSharp(): Accidental;
+    addFlat(): Accidental;
+    get semitones(): number;
+    set semitones(semitones: number);
+    get name(): string;
     static fromString(str: string): Accidental | undefined;
 }
 export {};

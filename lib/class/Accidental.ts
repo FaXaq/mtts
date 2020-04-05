@@ -7,92 +7,95 @@ export enum ACCIDENTAL {
 }
 
 interface AccidentalParams {
-  semitones: number;
+  semitones: number
 }
 
 export const ACCIDENTALS = Object.keys(ACCIDENTAL).filter(p =>
   isNaN(parseInt(p))
-);
+)
 
 export class Accidental {
   private _semitones!: ACCIDENTAL;
 
-  constructor(params: AccidentalParams = { semitones: 0 }) {
-    this.semitones = params.semitones;
+  constructor (params: AccidentalParams = { semitones: 0 }) {
+    this.semitones = params.semitones
   }
 
-  public addSharp() {
+  public addSharp (): Accidental {
     switch (this.semitones) {
       case 2:
-        throw new Error(`Cannot add sharp to a DOUBLE_SHARP.`);
+        throw new Error('Cannot add sharp to a DOUBLE_SHARP.')
       default:
-        this.semitones++;
+        this.semitones++
     }
+
+    return this
   }
 
-  public addFlat() {
+  public addFlat (): Accidental {
     switch (this.semitones) {
       case -2:
-        throw new Error(`Cannot add flat to a DOUBLE_FLAT.`);
+        throw new Error('Cannot add flat to a DOUBLE_FLAT.')
       default:
-        this.semitones--;
+        this.semitones--
     }
+
+    return this
   }
 
   // getters & setters
   // semitones
-  get semitones(): number {
-    return this._semitones;
+  get semitones (): number {
+    return this._semitones
   }
 
-  set semitones(semitones: number) {
-    if (ACCIDENTAL[semitones]) {
-      this._semitones = semitones;
+  set semitones (semitones: number) {
+    if (ACCIDENTAL[semitones] !== undefined) {
+      this._semitones = semitones
     } else {
       throw new Error(
-        `Couldn't find a semitone with the value ${semitones}. Semitones available : ${ACCIDENTAL}`
-      );
+        `Couldn't find a semitone with the value ${semitones}. Semitones available : ${Object.keys(ACCIDENTAL).join(', ')}`
+      )
     }
   }
 
   // name
-  get name(): string {
-    return ACCIDENTAL[this._semitones];
+  get name (): string {
+    return ACCIDENTAL[this._semitones]
   }
 
-  static fromString(str: string): Accidental | undefined {
+  static fromString (str: string): Accidental | undefined {
     switch (str) {
-      case "b":
-      case "♭":
+      case 'b':
+      case '♭':
         return new Accidental({
           semitones: -1
-        });
+        })
 
-      case "bb":
-      case "𝄫":
+      case 'bb':
+      case '𝄫':
         return new Accidental({
           semitones: -2
-        });
+        })
 
-      case "#":
-      case "♯":
+      case '#':
+      case '♯':
         return new Accidental({
           semitones: 1
-        });
+        })
 
-      case "𝄪":
+      case '𝄪':
         return new Accidental({
           semitones: 2
-        });
+        })
 
-      case "n":
-      case "♮":
+      case 'n':
+      case '♮':
         return new Accidental({
           semitones: 0
-        });
+        })
 
       default:
-        return;
     }
   }
 }

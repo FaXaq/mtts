@@ -1,7 +1,7 @@
-import { TimeSignature } from "./TimeSignature";
-import { Bar, BAR_TYPE_START, BAR_TYPE_END, BAR_CONTENT } from "./Bar";
-import { NOTE_VALUE } from "./NoteValue";
-import { Scale } from "./Scale";
+import { TimeSignature } from './TimeSignature';
+import { Bar, BAR_TYPE_START, BAR_TYPE_END, BAR_CONTENT } from './Bar';
+import { NOTE_VALUE } from './NoteValue';
+import { Scale } from './Scale';
 export declare enum SCORE_STAFF {
     TREBLE = "TREBLE",
     FRENCH_VIOLIN = "FRENCH_VIOLIN",
@@ -18,9 +18,9 @@ export declare enum SCORE_STAFF {
 export interface ScoreParams {
     timeSignature?: TimeSignature;
     staff?: SCORE_STAFF;
-    measures?: Array<Bar>;
+    measures?: Bar[];
     keySignature?: Scale;
-    bars?: Array<Bar>;
+    bars?: Bar[];
 }
 export declare class Score {
     private _ts;
@@ -28,14 +28,19 @@ export declare class Score {
     private _bars;
     private _ks;
     constructor(params?: ScoreParams);
-    timeSignature: TimeSignature;
-    staff: SCORE_STAFF;
-    bars: Array<Bar>;
-    measures: Array<Bar>;
-    keySignature: Scale;
-    readonly defaultNoteValue: NOTE_VALUE;
-    readonly lastBar: Bar;
-    addBar(typeStart: BAR_TYPE_START, typeEnd: BAR_TYPE_END, content?: Array<BAR_CONTENT>): Bar;
+    get timeSignature(): TimeSignature;
+    set timeSignature(ts: TimeSignature);
+    get staff(): SCORE_STAFF;
+    set staff(staff: SCORE_STAFF);
+    get bars(): Bar[];
+    set bars(bars: Bar[]);
+    get measures(): Bar[];
+    set measures(measures: Bar[]);
+    get keySignature(): Scale;
+    set keySignature(scale: Scale);
+    get defaultNoteValue(): NOTE_VALUE;
+    get lastBar(): Bar;
+    addBar(typeStart: BAR_TYPE_START, typeEnd: BAR_TYPE_END, content?: BAR_CONTENT[]): Bar;
     addContent(content: BAR_CONTENT): void;
     modifyContent(bar: number, contentIndex: number, newContent: BAR_CONTENT): void;
 }

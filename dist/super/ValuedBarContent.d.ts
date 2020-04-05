@@ -1,13 +1,15 @@
-import { NOTE_VALUE } from "../class/NoteValue";
+import { NOTE_VALUE } from '../class/NoteValue';
 export interface IValuedBarContentParams {
-    value?: NOTE_VALUE | number;
+    value?: NOTE_VALUE;
     dots?: number;
 }
 export declare class ValuedBarContent {
     private _value;
     private _dots;
     constructor(params?: IValuedBarContentParams);
-    value: NOTE_VALUE | number;
-    dots: number;
-    readonly dottedValue: number;
+    set value(value: NOTE_VALUE);
+    get value(): NOTE_VALUE;
+    set dots(dots: number);
+    get dots(): number;
+    get dottedValue(): number;
 }

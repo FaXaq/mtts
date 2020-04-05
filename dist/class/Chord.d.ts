@@ -1,8 +1,8 @@
-import { Note } from "./Note";
-import { Interval } from "./Interval";
-import { IntervalHandler } from "../super/IntervalHandler";
-import { NOTE_VALUE } from "./NoteValue";
-import { ValuedBarContent } from "../super/ValuedBarContent";
+import { Note } from './Note';
+import { Interval } from './Interval';
+import { IntervalHandler } from '../super/IntervalHandler';
+import { NOTE_VALUE } from './NoteValue';
+import { ValuedBarContent } from '../super/ValuedBarContent';
 interface ITriadDefinition {
     name: string;
     intervals: Interval[];
@@ -30,6 +30,7 @@ export declare const COMPUTED_EXTENDED_CHORDS: {
     notation: string;
     extends: ITriadDefinition | IChordDefinition;
 }[];
+declare type COMPUTED_EXTENDED_CHORD = typeof COMPUTED_EXTENDED_CHORDS[number];
 interface ChordParams {
     root: Note;
     intervals?: Interval[];
@@ -42,21 +43,18 @@ export declare class Chord extends ValuedBarContent implements IntervalHandler {
     private _notes;
     private _definitions;
     constructor(params?: ChordParams);
-    root: Note;
-    intervals: Interval[];
-    notes: Note[];
-    readonly _possibleTriads: IPossibleTriad[];
-    readonly notation: string;
+    get root(): Note;
+    set root(root: Note);
+    get intervals(): Interval[];
+    set intervals(intervals: Interval[]);
+    set notes(notes: Note[]);
+    get notes(): Note[];
+    get _possibleTriads(): IPossibleTriad[];
+    get notation(): string;
     computeIntervals(): Interval[];
-    addInterval(interval: Interval): void;
+    addInterval(interval: Interval): Chord;
     possibleAddedTones(triad: ITriadDefinition): Interval[];
-    possibleExtendedChords(triad: ITriadDefinition): {
-        intervals: Interval[];
-        addedTones: Interval[];
-        name: string;
-        notation: string;
-        extends: ITriadDefinition | IChordDefinition;
-    }[];
+    possibleExtendedChords(triad: ITriadDefinition): COMPUTED_EXTENDED_CHORD[];
     compute: (intervals: Interval[], note: Note) => Note[];
 }
 export {};

@@ -20,10 +20,11 @@ var SCORE_STAFF;
 })(SCORE_STAFF = exports.SCORE_STAFF || (exports.SCORE_STAFF = {}));
 class Score {
     constructor(params = {}) {
-        this.timeSignature = params.timeSignature || new TimeSignature_1.TimeSignature({});
-        this.staff = params.staff || SCORE_STAFF.TREBLE;
-        this.bars = params.measures || params.bars || [];
-        this.keySignature = params.keySignature || new Scale_1.Scale({
+        var _a, _b, _c, _d, _e;
+        this.timeSignature = (_a = params.timeSignature) !== null && _a !== void 0 ? _a : new TimeSignature_1.TimeSignature({});
+        this.staff = (_b = params.staff) !== null && _b !== void 0 ? _b : SCORE_STAFF.TREBLE;
+        this.bars = (_d = ((_c = params.measures) !== null && _c !== void 0 ? _c : params.bars)) !== null && _d !== void 0 ? _d : [];
+        this.keySignature = (_e = params.keySignature) !== null && _e !== void 0 ? _e : new Scale_1.Scale({
             key: new Note_1.Note()
         });
     }
@@ -42,7 +43,7 @@ class Score {
             this._staff = staff;
         }
         else {
-            throw new Error(`Clef on new score can only be one of ${Object.keys(SCORE_STAFF)}, you tried to set it to : ${staff}`);
+            throw new Error(`Clef on new score can only be one of ${Object.keys(SCORE_STAFF).join(', ')}, you tried to set it to : ${staff}`);
         }
     }
     get bars() {
@@ -76,8 +77,8 @@ class Score {
         this.bars.push(new Bar_1.Bar({
             timeSignature: this.timeSignature,
             content: content,
-            typeStart: typeStart || Bar_1.BAR_TYPE_START.STANDARD,
-            typeEnd: typeEnd || Bar_1.BAR_TYPE_END.STANDARD,
+            typeStart: typeStart !== null && typeStart !== void 0 ? typeStart : Bar_1.BAR_TYPE_START.STANDARD,
+            typeEnd: typeEnd !== null && typeEnd !== void 0 ? typeEnd : Bar_1.BAR_TYPE_END.STANDARD,
             staff: this.staff
         }));
         return this.lastBar;
@@ -92,7 +93,7 @@ class Score {
                 this.addBar(Bar_1.BAR_TYPE_START.STANDARD, Bar_1.BAR_TYPE_END.STANDARD, [content]);
             }
             catch (err) {
-                throw new Error(`Trying to add content ${content} to Score. ${err}`);
+                throw new Error(`Trying to add content ${JSON.stringify(content)} to Score. ${JSON.stringify(err)}`);
             }
         }
     }

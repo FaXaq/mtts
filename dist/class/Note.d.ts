@@ -1,8 +1,8 @@
-import { Pitch } from "./Pitch";
-import { Accidental } from "./Accidental";
-import { NOTE_VALUE } from "./NoteValue";
-import { ValuedBarContent } from "../super/ValuedBarContent";
-export declare const NOTES: Array<string>;
+import { Pitch } from './Pitch';
+import { Accidental } from './Accidental';
+import { NOTE_VALUE } from './NoteValue';
+import { ValuedBarContent } from '../super/ValuedBarContent';
+export declare const NOTES: string[];
 export declare const SEMITONES_NUMBER: number;
 export declare const DEFAULT_NOTE_VALUE: NOTE_VALUE;
 export declare const BASE_FREQUENCY: number;
@@ -21,26 +21,29 @@ export declare class Note extends ValuedBarContent {
     /**
      * Adds a sharp accidental (if one is already there, adds a second one)
      */
-    addSharp(): void;
-    sharpenTo(n: number): void;
+    addSharp(): Note;
+    sharpenTo(n: number): Note;
     /**
      * Adds a flat to the current note (or flatten the accidental)
      */
-    addFlat(): void;
-    flattenTo(n: number): void;
-    next(): void;
-    previous(): void;
+    addFlat(): Note;
+    flattenTo(n: number): Note;
+    next(): Note;
+    previous(): Note;
     getSemitonesTo(note: Note): number;
     duplicate(): Note;
-    removeAccidental(): void;
+    removeAccidental(): Note;
     hasAccidental(): boolean;
     isBorE(): boolean;
     isCorF(): boolean;
-    name: string;
-    pitch: Pitch;
-    readonly index: number;
-    accidental: Accidental;
-    readonly frequency: number;
+    set name(name: string);
+    get name(): string;
+    set pitch(pitch: Pitch);
+    get pitch(): Pitch;
+    get index(): number;
+    set accidental(accidental: Accidental);
+    get accidental(): Accidental;
+    get frequency(): number;
     static validateName(name: string): boolean;
     static getSemitonesBetween(note1: Note, note2: Note): number;
     static getIndexDifferenceBetween(note1: Note, note2: Note): number;

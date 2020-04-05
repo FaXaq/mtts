@@ -3,8 +3,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const Note_1 = require("../class/Note");
 class ValuedBarContent {
     constructor(params = {}) {
-        this.value = params.value || Note_1.DEFAULT_NOTE_VALUE;
-        this.dots = params.dots || 0;
+        var _a, _b;
+        this.value = (_a = params.value) !== null && _a !== void 0 ? _a : Note_1.DEFAULT_NOTE_VALUE;
+        this.dots = (_b = params.dots) !== null && _b !== void 0 ? _b : 0;
     }
     // getters & setters
     set value(value) {

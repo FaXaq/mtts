@@ -6,33 +6,34 @@ const IntervalHandler_1 = require("../super/IntervalHandler");
 const applyMixins_1 = require("../misc/applyMixins");
 const Chord_1 = require("./Chord");
 exports.SCALES = {
-    "major": {
-        "intervals": [
-            new Interval_1.Interval("P1"),
-            new Interval_1.Interval("M2"),
-            new Interval_1.Interval("M3"),
-            new Interval_1.Interval("P4"),
-            new Interval_1.Interval("P5"),
-            new Interval_1.Interval("M6"),
-            new Interval_1.Interval("M7")
+    major: {
+        intervals: [
+            new Interval_1.Interval('P1'),
+            new Interval_1.Interval('M2'),
+            new Interval_1.Interval('M3'),
+            new Interval_1.Interval('P4'),
+            new Interval_1.Interval('P5'),
+            new Interval_1.Interval('M6'),
+            new Interval_1.Interval('M7')
         ]
     },
-    "minor": {
-        "intervals": [
-            new Interval_1.Interval("P1"),
-            new Interval_1.Interval("M2"),
-            new Interval_1.Interval("m3"),
-            new Interval_1.Interval("P4"),
-            new Interval_1.Interval("P5"),
-            new Interval_1.Interval("M6"),
-            new Interval_1.Interval("m7")
+    minor: {
+        intervals: [
+            new Interval_1.Interval('P1'),
+            new Interval_1.Interval('M2'),
+            new Interval_1.Interval('m3'),
+            new Interval_1.Interval('P4'),
+            new Interval_1.Interval('P5'),
+            new Interval_1.Interval('M6'),
+            new Interval_1.Interval('m7')
         ]
     }
 };
 class Scale {
-    constructor(params = { key: new Note_1.Note({ name: "C" }) }) {
+    constructor(params = { key: new Note_1.Note({ name: 'C' }) }) {
+        var _a;
         this._notes = [];
-        this.name = params.name || "major";
+        this.name = (_a = params.name) !== null && _a !== void 0 ? _a : 'major';
         this.key = params.key;
         this.notes = this.compute(exports.SCALES[this.name].intervals, this.key);
     }
@@ -40,11 +41,11 @@ class Scale {
         return this._name;
     }
     set name(name) {
-        if (exports.SCALES[name]) {
+        if (exports.SCALES[name] !== undefined) {
             this._name = name;
         }
         else {
-            throw new Error(`Couldn't create scale ${name}. Available scales are "${Object.keys(exports.SCALES)}"`);
+            throw new Error(`Couldn't create scale ${name}. Available scales are "${Object.keys(exports.SCALES).join(', ')}"`);
         }
     }
     get key() {
@@ -61,7 +62,7 @@ class Scale {
     }
     // Return all 7th chords from the scale
     get scaleChords() {
-        let chords = [];
+        const chords = [];
         for (let i = 0; i < this.notes.length; i++) {
             chords.push(new Chord_1.Chord({
                 root: this.notes[i],

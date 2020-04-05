@@ -6,7 +6,7 @@ export enum BEATS_TYPE {
 }
 
 export interface TimeSignatureParams {
-  beats?: number,
+  beats?: number
   beatsType?: number
 }
 
@@ -14,25 +14,25 @@ export class TimeSignature {
   private _beats!: number;
   private _beatsType!: BEATS_TYPE;
 
-  constructor(params: TimeSignatureParams = {}) {
-    this.beats = params.beats || 4;
-    this.beatsType = params.beatsType || BEATS_TYPE.QUARTER_NOTE;
+  constructor (params: TimeSignatureParams = {}) {
+    this.beats = params.beats ?? 4
+    this.beatsType = params.beatsType ?? BEATS_TYPE.QUARTER_NOTE
   }
 
   // getters & setters
-  set beats(beats: number) {
-    this._beats = beats;
+  set beats (beats: number) {
+    this._beats = beats
   }
 
-  get beats(): number {
-    return this._beats;
+  get beats (): number {
+    return this._beats
   }
 
-  set beatsType(beatsType: number) {
-    this._beatsType = beatsType;
+  set beatsType (beatsType: number) {
+    this._beatsType = beatsType
   }
 
-  get beatsType(): number {
-    return this._beatsType;
+  get beatsType (): number {
+    return this._beatsType
   }
 }

@@ -1,8 +1,8 @@
-import { Note, NOTES } from "./Note";
+import { Note, NOTES } from './Note'
 
 interface IInterval {
-  value: number;
-  semitones: number;
+  value: number
+  semitones: number
 }
 
 export const INTERVALS: { [key: string]: IInterval } = {
@@ -214,96 +214,96 @@ export const INTERVALS: { [key: string]: IInterval } = {
     value: 15,
     semitones: 25
   }
-};
+}
 
 export class Interval {
   name: string;
   semitones: number;
   value: number;
 
-  constructor(name: string) {
-    if (typeof INTERVALS[name] !== undefined) {
-      this.name = name;
-      this.semitones = INTERVALS[name].semitones;
-      this.value = INTERVALS[name].value;
+  constructor (name: string) {
+    if (INTERVALS[name] !== undefined) {
+      this.name = name
+      this.semitones = INTERVALS[name].semitones
+      this.value = INTERVALS[name].value
     } else {
-      throw new Error(`Interval with ${name} does not exist.`);
+      throw new Error(`Interval with ${name} does not exist.`)
     }
   }
 
-  apply(note: Note) {
-    return Interval.apply(note, this.name);
+  apply (note: Note): Note {
+    return Interval.apply(note, this.name)
   }
 
-  static fromSemitones(semitones: number): Interval[] {
-    let intervals: Interval[] = [];
+  static fromSemitones (semitones: number): Interval[] {
+    const intervals: Interval[] = []
 
     Object.keys(INTERVALS).forEach((k: string) => {
       if (INTERVALS[k].semitones === semitones) {
-        intervals.push(new Interval(k));
+        intervals.push(new Interval(k))
       }
-    });
+    })
 
-    return intervals;
+    return intervals
   }
 
-  static fromValue(value: number): Interval[] {
-    let intervals: Interval[] = [];
+  static fromValue (value: number): Interval[] {
+    const intervals: Interval[] = []
 
     Object.keys(INTERVALS).forEach((k: string) => {
       if (INTERVALS[k].value === value) {
-        intervals.push(new Interval(k));
+        intervals.push(new Interval(k))
       }
-    });
+    })
 
-    return intervals;
+    return intervals
   }
 
-  static fromSemitonesAndValue(
+  static fromSemitonesAndValue (
     semitones: number,
     value: number
   ): Interval | undefined {
     return Interval.fromSemitones(semitones).find((interval: Interval) => {
-      return interval.value % NOTES.length === value % NOTES.length;
-    });
+      return interval.value % NOTES.length === value % NOTES.length
+    })
   }
 
-  static getSemitones(name: keyof typeof INTERVALS) {
-    return INTERVALS[name].semitones;
+  static getSemitones (name: keyof typeof INTERVALS): number {
+    return INTERVALS[name].semitones
   }
 
-  static apply(note: Note, name: keyof typeof INTERVALS): Note {
-    let newNote = note.duplicate();
-    let intervalValue = Interval.getValue(name);
+  static apply (note: Note, name: keyof typeof INTERVALS): Note {
+    const newNote = note.duplicate()
+    let intervalValue = Interval.getValue(name)
 
     /* skip to next note until interval value is reached */
     while (intervalValue > 1) {
-      newNote.next();
-      intervalValue--;
+      newNote.next()
+      intervalValue--
     }
 
     /* check if new note has the correct interval semitones difference as the one requested */
-    let semitonesDifference =
-      Interval.getSemitones(name) - note.getSemitonesTo(newNote);
+    const semitonesDifference =
+      Interval.getSemitones(name) - note.getSemitonesTo(newNote)
 
     if (semitonesDifference < 0) {
-      newNote.flattenTo(semitonesDifference);
+      newNote.flattenTo(semitonesDifference)
     } else if (semitonesDifference > 0) {
-      newNote.sharpenTo(semitonesDifference);
+      newNote.sharpenTo(semitonesDifference)
     }
 
-    return newNote;
+    return newNote
   }
 
-  static getValue(name: keyof typeof INTERVALS): number {
-    return INTERVALS[name].value;
+  static getValue (name: keyof typeof INTERVALS): number {
+    return INTERVALS[name].value
   }
 
-  static fromName(name: string): Interval {
-    return new Interval(name);
+  static fromName (name: string): Interval {
+    return new Interval(name)
   }
 
-  static equals(interval1: Interval, interval2: Interval) {
-    return interval1.name === interval2.name;
+  static equals (interval1: Interval, interval2: Interval): boolean {
+    return interval1.name === interval2.name
   }
 }

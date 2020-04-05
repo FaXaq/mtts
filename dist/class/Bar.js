@@ -21,16 +21,17 @@ var BAR_TYPE_END;
 })(BAR_TYPE_END = exports.BAR_TYPE_END || (exports.BAR_TYPE_END = {}));
 class Bar {
     constructor(params = {}) {
+        var _a, _b, _c, _d, _e;
         this._content = [];
         this._autoFill = true;
         // setup autofill parameter before content assignation to prevent first autofill
         if (params.autoFill !== undefined)
             this.autoFill = params.autoFill;
-        this.timeSignature = params.timeSignature || new TimeSignature_1.TimeSignature();
-        this.content = params.content || [];
-        this.staff = params.staff || Score_1.SCORE_STAFF.TREBLE;
-        this.typeStart = params.typeStart || BAR_TYPE_START.STANDARD;
-        this.typeEnd = params.typeEnd || BAR_TYPE_END.STANDARD;
+        this.timeSignature = (_a = params.timeSignature) !== null && _a !== void 0 ? _a : new TimeSignature_1.TimeSignature();
+        this.content = (_b = params.content) !== null && _b !== void 0 ? _b : [];
+        this.staff = (_c = params.staff) !== null && _c !== void 0 ? _c : Score_1.SCORE_STAFF.TREBLE;
+        this.typeStart = (_d = params.typeStart) !== null && _d !== void 0 ? _d : BAR_TYPE_START.STANDARD;
+        this.typeEnd = (_e = params.typeEnd) !== null && _e !== void 0 ? _e : BAR_TYPE_END.STANDARD;
         if (this.autoFill)
             this.fillEmptySpace();
     }
@@ -39,8 +40,8 @@ class Bar {
         return this._ts;
     }
     set timeSignature(timeSignature) {
-        if (timeSignature instanceof TimeSignature_1.TimeSignature === false) {
-            throw new Error(`Trying to set a bar Time signature with something other than a Time Signature : ${timeSignature}`);
+        if (!(timeSignature instanceof TimeSignature_1.TimeSignature)) {
+            throw new Error(`Trying to set a bar Time signature with something other than a Time Signature : ${JSON.stringify(timeSignature)}`);
         }
         else {
             this._ts = timeSignature;
@@ -50,8 +51,8 @@ class Bar {
         return this._content;
     }
     set content(content) {
-        if (!(content instanceof Array)) {
-            throw new Error(`Tying to set the content of a bar with something else than an array : ${content}`);
+        if (!Array.isArray(content)) {
+            throw new Error(`Tying to set the content of a bar with something else than an array : ${JSON.stringify(content)}`);
         }
         // reset content
         this._content = [];
@@ -104,23 +105,24 @@ class Bar {
     }
     addContent(content, fillEmptySpace = false) {
         if (this.isFull()) {
-            throw new Error(`Trying to add content to a bar that is already full. Try modifyContent instead.`);
+            throw new Error('Trying to add content to a bar that is already full. Try modifyContent instead.');
         }
         if (Bar.isBarContent(content)) {
             if (content.value <= this.emptySpace) {
                 this._content.push(content);
             }
             else {
-                throw new Error(`Trying to add a content with a note value greater than the remaining space in bar. ${content}`);
+                throw new Error(`Trying to add a content with a note value greater than the remaining space in bar. ${JSON.stringify(content)}`);
             }
         }
         else {
-            throw new Error(`Trying to add a content to a bar that either is not a Note, Chord or Rest or : ${content}`);
+            throw new Error(`Trying to add a content to a bar that either is not a Note, Chord or Rest or : ${JSON.stringify(content)}`);
         }
         // auto fill empty space in bar
         if (fillEmptySpace) {
             this.fillEmptySpace();
         }
+        return this;
     }
     // return old content
     modifyContent(contentIndex, newContent) {
@@ -135,11 +137,11 @@ class Bar {
             return this.content[contentIndex];
         }
         else {
-            throw new Error(`Trying to modify content at index : ${contentIndex} in Bar ${this} with content ${this.content}.`);
+            throw new Error(`Trying to modify content at index : ${contentIndex} in Bar ${JSON.stringify(this)} with content ${JSON.stringify(this.content)}.`);
         }
     }
     fillEmptySpace() {
-        Bar.fillEmptySpace(this);
+        return Bar.fillEmptySpace(this);
     }
     isFull() {
         return Bar.isFull(this);
@@ -147,9 +149,9 @@ class Bar {
     // fill empty space with rests
     static fillEmptySpace(bar) {
         if (bar.isFull())
-            return;
+            return bar;
         // when the bar is not full, fill it with the greater rests starting from the end
-        let rests = [];
+        const rests = [];
         // calculate sum of rests note_values
         let restsValue = 0;
         // while there is remaining space in bar + rests
@@ -162,6 +164,7 @@ class Bar {
             // add each rest without triggering autoFill
             bar.addContent(rests[i], false);
         }
+        return bar;
     }
     static isFull(bar) {
         return bar.value === bar.expectedValue;

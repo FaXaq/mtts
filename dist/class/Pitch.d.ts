@@ -6,6 +6,7 @@ export declare class Pitch {
     constructor(params?: PitchParams);
     inc(): void;
     dec(): void;
-    value: number;
+    get value(): number;
+    set value(value: number);
 }
 export {};

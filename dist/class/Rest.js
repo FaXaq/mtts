@@ -2,7 +2,6 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const ValuedBarContent_1 = require("../super/ValuedBarContent");
 const NoteValue_1 = require("./NoteValue");
-const __1 = require("..");
 class Rest extends ValuedBarContent_1.ValuedBarContent {
     constructor(params = {}) {
         super(params);
@@ -15,7 +14,7 @@ class Rest extends ValuedBarContent_1.ValuedBarContent {
                 });
             }
         }
-        throw new Error(`Couldn't find largest rest value for ${value}. Possible Note values : ${__1.NOTE_VALUE}`);
+        throw new Error(`Couldn't find largest rest value for ${value}. Possible Note values : ${JSON.stringify(NoteValue_1.NOTE_VALUES)}`);
     }
 }
 exports.Rest = Rest;

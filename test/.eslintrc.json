@@ -1,0 +1,10 @@
+{
+  "extends": "standard-with-typescript",
+  "parserOptions": {
+    "project": "../tsconfig.json"
+  },
+  "rules": {
+    "no-unused-expressions": "off",
+    "no-new": "off"
+  }
+}

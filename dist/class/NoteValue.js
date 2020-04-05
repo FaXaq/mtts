@@ -1,19 +1,19 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var NOTE_VALUE;
-(function (NOTE_VALUE) {
-    NOTE_VALUE[NOTE_VALUE["LARGE"] = 8] = "LARGE";
-    NOTE_VALUE[NOTE_VALUE["LONG"] = 4] = "LONG";
-    NOTE_VALUE[NOTE_VALUE["DOUBLE_WHOLE"] = 2] = "DOUBLE_WHOLE";
-    NOTE_VALUE[NOTE_VALUE["WHOLE"] = 1] = "WHOLE";
-    NOTE_VALUE[NOTE_VALUE["HALF"] = 0.5] = "HALF";
-    NOTE_VALUE[NOTE_VALUE["QUARTER"] = 0.25] = "QUARTER";
-    NOTE_VALUE[NOTE_VALUE["EIGHT"] = 0.125] = "EIGHT";
-    NOTE_VALUE[NOTE_VALUE["SIXTEENTH"] = 0.0625] = "SIXTEENTH";
-    NOTE_VALUE[NOTE_VALUE["THIRTY_SECOND"] = 0.03125] = "THIRTY_SECOND";
-    NOTE_VALUE[NOTE_VALUE["SIXY_FOURTH"] = 0.015625] = "SIXY_FOURTH";
-    NOTE_VALUE[NOTE_VALUE["HUNDRED_TWENTY_EIGHTH"] = 0.0078125] = "HUNDRED_TWENTY_EIGHTH";
-    NOTE_VALUE[NOTE_VALUE["TWO_HUNDRED_FIFTY_SIXTH"] = 0.00390625] = "TWO_HUNDRED_FIFTY_SIXTH";
-})(NOTE_VALUE = exports.NOTE_VALUE || (exports.NOTE_VALUE = {}));
-exports.SORTED_NOTE_VALUES = Object.keys(NOTE_VALUE).filter(v => !isNaN(parseInt(v))).map(v => parseFloat(v)).sort();
+exports.NOTE_VALUES = {
+    LARGE: 8,
+    LONG: 4,
+    DOUBLE_WHOLE: 2,
+    WHOLE: 1,
+    HALF: 1 / 2,
+    QUARTER: 1 / 4,
+    EIGHT: 1 / 8,
+    SIXTEENTH: 1 / 16,
+    THIRTY_SECOND: 1 / 32,
+    SIXY_FOURTH: 1 / 64,
+    HUNDRED_TWENTY_EIGHTH: 1 / 128,
+    TWO_HUNDRED_FIFTY_SIXTH: 1 / 256
+};
+exports.SORTED_NOTE_VALUES = Object.keys(exports.NOTE_VALUES)
+    .map(v => exports.NOTE_VALUES[v]).sort((a, b) => a - b);
 exports.REVERSE_SORTED_NOTE_VALUES = exports.SORTED_NOTE_VALUES.reverse();

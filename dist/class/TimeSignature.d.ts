@@ -12,6 +12,8 @@ export declare class TimeSignature {
     private _beats;
     private _beatsType;
     constructor(params?: TimeSignatureParams);
-    beats: number;
-    beatsType: number;
+    set beats(beats: number);
+    get beats(): number;
+    set beatsType(beatsType: number);
+    get beatsType(): number;
 }

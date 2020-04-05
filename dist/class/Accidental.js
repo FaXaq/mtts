@@ -16,18 +16,20 @@ class Accidental {
     addSharp() {
         switch (this.semitones) {
             case 2:
-                throw new Error(`Cannot add sharp to a DOUBLE_SHARP.`);
+                throw new Error('Cannot add sharp to a DOUBLE_SHARP.');
             default:
                 this.semitones++;
         }
+        return this;
     }
     addFlat() {
         switch (this.semitones) {
             case -2:
-                throw new Error(`Cannot add flat to a DOUBLE_FLAT.`);
+                throw new Error('Cannot add flat to a DOUBLE_FLAT.');
             default:
                 this.semitones--;
         }
+        return this;
     }
     // getters & setters
     // semitones
@@ -35,11 +37,11 @@ class Accidental {
         return this._semitones;
     }
     set semitones(semitones) {
-        if (ACCIDENTAL[semitones]) {
+        if (ACCIDENTAL[semitones] !== undefined) {
             this._semitones = semitones;
         }
         else {
-            throw new Error(`Couldn't find a semitone with the value ${semitones}. Semitones available : ${ACCIDENTAL}`);
+            throw new Error(`Couldn't find a semitone with the value ${semitones}. Semitones available : ${Object.keys(ACCIDENTAL).join(', ')}`);
         }
     }
     // name
@@ -48,32 +50,31 @@ class Accidental {
     }
     static fromString(str) {
         switch (str) {
-            case "b":
-            case "♭":
+            case 'b':
+            case '♭':
                 return new Accidental({
                     semitones: -1
                 });
-            case "bb":
-            case "𝄫":
+            case 'bb':
+            case '𝄫':
                 return new Accidental({
                     semitones: -2
                 });
-            case "#":
-            case "♯":
+            case '#':
+            case '♯':
                 return new Accidental({
                     semitones: 1
                 });
-            case "𝄪":
+            case '𝄪':
                 return new Accidental({
                     semitones: 2
                 });
-            case "n":
-            case "♮":
+            case 'n':
+            case '♮':
                 return new Accidental({
                     semitones: 0
                 });
             default:
-                return;
         }
     }
 }

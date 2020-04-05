@@ -9,8 +9,9 @@ var BEATS_TYPE;
 })(BEATS_TYPE = exports.BEATS_TYPE || (exports.BEATS_TYPE = {}));
 class TimeSignature {
     constructor(params = {}) {
-        this.beats = params.beats || 4;
-        this.beatsType = params.beatsType || BEATS_TYPE.QUARTER_NOTE;
+        var _a, _b;
+        this.beats = (_a = params.beats) !== null && _a !== void 0 ? _a : 4;
+        this.beatsType = (_b = params.beatsType) !== null && _b !== void 0 ? _b : BEATS_TYPE.QUARTER_NOTE;
     }
     // getters & setters
     set beats(beats) {
