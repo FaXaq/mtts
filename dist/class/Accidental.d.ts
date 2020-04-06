@@ -17,6 +17,15 @@ export declare class Accidental {
     get semitones(): number;
     set semitones(semitones: number);
     get name(): string;
-    static fromString(str: string): Accidental | undefined;
+    get SPN(): string;
+    static fromString(s: string): Accidental;
+    /**
+     * To Scientific Pitch Notation
+     */
+    static toSPN(accidental: Accidental): string;
+    /**
+     * To Scientific Pitch Notation
+     */
+    static fromSPN(s: string): Accidental;
 }
 export {};

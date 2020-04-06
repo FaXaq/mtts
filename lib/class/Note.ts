@@ -167,8 +167,12 @@ export class Note extends ValuedBarContent {
   // frequency
   // Base frequency times 2 pow (semitones to A440 / 12)
   get frequency (): number {
-    const baseA: Note = new Note({ name: 'A', pitch: new Pitch({ value: 5 }) })
+    const baseA: Note = new Note({ name: 'A', pitch: new Pitch({ value: 4 }) })
     return BASE_FREQUENCY * Math.pow(2, baseA.getSemitonesTo(this) / 12)
+  }
+
+  get SPN (): string {
+    return Note.toSPN(this)
   }
 
   // static methods
@@ -204,5 +208,33 @@ export class Note extends ValuedBarContent {
 
   static getIndexDifferenceBetween (note1: Note, note2: Note): number {
     return 1 + ((note2.index - note1.index + NOTES.length) % NOTES.length)
+  }
+
+  /**
+   * To Scientific Pitch Notation
+   */
+  static toSPN (n: Note): string {
+    try {
+      return `${n.name}${n.hasAccidental() ? n.accidental.SPN : ''}${n.pitch.value}`
+    } catch (err) {
+      throw new Error(`The note you provided is incorrect. You provided : ${JSON.stringify(n)}.`)
+    }
+  }
+
+  /**
+   * From Scientific Pitch Notation
+   */
+  static fromSPN (s: string): Note {
+    try {
+      return new Note({
+        name: s[0],
+        accidental: s.length > 2 ? Accidental.fromSPN(s.slice(1, s.length - 1)) : undefined,
+        pitch: new Pitch({
+          value: parseInt(s[s.length - 1])
+        })
+      })
+    } catch (err) {
+      throw new Error(`The string you provided is not a Scientific Pitch Notation. You provided : ${s}.`)
+    }
   }
 }

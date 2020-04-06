@@ -119,4 +119,28 @@ describe('Accidental class', () => {
       })
     })
   })
+
+  describe('SPN notation', () => {
+    it('Should get note SPN when note is valid', () => {
+      const accidental1 = new Accidental()
+      expect(accidental1.SPN).to.equal('')
+      const accidental2 = new Accidental({ semitones: -1 })
+      expect(accidental2.SPN).to.equal('b')
+      const accidental3 = new Accidental({ semitones: -2 })
+      expect(accidental3.SPN).to.equal('bb')
+      const accidental4 = new Accidental({ semitones: 1 })
+      expect(accidental4.SPN).to.equal('#')
+      const accidental5 = new Accidental({ semitones: 2 })
+      expect(accidental5.SPN).to.equal('x')
+    })
+
+    it('Should error on get SPN when not provided a valid note', () => {
+      expect(() => Accidental.toSPN('tartiflette')).to.throw()
+      expect(() => Accidental.fromSPN('tartiflette')).to.throw()
+    })
+
+    it('Should create a not from a SPN string', () => {
+      expect(Accidental.fromSPN('n')).to.deep.equal(new Accidental())
+    })
+  })
 })

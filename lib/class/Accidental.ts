@@ -64,8 +64,12 @@ export class Accidental {
     return ACCIDENTAL[this._semitones]
   }
 
-  static fromString (str: string): Accidental | undefined {
-    switch (str) {
+  get SPN (): string {
+    return Accidental.toSPN(this)
+  }
+
+  static fromString (s: string): Accidental {
+    switch (s) {
       case 'b':
       case '♭':
         return new Accidental({
@@ -96,6 +100,34 @@ export class Accidental {
         })
 
       default:
+        throw new Error(`Couldn't find an accidental for this string : ${JSON.stringify(s)}.`)
     }
+  }
+
+  /**
+   * To Scientific Pitch Notation
+   */
+  static toSPN (accidental: Accidental): string {
+    switch (accidental.name) {
+      case 'SHARP':
+        return '#'
+      case 'FLAT':
+        return 'b'
+      case 'DOUBLE_SHARP':
+        return 'x'
+      case 'DOUBLE_FLAT':
+        return 'bb'
+      case 'NATURAL':
+        return ''
+      default:
+        throw new Error(`Couldn't find SPN for this accidental : ${JSON.stringify(accidental)}.`)
+    }
+  }
+
+  /**
+   * To Scientific Pitch Notation
+   */
+  static fromSPN (s: string): Accidental {
+    return Accidental.fromString(s)
   }
 }

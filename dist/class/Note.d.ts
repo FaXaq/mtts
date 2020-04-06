@@ -44,8 +44,17 @@ export declare class Note extends ValuedBarContent {
     set accidental(accidental: Accidental);
     get accidental(): Accidental;
     get frequency(): number;
+    get SPN(): string;
     static validateName(name: string): boolean;
     static getSemitonesBetween(note1: Note, note2: Note): number;
     static getIndexDifferenceBetween(note1: Note, note2: Note): number;
+    /**
+     * To Scientific Pitch Notation
+     */
+    static toSPN(n: Note): string;
+    /**
+     * From Scientific Pitch Notation
+     */
+    static fromSPN(s: string): Note;
 }
 export {};

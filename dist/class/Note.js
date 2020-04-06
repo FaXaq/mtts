@@ -134,8 +134,11 @@ class Note extends ValuedBarContent_1.ValuedBarContent {
     // frequency
     // Base frequency times 2 pow (semitones to A440 / 12)
     get frequency() {
-        const baseA = new Note({ name: 'A', pitch: new Pitch_1.Pitch({ value: 5 }) });
+        const baseA = new Note({ name: 'A', pitch: new Pitch_1.Pitch({ value: 4 }) });
         return exports.BASE_FREQUENCY * Math.pow(2, baseA.getSemitonesTo(this) / 12);
+    }
+    get SPN() {
+        return Note.toSPN(this);
     }
     // static methods
     static validateName(name) {
@@ -165,6 +168,34 @@ class Note extends ValuedBarContent_1.ValuedBarContent {
     }
     static getIndexDifferenceBetween(note1, note2) {
         return 1 + ((note2.index - note1.index + exports.NOTES.length) % exports.NOTES.length);
+    }
+    /**
+     * To Scientific Pitch Notation
+     */
+    static toSPN(n) {
+        try {
+            return `${n.name}${n.hasAccidental() ? n.accidental.SPN : ''}${n.pitch.value}`;
+        }
+        catch (err) {
+            throw new Error(`The note you provided is incorrect. You provided : ${JSON.stringify(n)}.`);
+        }
+    }
+    /**
+     * From Scientific Pitch Notation
+     */
+    static fromSPN(s) {
+        try {
+            return new Note({
+                name: s[0],
+                accidental: s.length > 2 ? Accidental_1.Accidental.fromSPN(s.slice(1, s.length - 1)) : undefined,
+                pitch: new Pitch_1.Pitch({
+                    value: parseInt(s[s.length - 1])
+                })
+            });
+        }
+        catch (err) {
+            throw new Error(`The string you provided is not a Scientific Pitch Notation. You provided : ${s}.`);
+        }
     }
 }
 exports.Note = Note;

@@ -48,8 +48,11 @@ class Accidental {
     get name() {
         return ACCIDENTAL[this._semitones];
     }
-    static fromString(str) {
-        switch (str) {
+    get SPN() {
+        return Accidental.toSPN(this);
+    }
+    static fromString(s) {
+        switch (s) {
             case 'b':
             case '♭':
                 return new Accidental({
@@ -75,7 +78,33 @@ class Accidental {
                     semitones: 0
                 });
             default:
+                throw new Error(`Couldn't find an accidental for this string : ${JSON.stringify(s)}.`);
         }
+    }
+    /**
+     * To Scientific Pitch Notation
+     */
+    static toSPN(accidental) {
+        switch (accidental.name) {
+            case 'SHARP':
+                return '#';
+            case 'FLAT':
+                return 'b';
+            case 'DOUBLE_SHARP':
+                return 'x';
+            case 'DOUBLE_FLAT':
+                return 'bb';
+            case 'NATURAL':
+                return '';
+            default:
+                throw new Error(`Couldn't find SPN for this accidental : ${JSON.stringify(accidental)}.`);
+        }
+    }
+    /**
+     * To Scientific Pitch Notation
+     */
+    static fromSPN(s) {
+        return Accidental.fromString(s);
     }
 }
 exports.Accidental = Accidental;

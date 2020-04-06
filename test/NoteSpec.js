@@ -246,6 +246,36 @@ describe('Note class', () => {
     })
   })
 
+  describe('Checkers', () => {
+    it('Should be able to check if note is a C || F OR B || E', () => {
+      const note1 = new Note()
+      expect(note1.isBorE()).to.be.false
+      expect(note1.isCorF()).to.be.true
+      const note2 = new Note({ name: 'F' })
+      expect(note2.isBorE()).to.be.false
+      expect(note2.isCorF()).to.be.true
+    })
+  })
+
+  describe('Modifiers', () => {
+    it('Should be able to remove accidental', () => {
+      const note1 = new Note({
+        accidental: new Accidental({ semitones: -1 })
+      })
+      expect(note1.hasAccidental()).to.be.true
+      note1.removeAccidental()
+      expect(note1.hasAccidental()).to.be.false
+    })
+  })
+
+  describe('Getters', () => {
+    it('Should be able to calculate the frequency of a given note', () => {
+      const note1 = new Note({ name: 'A' })
+      console.log(note1.SPN)
+      expect(note1.frequency).to.equal(440)
+    })
+  })
+
   describe('Note index difference', () => {
     it('Should get index difference between two notes', () => {
       const note1 = new Note({
@@ -263,6 +293,41 @@ describe('Note class', () => {
         name: 'C'
       })
       expect(Note.getIndexDifferenceBetween(note1, note2)).to.equal(7)
+    })
+  })
+
+  describe('SPN notation', () => {
+    it('Should get note SPN when note is valid', () => {
+      const note1 = new Note()
+      expect(note1.SPN).to.equal('C4')
+      const note2 = new Note({
+        name: 'A',
+        accidental: new Accidental({
+          semitones: -2
+        })
+      })
+      expect(note2.SPN).to.equal('Abb4')
+      const note3 = new Note({
+        name: 'D',
+        pitch: new Pitch({ value: 5 })
+      })
+      expect(note3.SPN).to.equal('D5')
+    })
+
+    it('Should error on get SPN when not provided a valid note', () => {
+      expect(() => Note.toSPN('tartiflette')).to.throw()
+      expect(() => Note.fromSPN('tartiflette')).to.throw()
+    })
+
+    it('Should create a not from a SPN string', () => {
+      const note = new Note()
+      expect(note).to.deep.equal(Note.fromSPN(note.SPN))
+      const note2 = new Note({
+        name: 'B',
+        pitch: new Pitch({ value: 2 }),
+        accidental: new Accidental({ semitones: -2 })
+      })
+      expect(note2).to.deep.equal(Note.fromSPN(note2.SPN))
     })
   })
 })
