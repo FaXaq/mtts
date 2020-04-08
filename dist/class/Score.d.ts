@@ -40,7 +40,15 @@ export declare class Score {
     set keySignature(scale: Scale);
     get defaultNoteValue(): NOTE_VALUE;
     get lastBar(): Bar;
-    addBar(typeStart: BAR_TYPE_START, typeEnd: BAR_TYPE_END, content?: BAR_CONTENT[]): Bar;
+    /**
+     * Add bar to the current score.
+     * @param - No field is mandatory
+     */
+    addBar({ typeStart, typeEnd, content }: {
+        typeStart?: BAR_TYPE_START;
+        typeEnd?: BAR_TYPE_END;
+        content?: BAR_CONTENT[];
+    }): Bar;
     addContent(content: BAR_CONTENT): void;
     modifyContent(bar: number, contentIndex: number, newContent: BAR_CONTENT): void;
 }

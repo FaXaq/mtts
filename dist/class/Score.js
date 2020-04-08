@@ -73,7 +73,11 @@ class Score {
         }
         return this.bars[this.bars.length - 1];
     }
-    addBar(typeStart, typeEnd, content = []) {
+    /**
+     * Add bar to the current score.
+     * @param - No field is mandatory
+     */
+    addBar({ typeStart = Bar_1.BAR_TYPE_START.STANDARD, typeEnd = Bar_1.BAR_TYPE_END.STANDARD, content = [] }) {
         this.bars.push(new Bar_1.Bar({
             timeSignature: this.timeSignature,
             content: content,
@@ -90,7 +94,11 @@ class Score {
         catch (err) {
             // if error, it means that the bar is full, add a bar with content to it
             try {
-                this.addBar(Bar_1.BAR_TYPE_START.STANDARD, Bar_1.BAR_TYPE_END.STANDARD, [content]);
+                this.addBar({
+                    typeStart: Bar_1.BAR_TYPE_START.STANDARD,
+                    typeEnd: Bar_1.BAR_TYPE_END.STANDARD,
+                    content: [content]
+                });
             }
             catch (err) {
                 throw new Error(`Trying to add content ${JSON.stringify(content)} to Score. ${JSON.stringify(err)}`);
