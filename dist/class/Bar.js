@@ -91,7 +91,7 @@ class Bar {
     get value() {
         let barValue = 0;
         for (let i = 0; i < this.content.length; i++) {
-            barValue += this.content[i].value;
+            barValue += this.content[i].dottedValue;
         }
         return barValue;
     }
