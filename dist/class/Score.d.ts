@@ -44,7 +44,7 @@ export declare class Score {
      * Add bar to the current score.
      * @param - No field is mandatory
      */
-    addBar({ typeStart, typeEnd, content }: {
+    addBar({ typeStart, typeEnd, content }?: {
         typeStart?: BAR_TYPE_START;
         typeEnd?: BAR_TYPE_END;
         content?: BAR_CONTENT[];

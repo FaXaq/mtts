@@ -77,7 +77,7 @@ class Score {
      * Add bar to the current score.
      * @param - No field is mandatory
      */
-    addBar({ typeStart = Bar_1.BAR_TYPE_START.STANDARD, typeEnd = Bar_1.BAR_TYPE_END.STANDARD, content = [] }) {
+    addBar({ typeStart = Bar_1.BAR_TYPE_START.STANDARD, typeEnd = Bar_1.BAR_TYPE_END.STANDARD, content = [] } = {}) {
         this.bars.push(new Bar_1.Bar({
             timeSignature: this.timeSignature,
             content: content,
