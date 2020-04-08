@@ -107,7 +107,7 @@ export class Score {
     typeStart = BAR_TYPE_START.STANDARD,
     typeEnd = BAR_TYPE_END.STANDARD,
     content = []
-  }: { typeStart?: BAR_TYPE_START, typeEnd?: BAR_TYPE_END, content?: BAR_CONTENT[] }): Bar {
+  }: { typeStart?: BAR_TYPE_START, typeEnd?: BAR_TYPE_END, content?: BAR_CONTENT[] } = {}): Bar {
     this.bars.push(new Bar({
       timeSignature: this.timeSignature,
       content: content,
