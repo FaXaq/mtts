@@ -50,7 +50,7 @@ export declare class Chord extends ValuedBarContent implements IntervalHandler {
     set notes(notes: Note[]);
     get notes(): Note[];
     get _possibleTriads(): IPossibleTriad[];
-    get notation(): string;
+    get notation(): string | undefined;
     computeIntervals(): Interval[];
     addInterval(interval: Interval): Chord;
     possibleAddedTones(triad: ITriadDefinition): Interval[];

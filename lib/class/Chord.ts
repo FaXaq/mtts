@@ -222,7 +222,7 @@ export class Chord extends ValuedBarContent implements IntervalHandler {
     return triads
   }
 
-  get notation (): string {
+  get notation (): string | undefined {
     // Filter each triad defintion
     const possibleTriads: IPossibleTriad[] = this._possibleTriads
 
@@ -242,9 +242,10 @@ export class Chord extends ValuedBarContent implements IntervalHandler {
         )
         return possibleExtendedChords[0].notation
       }
-    } else {
-      throw new Error(`No name for this chord yet ${JSON.stringify(this)}`)
     }
+
+    console.warn(`No name for this chord yet ${JSON.stringify(this)}`)
+    return undefined
   }
 
   computeIntervals (): Interval[] {

@@ -1,17 +1,19 @@
 import { Note } from './Note'
-import { Interval, INTERVALS } from './Interval'
+import { Interval } from './Interval'
 import { IntervalHandler } from '../super/IntervalHandler'
 import { applyMixins } from '../misc/applyMixins'
 import { Chord } from './Chord'
 
-interface IScale {
+interface IScaleDefinition {
   name: string
+  mode?: string
   intervals: Interval[]
 }
 
-export const SCALES: { [key: string]: IScale } = {
+export const SCALES: { [key: string]: IScaleDefinition } = {
   MAJOR: {
     name: 'major',
+    mode: 'ionian',
     intervals: [
       new Interval('P1'),
       new Interval('M2'),
@@ -24,6 +26,7 @@ export const SCALES: { [key: string]: IScale } = {
   },
   MINOR: {
     name: 'minor',
+    mode: 'aeolian',
     intervals: [
       new Interval('P1'),
       new Interval('M2'),
@@ -40,6 +43,7 @@ interface IScaleParams {
   name?: string
   key?: Note
   intervals?: Interval[]
+  mode?: string
 }
 
 export class Scale implements IntervalHandler {
@@ -50,17 +54,17 @@ export class Scale implements IntervalHandler {
   constructor (params: IScaleParams = {}) {
     const key = params.key ?? new Note({ name: 'C' })
     const intervals = params.intervals ?? []
-    const name = params.name ?? 'MAJOR'
+    const name = params.name ?? 'major'
+    const mode = params.mode ?? ''
 
     this.key = key
 
     if (params.intervals !== undefined && Array.isArray(intervals) && intervals.length > 0) {
       this.intervals = intervals
-    } else if (SCALES[name] !== undefined) {
-      console.warn('Scale built from name, not from provided intervals.')
-      this.intervals = SCALES[name].intervals
+    } else if (mode !== '') {
+      this.mode = mode
     } else {
-      throw new Error("Didn't provide a valid array of intervals or a valid scale name. Cannot initialize scale.")
+      this.name = name
     }
   }
 
@@ -78,24 +82,35 @@ export class Scale implements IntervalHandler {
   }
 
   get name (): string {
-    const filteredScales = Object.keys(SCALES).filter(s => {
-      const scale = SCALES[s]
-      if (scale.intervals.length === this.intervals.length) {
-        return scale.intervals.every((v, i) => v.name === this.intervals[i].name)
-      } else {
-        return false
-      }
-    })
+    const definitions = Scale.getDefintionsFromIntervals(this.intervals)
 
-    if (filteredScales.length === 0) {
-      throw new Error('Cannot find a name for this scale.')
-    }
-
-    return SCALES[filteredScales[0]].name
+    return definitions.length > 0 ? definitions[0].name : ''
   }
 
   set name (name: string) {
+    const definitionName = Object.keys(SCALES).find(s => SCALES[s].name === name)
 
+    if (definitionName !== undefined) {
+      this.intervals = SCALES[definitionName].intervals
+    } else {
+      throw new Error(`Couldn't find a scale definition with that name : ${name}.`)
+    }
+  }
+
+  get mode (): string {
+    const definitions = Scale.getDefintionsFromIntervals(this.intervals)
+
+    return definitions.length > 0 ? definitions[0].mode ?? '' : ''
+  }
+
+  set mode (mode: string) {
+    const definitionName = Object.keys(SCALES).find(s => SCALES[s].mode === mode)
+
+    if (definitionName !== undefined) {
+      this.intervals = SCALES[definitionName].intervals
+    } else {
+      throw new Error(`Couldn't find a scale definition with that mode : ${mode}.`)
+    }
   }
 
   get key (): Note {
@@ -136,6 +151,17 @@ export class Scale implements IntervalHandler {
     }
 
     return chords
+  }
+
+  static getDefintionsFromIntervals (intervals: Interval[]): IScaleDefinition[] {
+    return Object.keys(SCALES).filter(s => {
+      const scale = SCALES[s]
+      if (scale.intervals.length === intervals.length) {
+        return scale.intervals.every((v, i) => v.name === intervals[i].name)
+      } else {
+        return false
+      }
+    }).map(n => SCALES[n])
   }
 
   // IntervalHandler mixin

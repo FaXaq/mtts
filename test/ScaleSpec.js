@@ -1,6 +1,5 @@
 'use strict'
 var it = require('mocha').it
-var chai = require('chai')
 var describe = require('mocha').describe
 var expect = require('chai').expect
 var index = require('../dist/index.js')
@@ -70,6 +69,56 @@ describe('Scale class', () => {
       expect(() => {
         new Scale({ intervals: [{ 2: 'test' }] })
       }).to.throw()
+    })
+  })
+
+  describe('Get & Set mode & name', () => {
+    describe('setters', () => {
+      it('Should create a scale from a name', () => {
+        expect(new Scale({ name: 'major' })).to.deep.equal(new Scale())
+      })
+
+      it('Should be able to set a name after its creation', () => {
+        // default is major
+        const s = new Scale()
+        s.name = 'minor'
+        expect(s).to.deep.equal(new Scale({ name: 'minor' }))
+      })
+
+      it('Should create a scale from a mode', () => {
+        expect(new Scale({ mode: 'aeolian' })).to.deep.equal(new Scale({ name: 'minor' }))
+      })
+      it('Should be able to set a mode after its creation', () => {
+        // default is ionian
+        const s = new Scale()
+        s.mode = 'aeolian'
+        expect(s).to.deep.equal(new Scale({ name: 'minor' }))
+      })
+
+      it('Should throw when name / mode is unknown', () => {
+        const s = new Scale()
+
+        expect(() => { s.name = 'tartiflette' }).to.throw()
+        expect(() => { s.name = ['tartiflette'] }).to.throw()
+        expect(() => { s.mode = 'tartiflette' }).to.throw()
+        expect(() => { s.mode = { tartiflette: 2 } }).to.throw()
+      })
+    })
+
+    describe('getters', () => {
+      it('Should get a scale name', () => {
+        expect(new Scale().name).to.equal('major')
+      })
+
+      it('Should be able to set a name after its creation', () => {
+        expect(new Scale().mode).to.equal('ionian')
+      })
+
+      it('Should return an empty string when definition is not found', () => {
+        const s = new Scale({ intervals: [new Interval('P1'), new Interval('A2')] })
+        expect(s.name).to.equal('')
+        expect(s.mode).to.equal('')
+      })
     })
   })
 

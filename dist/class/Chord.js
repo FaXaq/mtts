@@ -171,9 +171,8 @@ class Chord extends ValuedBarContent_1.ValuedBarContent {
                 return possibleExtendedChords[0].notation;
             }
         }
-        else {
-            throw new Error(`No name for this chord yet ${JSON.stringify(this)}`);
-        }
+        console.warn(`No name for this chord yet ${JSON.stringify(this)}`);
+        return undefined;
     }
     computeIntervals() {
         const intervals = [];
