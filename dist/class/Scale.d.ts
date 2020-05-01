@@ -3,6 +3,7 @@ import { Interval } from './Interval';
 import { IntervalHandler } from '../super/IntervalHandler';
 import { Chord } from './Chord';
 interface IScale {
+    name: string;
     intervals: Interval[];
 }
 export declare const SCALES: {
@@ -10,13 +11,16 @@ export declare const SCALES: {
 };
 interface IScaleParams {
     name?: string;
-    key: Note;
+    key?: Note;
+    intervals?: Interval[];
 }
 export declare class Scale implements IntervalHandler {
-    private _name;
     private _key;
     private _notes;
+    private _intervals;
     constructor(params?: IScaleParams);
+    get intervals(): Interval[];
+    set intervals(intervals: Interval[]);
     get name(): string;
     set name(name: string);
     get key(): Note;

@@ -1,15 +1,17 @@
 import { Note } from './Note'
-import { Interval } from './Interval'
+import { Interval, INTERVALS } from './Interval'
 import { IntervalHandler } from '../super/IntervalHandler'
 import { applyMixins } from '../misc/applyMixins'
 import { Chord } from './Chord'
 
 interface IScale {
+  name: string
   intervals: Interval[]
 }
 
 export const SCALES: { [key: string]: IScale } = {
-  major: {
+  MAJOR: {
+    name: 'major',
     intervals: [
       new Interval('P1'),
       new Interval('M2'),
@@ -20,7 +22,8 @@ export const SCALES: { [key: string]: IScale } = {
       new Interval('M7')
     ]
   },
-  minor: {
+  MINOR: {
+    name: 'minor',
     intervals: [
       new Interval('P1'),
       new Interval('M2'),
@@ -35,30 +38,64 @@ export const SCALES: { [key: string]: IScale } = {
 
 interface IScaleParams {
   name?: string
-  key: Note
+  key?: Note
+  intervals?: Interval[]
 }
 
 export class Scale implements IntervalHandler {
-  private _name!: string;
   private _key!: Note;
   private _notes: Note[] = [];
+  private _intervals: Interval[] = [];
 
-  constructor (params: IScaleParams = { key: new Note({ name: 'C' }) }) {
-    this.name = params.name ?? 'major'
-    this.key = params.key
-    this.notes = this.compute(SCALES[this.name].intervals, this.key)
+  constructor (params: IScaleParams = {}) {
+    const key = params.key ?? new Note({ name: 'C' })
+    const intervals = params.intervals ?? []
+    const name = params.name ?? 'MAJOR'
+
+    this.key = key
+
+    if (params.intervals !== undefined && Array.isArray(intervals) && intervals.length > 0) {
+      this.intervals = intervals
+    } else if (SCALES[name] !== undefined) {
+      console.warn('Scale built from name, not from provided intervals.')
+      this.intervals = SCALES[name].intervals
+    } else {
+      throw new Error("Didn't provide a valid array of intervals or a valid scale name. Cannot initialize scale.")
+    }
+  }
+
+  get intervals (): Interval[] {
+    return this._intervals
+  }
+
+  set intervals (intervals: Interval[]) {
+    if (!Array.isArray(intervals) || !intervals.every(i => i instanceof Interval)) {
+      throw new Error(`Cannot assign ${JSON.stringify(intervals)} as scale intervals.`)
+    }
+    this._intervals = intervals
+    // each time intevals changes, compute notes of the scale
+    this.notes = this.compute(this.intervals, this.key)
   }
 
   get name (): string {
-    return this._name
+    const filteredScales = Object.keys(SCALES).filter(s => {
+      const scale = SCALES[s]
+      if (scale.intervals.length === this.intervals.length) {
+        return scale.intervals.every((v, i) => v.name === this.intervals[i].name)
+      } else {
+        return false
+      }
+    })
+
+    if (filteredScales.length === 0) {
+      throw new Error('Cannot find a name for this scale.')
+    }
+
+    return SCALES[filteredScales[0]].name
   }
 
   set name (name: string) {
-    if (SCALES[name] !== undefined) {
-      this._name = name
-    } else {
-      throw new Error(`Couldn't create scale ${name}. Available scales are "${Object.keys(SCALES).join(', ')}"`)
-    }
+
   }
 
   get key (): Note {
@@ -77,21 +114,25 @@ export class Scale implements IntervalHandler {
     return this._notes
   }
 
-  // Return all 7th chords from the scale
+  // Return all 7th chords from the scale if it is diatonic
   get scaleChords (): Chord[] {
     const chords: Chord[] = []
-    for (let i = 0; i < this.notes.length; i++) {
-      chords.push(
-        new Chord({
-          root: this.notes[i],
-          notes: [
-            this.notes[i],
-            this.notes[(i + 2) % this.notes.length], // 3rd
-            this.notes[(i + 4) % this.notes.length], // 5th
-            this.notes[(i + 6) % this.notes.length] // 7th
-          ]
-        })
-      )
+    if (this.intervals.length === 7) {
+      for (let i = 0; i < this.notes.length; i++) {
+        chords.push(
+          new Chord({
+            root: this.notes[i],
+            notes: [
+              this.notes[i],
+              this.notes[(i + 2) % this.notes.length], // 3rd
+              this.notes[(i + 4) % this.notes.length], // 5th
+              this.notes[(i + 6) % this.notes.length] // 7th
+            ]
+          })
+        )
+      }
+    } else {
+      console.warn('Cannot compute scale chords yet.')
     }
 
     return chords
