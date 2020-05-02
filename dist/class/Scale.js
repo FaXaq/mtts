@@ -589,7 +589,8 @@ class Scale {
         if (!Array.isArray(intervals) || !intervals.every(i => i instanceof Interval_1.Interval)) {
             throw new Error(`Cannot assign ${JSON.stringify(intervals)} as scale intervals.`);
         }
-        this._intervals = intervals;
+        // sort intervals by semitones
+        this._intervals = intervals.sort((ia, ib) => ia.semitones - ib.semitones);
         // each time intevals changes, compute notes of the scale
         this.notes = this.compute(this.intervals, this.key);
     }

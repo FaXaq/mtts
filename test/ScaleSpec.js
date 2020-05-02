@@ -108,10 +108,21 @@ describe('Scale class', () => {
     describe('getters', () => {
       it('Should get a scale name', () => {
         expect(new Scale().name).to.equal('major')
+        expect(new Scale().mode).to.equal('ionian')
+        expect(new Scale({
+          intervals: [
+            new Interval('P1'),
+            new Interval('M2'),
+            new Interval('P4'),
+            new Interval('P5'),
+            new Interval('M6'),
+            new Interval('M7'),
+            new Interval('M3')
+          ]
+        }).mode).to.equal('ionian')
       })
 
       it('Should be able to set a name after its creation', () => {
-        expect(new Scale().mode).to.equal('ionian')
       })
 
       it('Should return an empty string when definition is not found', () => {
