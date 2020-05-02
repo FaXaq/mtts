@@ -12,6 +12,7 @@ export declare class Interval {
     value: number;
     constructor(name: string);
     apply(note: Note): Note;
+    get notation(): string;
     static fromSemitones(semitones: number): Interval[];
     static fromValue(value: number): Interval[];
     static fromSemitonesAndValue(semitones: number, value: number): Interval | undefined;
@@ -20,5 +21,6 @@ export declare class Interval {
     static getValue(name: keyof typeof INTERVALS): number;
     static fromName(name: string): Interval;
     static equals(interval1: Interval, interval2: Interval): boolean;
+    static notation(name: string): string;
 }
 export {};

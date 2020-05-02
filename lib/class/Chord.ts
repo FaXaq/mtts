@@ -19,7 +19,7 @@ interface IPossibleTriad extends ITriadDefinition {
 interface IChordDefinition {
   name: string
   notation: string
-  extends: ITriadDefinition | IChordDefinition
+  extends: ITriadDefinition
   addedTones: Interval[]
 }
 
@@ -84,6 +84,78 @@ export const EXTENDED_CHORDS: { [key: string]: IChordDefinition } = {
     addedTones: [new Interval('m7')],
     name: 'minor 7',
     notation: '-7',
+    extends: TRIADS.min
+  },
+  '7sus4': {
+    addedTones: [new Interval('m7')],
+    name: 'dominant 7 sus 4',
+    notation: '7sus4',
+    extends: TRIADS.sus4
+  },
+  9: {
+    addedTones: [new Interval('m7'), new Interval('M9')],
+    name: '7(9)',
+    notation: '9',
+    extends: TRIADS.maj
+  },
+  M9: {
+    addedTones: [new Interval('M7'), new Interval('M9')],
+    name: 'M7(9)',
+    notation: 'M9',
+    extends: TRIADS.maj
+  },
+  min9: {
+    addedTones: [new Interval('m7'), new Interval('M9')],
+    name: '-7(9)',
+    notation: '-9',
+    extends: TRIADS.min
+  },
+  11: {
+    addedTones: [new Interval('m7'), new Interval('M9'), new Interval('P11')],
+    name: '7(11)',
+    notation: '11',
+    extends: TRIADS.maj
+  },
+  M11: {
+    addedTones: [new Interval('M7'), new Interval('M9'), new Interval('P11')],
+    name: 'M7(11)',
+    notation: 'M11',
+    extends: TRIADS.maj
+  },
+  min11: {
+    addedTones: [new Interval('m7'), new Interval('M9'), new Interval('P11')],
+    name: '-7(11)',
+    notation: '-11',
+    extends: TRIADS.min
+  },
+  13: {
+    addedTones: [new Interval('m7'), new Interval('M9'), new Interval('P11'), new Interval('M13')],
+    name: '7(13)',
+    notation: '13',
+    extends: TRIADS.maj
+  },
+  M13: {
+    addedTones: [new Interval('M7'), new Interval('M9'), new Interval('P11'), new Interval('M13')],
+    name: 'M7(13)',
+    notation: 'M13',
+    extends: TRIADS.maj
+  },
+  min13: {
+    addedTones: [new Interval('m7'), new Interval('M9'), new Interval('P11'), new Interval('M13')],
+    name: '-7(13)',
+    notation: '-13',
+    extends: TRIADS.min
+  },
+  6: {
+    addedTones: [new Interval('M6')],
+    name: '6',
+    notation: '6',
+    extends: TRIADS.maj
+  },
+  min6: {
+    addedTones: [new Interval('M6')],
+    name: 'minor major 6',
+    notation: '-6',
     extends: TRIADS.min
   }
 }
@@ -222,7 +294,7 @@ export class Chord extends ValuedBarContent implements IntervalHandler {
     return triads
   }
 
-  get notation (): string | undefined {
+  get notation (): string {
     // Filter each triad defintion
     const possibleTriads: IPossibleTriad[] = this._possibleTriads
 
@@ -240,12 +312,18 @@ export class Chord extends ValuedBarContent implements IntervalHandler {
         const possibleExtendedChords = this.possibleExtendedChords(
           perfectMatchedTriad
         )
+
+        if (possibleExtendedChords.length === 0) {
+          console.warn(`No name for this chord yet ${JSON.stringify(this)}. Adding static alterations`)
+          return this.addTonesToChordNotation(perfectMatchedTriad)
+        }
+
         return possibleExtendedChords[0].notation
       }
     }
 
     console.warn(`No name for this chord yet ${JSON.stringify(this)}`)
-    return undefined
+    return ''
   }
 
   computeIntervals (): Interval[] {
@@ -265,6 +343,10 @@ export class Chord extends ValuedBarContent implements IntervalHandler {
       if (possibleInterval !== undefined) intervals.push(possibleInterval)
     })
     return intervals
+  }
+
+  addTonesToChordNotation (chordDefinition: ITriadDefinition): string {
+    return chordDefinition.notation + this.possibleAddedTones(chordDefinition).reduce((p, c) => p + `add${c.notation}`, '')
   }
 
   addInterval (interval: Interval): Chord {

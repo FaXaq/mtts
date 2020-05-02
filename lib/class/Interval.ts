@@ -235,6 +235,10 @@ export class Interval {
     return Interval.apply(note, this.name)
   }
 
+  get notation (): string {
+    return Interval.notation(this.name)
+  }
+
   static fromSemitones (semitones: number): Interval[] {
     const intervals: Interval[] = []
 
@@ -305,5 +309,39 @@ export class Interval {
 
   static equals (interval1: Interval, interval2: Interval): boolean {
     return interval1.name === interval2.name
+  }
+
+  static notation (name: string): string {
+    if (INTERVALS[name] === undefined) {
+      throw new Error(`No interval known with that name : ${name}. Cannot get its notation.`)
+    }
+
+    const [modifier, ...values] = name.split('')
+    const value = values.join('')
+    switch (value) {
+      case '4':
+      case '5':
+      case '11':
+      case '12':
+        switch (modifier) {
+          case 'd':
+            return `-${value}`
+          case 'A':
+            return `+${value}`
+          default:
+            return value
+        }
+      default:
+        switch (modifier) {
+          case 'd':
+            return `°${value}`
+          case 'm':
+            return `-${value}`
+          case 'A':
+            return `+${value}`
+          default:
+            return value
+        }
+    }
   }
 }

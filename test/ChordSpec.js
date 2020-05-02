@@ -186,6 +186,21 @@ describe('Chord class', () => {
         })
       })
 
+      describe('Added tones to triad', () => {
+        const root = new Note({
+          name: 'C'
+        })
+        const c = new Chord({
+          root,
+          notes: [
+            root,
+            Interval.apply(root, 'A4'),
+            Interval.apply(root, 'P5')
+          ]
+        })
+        expect(c.notation).to.equal('5add+4')
+      })
+
       describe('Extended', () => {
         it('Should give notation for Major 7 chord', () => {
           const root = new Note({
@@ -234,6 +249,11 @@ describe('Chord class', () => {
           })
           expect(c.notation).to.equal('-7/5b')
         })
+      })
+
+      describe('Error', () => {
+        const c = new Chord({ root: new Note(), notes: [new Note(), new Note({ name: 'B' })] })
+        expect(c.notation).to.equal('')
       })
     })
   })

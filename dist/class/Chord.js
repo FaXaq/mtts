@@ -67,6 +67,78 @@ exports.EXTENDED_CHORDS = {
         name: 'minor 7',
         notation: '-7',
         extends: exports.TRIADS.min
+    },
+    '7sus4': {
+        addedTones: [new Interval_1.Interval('m7')],
+        name: 'dominant 7 sus 4',
+        notation: '7sus4',
+        extends: exports.TRIADS.sus4
+    },
+    9: {
+        addedTones: [new Interval_1.Interval('m7'), new Interval_1.Interval('M9')],
+        name: '7(9)',
+        notation: '9',
+        extends: exports.TRIADS.maj
+    },
+    M9: {
+        addedTones: [new Interval_1.Interval('M7'), new Interval_1.Interval('M9')],
+        name: 'M7(9)',
+        notation: 'M9',
+        extends: exports.TRIADS.maj
+    },
+    min9: {
+        addedTones: [new Interval_1.Interval('m7'), new Interval_1.Interval('M9')],
+        name: '-7(9)',
+        notation: '-9',
+        extends: exports.TRIADS.min
+    },
+    11: {
+        addedTones: [new Interval_1.Interval('m7'), new Interval_1.Interval('M9'), new Interval_1.Interval('P11')],
+        name: '7(11)',
+        notation: '11',
+        extends: exports.TRIADS.maj
+    },
+    M11: {
+        addedTones: [new Interval_1.Interval('M7'), new Interval_1.Interval('M9'), new Interval_1.Interval('P11')],
+        name: 'M7(11)',
+        notation: 'M11',
+        extends: exports.TRIADS.maj
+    },
+    min11: {
+        addedTones: [new Interval_1.Interval('m7'), new Interval_1.Interval('M9'), new Interval_1.Interval('P11')],
+        name: '-7(11)',
+        notation: '-11',
+        extends: exports.TRIADS.min
+    },
+    13: {
+        addedTones: [new Interval_1.Interval('m7'), new Interval_1.Interval('M9'), new Interval_1.Interval('P11'), new Interval_1.Interval('M13')],
+        name: '7(13)',
+        notation: '13',
+        extends: exports.TRIADS.maj
+    },
+    M13: {
+        addedTones: [new Interval_1.Interval('M7'), new Interval_1.Interval('M9'), new Interval_1.Interval('P11'), new Interval_1.Interval('M13')],
+        name: 'M7(13)',
+        notation: 'M13',
+        extends: exports.TRIADS.maj
+    },
+    min13: {
+        addedTones: [new Interval_1.Interval('m7'), new Interval_1.Interval('M9'), new Interval_1.Interval('P11'), new Interval_1.Interval('M13')],
+        name: '-7(13)',
+        notation: '-13',
+        extends: exports.TRIADS.min
+    },
+    6: {
+        addedTones: [new Interval_1.Interval('M6')],
+        name: '6',
+        notation: '6',
+        extends: exports.TRIADS.maj
+    },
+    min6: {
+        addedTones: [new Interval_1.Interval('M6')],
+        name: 'minor major 6',
+        notation: '-6',
+        extends: exports.TRIADS.min
     }
 };
 function _recursiveExtendedChordCompute(chord, addedTones = []) {
@@ -168,11 +240,15 @@ class Chord extends ValuedBarContent_1.ValuedBarContent {
             else {
                 // it lacks a few intervals, find them and compute extended chord to find a match
                 const possibleExtendedChords = this.possibleExtendedChords(perfectMatchedTriad);
+                if (possibleExtendedChords.length === 0) {
+                    console.warn(`No name for this chord yet ${JSON.stringify(this)}. Adding static alterations`);
+                    return this.addTonesToChordNotation(perfectMatchedTriad);
+                }
                 return possibleExtendedChords[0].notation;
             }
         }
         console.warn(`No name for this chord yet ${JSON.stringify(this)}`);
-        return undefined;
+        return '';
     }
     computeIntervals() {
         const intervals = [];
@@ -187,6 +263,9 @@ class Chord extends ValuedBarContent_1.ValuedBarContent {
                 intervals.push(possibleInterval);
         });
         return intervals;
+    }
+    addTonesToChordNotation(chordDefinition) {
+        return chordDefinition.notation + this.possibleAddedTones(chordDefinition).reduce((p, c) => p + `add${c.notation}`, '');
     }
     addInterval(interval) {
         this._intervals.push(interval);

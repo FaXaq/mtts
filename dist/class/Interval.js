@@ -225,6 +225,9 @@ class Interval {
     apply(note) {
         return Interval.apply(note, this.name);
     }
+    get notation() {
+        return Interval.notation(this.name);
+    }
     static fromSemitones(semitones) {
         const intervals = [];
         Object.keys(exports.INTERVALS).forEach((k) => {
@@ -277,6 +280,38 @@ class Interval {
     }
     static equals(interval1, interval2) {
         return interval1.name === interval2.name;
+    }
+    static notation(name) {
+        if (exports.INTERVALS[name] === undefined) {
+            throw new Error(`No interval known with that name : ${name}. Cannot get its notation.`);
+        }
+        const [modifier, ...values] = name.split('');
+        const value = values.join('');
+        switch (value) {
+            case '4':
+            case '5':
+            case '11':
+            case '12':
+                switch (modifier) {
+                    case 'd':
+                        return `-${value}`;
+                    case 'A':
+                        return `+${value}`;
+                    default:
+                        return value;
+                }
+            default:
+                switch (modifier) {
+                    case 'd':
+                        return `°${value}`;
+                    case 'm':
+                        return `-${value}`;
+                    case 'A':
+                        return `+${value}`;
+                    default:
+                        return value;
+                }
+        }
     }
 }
 exports.Interval = Interval;

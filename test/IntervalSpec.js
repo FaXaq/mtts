@@ -148,4 +148,29 @@ describe('Interval class', () => {
       })
     })
   })
+
+  describe('Getters', () => {
+    describe('notation', () => {
+      it('Should get a notation from an interval name', () => {
+        let interval = new Interval('P5')
+        expect(interval.notation).to.equal('5')
+        interval = new Interval('d5')
+        expect(interval.notation).to.equal('-5')
+        interval = new Interval('A5')
+        expect(interval.notation).to.equal('+5')
+        interval = new Interval('A13')
+        expect(interval.notation).to.equal('+13')
+        interval = new Interval('M13')
+        expect(interval.notation).to.equal('13')
+        interval = new Interval('m13')
+        expect(interval.notation).to.equal('-13')
+        interval = new Interval('d13')
+        expect(interval.notation).to.equal('°13')
+
+        expect(() => {
+          Interval.notation('D23')
+        }).to.throw()
+      })
+    })
+  })
 })

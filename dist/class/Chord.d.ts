@@ -14,7 +14,7 @@ interface IPossibleTriad extends ITriadDefinition {
 interface IChordDefinition {
     name: string;
     notation: string;
-    extends: ITriadDefinition | IChordDefinition;
+    extends: ITriadDefinition;
     addedTones: Interval[];
 }
 export declare const TRIADS: {
@@ -28,7 +28,7 @@ export declare const COMPUTED_EXTENDED_CHORDS: {
     addedTones: Interval[];
     name: string;
     notation: string;
-    extends: ITriadDefinition | IChordDefinition;
+    extends: ITriadDefinition;
 }[];
 declare type COMPUTED_EXTENDED_CHORD = typeof COMPUTED_EXTENDED_CHORDS[number];
 interface ChordParams {
@@ -50,8 +50,9 @@ export declare class Chord extends ValuedBarContent implements IntervalHandler {
     set notes(notes: Note[]);
     get notes(): Note[];
     get _possibleTriads(): IPossibleTriad[];
-    get notation(): string | undefined;
+    get notation(): string;
     computeIntervals(): Interval[];
+    addTonesToChordNotation(chordDefinition: ITriadDefinition): string;
     addInterval(interval: Interval): Chord;
     possibleAddedTones(triad: ITriadDefinition): Interval[];
     possibleExtendedChords(triad: ITriadDefinition): COMPUTED_EXTENDED_CHORD[];
