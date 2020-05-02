@@ -5,7 +5,7 @@ import { applyMixins } from '../misc/applyMixins'
 import { Chord } from './Chord'
 
 interface IScaleDefinition {
-  name: string
+  name?: string
   mode?: string
   intervals: Interval[]
 }
@@ -24,8 +24,20 @@ export const SCALES: { [key: string]: IScaleDefinition } = {
       new Interval('M7')
     ]
   },
-  MINOR: {
-    name: 'minor',
+  ACOUSTIC: {
+    name: 'acoustic',
+    intervals: [
+      new Interval('P1'),
+      new Interval('M2'),
+      new Interval('M3'),
+      new Interval('A4'),
+      new Interval('P5'),
+      new Interval('M6'),
+      new Interval('m7')
+    ]
+  },
+  NATURAL_MINOR: {
+    name: 'natural_minor',
     mode: 'aeolian',
     intervals: [
       new Interval('P1'),
@@ -34,6 +46,523 @@ export const SCALES: { [key: string]: IScaleDefinition } = {
       new Interval('P4'),
       new Interval('P5'),
       new Interval('M6'),
+      new Interval('m7')
+    ]
+  },
+  ALGERIAN: {
+    name: 'algerian',
+    intervals: [
+      new Interval('P1'),
+      new Interval('M2'),
+      new Interval('m3'),
+      new Interval('A4'),
+      new Interval('P5'),
+      new Interval('m6'),
+      new Interval('M7'),
+      new Interval('P8'),
+      new Interval('M9'),
+      new Interval('m10'),
+      new Interval('P11'),
+      new Interval('P12'),
+      new Interval('m13'),
+      new Interval('M14')
+    ]
+  },
+  ALTERED: {
+    name: 'altered',
+    mode: 'super_locrian',
+    intervals: [
+      new Interval('P1'),
+      new Interval('m2'),
+      new Interval('m3'),
+      new Interval('d4'),
+      new Interval('d5'),
+      new Interval('m6'),
+      new Interval('m7')
+    ]
+  },
+  AUGMENTED: {
+    name: 'augmented',
+    intervals: [
+      new Interval('P1'),
+      new Interval('m3'),
+      new Interval('M3'),
+      new Interval('P5'),
+      new Interval('A5'),
+      new Interval('M7')
+    ]
+  },
+  BEBOP_DOMINANT: {
+    name: 'bebop_dominant',
+    intervals: [
+      new Interval('P1'),
+      new Interval('M2'),
+      new Interval('M3'),
+      new Interval('P4'),
+      new Interval('P5'),
+      new Interval('M6'),
+      new Interval('m7'),
+      new Interval('M7')
+    ]
+  },
+  BLUES: {
+    name: 'blues',
+    intervals: [
+      new Interval('P1'),
+      new Interval('m3'),
+      new Interval('M3'),
+      new Interval('P4'),
+      new Interval('d5'),
+      new Interval('P5'),
+      new Interval('m7')
+    ]
+  },
+  ASCENDING_CHROMATIC: {
+    name: 'ascending_chromatic',
+    intervals: [
+      new Interval('P1'),
+      new Interval('A1'),
+      new Interval('M2'),
+      new Interval('A2'),
+      new Interval('M3'),
+      new Interval('P4'),
+      new Interval('A4'),
+      new Interval('P5'),
+      new Interval('A5'),
+      new Interval('M6'),
+      new Interval('A6'),
+      new Interval('M7')
+    ]
+  },
+  DESCENDING_CHROMATIC: {
+    name: 'decending_chromatic',
+    intervals: [
+      new Interval('M7'),
+      new Interval('m7'),
+      new Interval('M6'),
+      new Interval('m6'),
+      new Interval('P5'),
+      new Interval('d5'),
+      new Interval('P4'),
+      new Interval('M3'),
+      new Interval('m3'),
+      new Interval('M2'),
+      new Interval('m2'),
+      new Interval('P1')
+    ]
+  },
+  DORIAN: {
+    mode: 'dorian',
+    intervals: [
+      new Interval('P1'),
+      new Interval('M2'),
+      new Interval('m3'),
+      new Interval('P4'),
+      new Interval('P5'),
+      new Interval('M6'),
+      new Interval('m7')
+    ]
+  },
+  DOUBLE_HARMONIC: {
+    name: 'double_harmonic',
+    mode: 'flamenco',
+    intervals: [
+      new Interval('P1'),
+      new Interval('m2'),
+      new Interval('M3'),
+      new Interval('P4'),
+      new Interval('P5'),
+      new Interval('m6'),
+      new Interval('M7')
+    ]
+  },
+  ENIGMATIC: {
+    name: 'enigmatic',
+    intervals: [
+      new Interval('P1'),
+      new Interval('m2'),
+      new Interval('M3'),
+      new Interval('A4'),
+      new Interval('A5'),
+      new Interval('A6'),
+      new Interval('M7')
+    ]
+  },
+  GYPSY: {
+    name: 'gipsy',
+    intervals: [
+      new Interval('P1'),
+      new Interval('M2'),
+      new Interval('m3'),
+      new Interval('A4'),
+      new Interval('P5'),
+      new Interval('m6'),
+      new Interval('m7')
+    ]
+  },
+  HALF_DIMINISHED: {
+    name: 'half_diminished',
+    intervals: [
+      new Interval('P1'),
+      new Interval('M2'),
+      new Interval('m3'),
+      new Interval('d4'),
+      new Interval('d5'),
+      new Interval('m6'),
+      new Interval('m7')
+    ]
+  },
+  HARMONIC_MAJOR: {
+    name: 'harmonic_major',
+    intervals: [
+      new Interval('P1'),
+      new Interval('M2'),
+      new Interval('M3'),
+      new Interval('P4'),
+      new Interval('P5'),
+      new Interval('m6'),
+      new Interval('M7')
+    ]
+  },
+  HARMONIC_MINOR: {
+    name: 'harmonic_minor',
+    intervals: [
+      new Interval('P1'),
+      new Interval('M2'),
+      new Interval('m3'),
+      new Interval('P4'),
+      new Interval('P5'),
+      new Interval('m6'),
+      new Interval('M7')
+    ]
+  },
+  HIRAJOSHI: {
+    name: 'hirajoshi',
+    intervals: [
+      new Interval('P1'),
+      new Interval('M3'),
+      new Interval('A4'),
+      new Interval('P5'),
+      new Interval('M7')
+    ]
+  },
+  HUNGRARIAN_GYPSY: {
+    name: 'hungrarian_gypsy',
+    intervals: [
+      new Interval('P1'),
+      new Interval('M2'),
+      new Interval('m3'),
+      new Interval('A4'),
+      new Interval('P5'),
+      new Interval('m6'),
+      new Interval('M7')
+    ]
+  },
+  HUNGRARIAN_MINOR: {
+    name: 'hungrarian_minor',
+    intervals: [
+      new Interval('P1'),
+      new Interval('M2'),
+      new Interval('m3'),
+      new Interval('A4'),
+      new Interval('P5'),
+      new Interval('m6'),
+      new Interval('M7')
+    ]
+  },
+  IN: {
+    name: 'in',
+    intervals: [
+      new Interval('P1'),
+      new Interval('m2'),
+      new Interval('P4'),
+      new Interval('P5'),
+      new Interval('m6')
+    ]
+  },
+  INSEN: {
+    name: 'insen',
+    intervals: [
+      new Interval('P1'),
+      new Interval('m2'),
+      new Interval('P4'),
+      new Interval('P5'),
+      new Interval('m7')
+    ]
+  },
+  ISTRIAN: {
+    name: 'istrian',
+    mode: 'istrian',
+    intervals: [
+      new Interval('P1'),
+      new Interval('m2'),
+      new Interval('m3'),
+      new Interval('d4'),
+      new Interval('d5'),
+      new Interval('P5')
+    ]
+  },
+  IWATO: {
+    name: 'iwato',
+    intervals: [
+      new Interval('P1'),
+      new Interval('m2'),
+      new Interval('P4'),
+      new Interval('d5'),
+      new Interval('m7')
+    ]
+  },
+  LOCRIAN: {
+    mode: 'locrian',
+    intervals: [
+      new Interval('P1'),
+      new Interval('m2'),
+      new Interval('m3'),
+      new Interval('P4'),
+      new Interval('d5'),
+      new Interval('m6'),
+      new Interval('m7')
+    ]
+  },
+  LYDIAN_AUGMENTED: {
+    name: 'lydian_augmented',
+    intervals: [
+      new Interval('P1'),
+      new Interval('M2'),
+      new Interval('M3'),
+      new Interval('A4'),
+      new Interval('A5'),
+      new Interval('M6'),
+      new Interval('M7')
+    ]
+  },
+  LYDIAN: {
+    mode: 'lydian',
+    intervals: [
+      new Interval('P1'),
+      new Interval('M2'),
+      new Interval('M3'),
+      new Interval('A4'),
+      new Interval('P5'),
+      new Interval('M6'),
+      new Interval('M7')
+    ]
+  },
+  MAJOR_BEBOP: {
+    name: 'major_bebop',
+    intervals: [
+      new Interval('P1'),
+      new Interval('M2'),
+      new Interval('M3'),
+      new Interval('P4'),
+      new Interval('P5'),
+      new Interval('A5'),
+      new Interval('M6'),
+      new Interval('M7')
+    ]
+  },
+  MAJOR_LOCRIAN: {
+    name: 'major_locrian',
+    intervals: [
+      new Interval('P1'),
+      new Interval('M2'),
+      new Interval('M3'),
+      new Interval('P4'),
+      new Interval('d5'),
+      new Interval('m6'),
+      new Interval('m7')
+    ]
+  },
+  MAJOR_PENTATONIC: {
+    name: 'major_pentatonic',
+    intervals: [
+      new Interval('P1'),
+      new Interval('M2'),
+      new Interval('M3'),
+      new Interval('P5'),
+      new Interval('M6')
+    ]
+  },
+  MELODIC_MINOR_ASCENDING: {
+    name: 'melodic_minor_ascending',
+    intervals: [
+      new Interval('P1'),
+      new Interval('M2'),
+      new Interval('m3'),
+      new Interval('P4'),
+      new Interval('P5'),
+      new Interval('M6'),
+      new Interval('M7')
+    ]
+  },
+  MELODIC_MINOR_DESCENDING: {
+    name: 'melodic_minor_descending',
+    intervals: [
+      new Interval('P1'),
+      new Interval('M2'),
+      new Interval('m3'),
+      new Interval('P4'),
+      new Interval('P5'),
+      new Interval('m6'),
+      new Interval('m7')
+    ]
+  },
+  MINOR_PENTATONIC: {
+    name: 'minor_pentatonic',
+    intervals: [
+      new Interval('P1'),
+      new Interval('m3'),
+      new Interval('P4'),
+      new Interval('P5'),
+      new Interval('m7')
+    ]
+  },
+  MIXOLYDIAN: {
+    mode: 'mixolydian',
+    intervals: [
+      new Interval('P1'),
+      new Interval('M2'),
+      new Interval('M3'),
+      new Interval('P4'),
+      new Interval('P5'),
+      new Interval('M6'),
+      new Interval('m7')
+    ]
+  },
+  NEOPOLITAN_MAJOR: {
+    name: 'neopolitan_major',
+    intervals: [
+      new Interval('P1'),
+      new Interval('m2'),
+      new Interval('m3'),
+      new Interval('P4'),
+      new Interval('P5'),
+      new Interval('M6'),
+      new Interval('M7')
+    ]
+  },
+  NEOPOLITAN_MINOR: {
+    name: 'neopolitan_minor',
+    intervals: [
+      new Interval('P1'),
+      new Interval('m2'),
+      new Interval('m3'),
+      new Interval('P4'),
+      new Interval('P5'),
+      new Interval('m6'),
+      new Interval('M7')
+    ]
+  },
+  PERSIAN: {
+    name: 'persian',
+    intervals: [
+      new Interval('P1'),
+      new Interval('m2'),
+      new Interval('M3'),
+      new Interval('P4'),
+      new Interval('d5'),
+      new Interval('m6'),
+      new Interval('M7')
+    ]
+  },
+  PHRYGIAN_DOMINANT: {
+    name: 'phrygian_dominant',
+    intervals: [
+      new Interval('P1'),
+      new Interval('m2'),
+      new Interval('M3'),
+      new Interval('P4'),
+      new Interval('d5'),
+      new Interval('m6'),
+      new Interval('m7')
+    ]
+  },
+  PHRYGIAN: {
+    mode: 'phrygian',
+    intervals: [
+      new Interval('P1'),
+      new Interval('m2'),
+      new Interval('m3'),
+      new Interval('P4'),
+      new Interval('d5'),
+      new Interval('m6'),
+      new Interval('m7')
+    ]
+  },
+  PROMETHEUS: {
+    name: 'prometheus',
+    intervals: [
+      new Interval('P1'),
+      new Interval('M2'),
+      new Interval('M3'),
+      new Interval('A4'),
+      new Interval('M6'),
+      new Interval('m7')
+    ]
+  },
+  HARMONICS: {
+    name: 'harmonics',
+    intervals: [
+      new Interval('P1'),
+      new Interval('m3'),
+      new Interval('M3'),
+      new Interval('P4'),
+      new Interval('P5'),
+      new Interval('M6')
+    ]
+  },
+  TRITONE: {
+    name: 'tritones',
+    intervals: [
+      new Interval('P1'),
+      new Interval('m2'),
+      new Interval('M3'),
+      new Interval('d5'),
+      new Interval('P5'),
+      new Interval('m7')
+    ]
+  },
+  TWO_SEMITONE_TRITONE: {
+    name: 'two_semiton_tritone',
+    intervals: [
+      new Interval('P1'),
+      new Interval('m2'),
+      new Interval('M2'),
+      new Interval('A4'),
+      new Interval('P5'),
+      new Interval('m6')
+    ]
+  },
+  UKRANIAN_DORIAN: {
+    name: 'ukrarian_dorian',
+    intervals: [
+      new Interval('P1'),
+      new Interval('M2'),
+      new Interval('m3'),
+      new Interval('A4'),
+      new Interval('P5'),
+      new Interval('M6'),
+      new Interval('m7')
+    ]
+  },
+  WHOLE_TONE: {
+    name: 'whole_tone',
+    intervals: [
+      new Interval('P1'),
+      new Interval('M2'),
+      new Interval('M3'),
+      new Interval('A4'),
+      new Interval('A5'),
+      new Interval('A6')
+    ]
+  },
+  YO: {
+    name: 'yo',
+    intervals: [
+      new Interval('P1'),
+      new Interval('m3'),
+      new Interval('P4'),
+      new Interval('P5'),
       new Interval('m7')
     ]
   }
@@ -84,7 +613,7 @@ export class Scale implements IntervalHandler {
   get name (): string {
     const definitions = Scale.getDefintionsFromIntervals(this.intervals)
 
-    return definitions.length > 0 ? definitions[0].name : ''
+    return definitions.length > 0 ? definitions[0].name ?? '' : ''
   }
 
   set name (name: string) {
