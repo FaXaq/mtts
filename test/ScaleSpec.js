@@ -81,18 +81,18 @@ describe('Scale class', () => {
       it('Should be able to set a name after its creation', () => {
         // default is major
         const s = new Scale()
-        s.name = 'minor'
-        expect(s).to.deep.equal(new Scale({ name: 'minor' }))
+        s.name = 'natural_minor'
+        expect(s).to.deep.equal(new Scale({ name: 'natural_minor' }))
       })
 
       it('Should create a scale from a mode', () => {
-        expect(new Scale({ mode: 'aeolian' })).to.deep.equal(new Scale({ name: 'minor' }))
+        expect(new Scale({ mode: 'aeolian' })).to.deep.equal(new Scale({ name: 'natural_minor' }))
       })
       it('Should be able to set a mode after its creation', () => {
         // default is ionian
         const s = new Scale()
         s.mode = 'aeolian'
-        expect(s).to.deep.equal(new Scale({ name: 'minor' }))
+        expect(s).to.deep.equal(new Scale({ name: 'natural_minor' }))
       })
 
       it('Should throw when name / mode is unknown', () => {

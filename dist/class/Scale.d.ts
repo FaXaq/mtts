@@ -3,7 +3,7 @@ import { Interval } from './Interval';
 import { IntervalHandler } from '../super/IntervalHandler';
 import { Chord } from './Chord';
 interface IScaleDefinition {
-    name: string;
+    name?: string;
     mode?: string;
     intervals: Interval[];
 }
