@@ -30,6 +30,8 @@ export declare class Note extends ValuedBarContent {
     flattenTo(n: number): Note;
     next(): Note;
     previous(): Note;
+    sharpenChromatically(): Note;
+    flattenChromatically(): Note;
     getSemitonesTo(note: Note): number;
     duplicate(): Note;
     removeAccidental(): Note;

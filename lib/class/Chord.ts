@@ -80,7 +80,7 @@ export const EXTENDED_CHORDS: { [key: string]: IChordDefinition } = {
     notation: '-7/5b',
     extends: TRIADS.dim
   },
-  min7: {
+  m7: {
     addedTones: [new Interval('m7')],
     name: 'minor 7',
     notation: '-7',
@@ -122,7 +122,7 @@ export const EXTENDED_CHORDS: { [key: string]: IChordDefinition } = {
     notation: 'M11',
     extends: TRIADS.maj
   },
-  min11: {
+  m11: {
     addedTones: [new Interval('m7'), new Interval('M9'), new Interval('P11')],
     name: '-7(11)',
     notation: '-11',
@@ -140,7 +140,7 @@ export const EXTENDED_CHORDS: { [key: string]: IChordDefinition } = {
     notation: 'M13',
     extends: TRIADS.maj
   },
-  min13: {
+  m13: {
     addedTones: [new Interval('m7'), new Interval('M9'), new Interval('P11'), new Interval('M13')],
     name: '-7(13)',
     notation: '-13',
@@ -148,7 +148,7 @@ export const EXTENDED_CHORDS: { [key: string]: IChordDefinition } = {
   },
   6: {
     addedTones: [new Interval('M6')],
-    name: '6',
+    name: 'major 6',
     notation: '6',
     extends: TRIADS.maj
   },

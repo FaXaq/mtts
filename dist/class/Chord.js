@@ -62,7 +62,7 @@ exports.EXTENDED_CHORDS = {
         notation: '-7/5b',
         extends: exports.TRIADS.dim
     },
-    min7: {
+    m7: {
         addedTones: [new Interval_1.Interval('m7')],
         name: 'minor 7',
         notation: '-7',
@@ -104,7 +104,7 @@ exports.EXTENDED_CHORDS = {
         notation: 'M11',
         extends: exports.TRIADS.maj
     },
-    min11: {
+    m11: {
         addedTones: [new Interval_1.Interval('m7'), new Interval_1.Interval('M9'), new Interval_1.Interval('P11')],
         name: '-7(11)',
         notation: '-11',
@@ -122,7 +122,7 @@ exports.EXTENDED_CHORDS = {
         notation: 'M13',
         extends: exports.TRIADS.maj
     },
-    min13: {
+    m13: {
         addedTones: [new Interval_1.Interval('m7'), new Interval_1.Interval('M9'), new Interval_1.Interval('P11'), new Interval_1.Interval('M13')],
         name: '-7(13)',
         notation: '-13',
@@ -130,7 +130,7 @@ exports.EXTENDED_CHORDS = {
     },
     6: {
         addedTones: [new Interval_1.Interval('M6')],
-        name: '6',
+        name: 'major 6',
         notation: '6',
         extends: exports.TRIADS.maj
     },

@@ -71,6 +71,52 @@ class Note extends ValuedBarContent_1.ValuedBarContent {
         this.name = exports.NOTES[(this.index - 1 + exports.NOTES.length) % exports.NOTES.length];
         return this;
     }
+    sharpenChromatically() {
+        if (!this.hasAccidental()) {
+            if (this.isBorE()) {
+                return this.next();
+            }
+            else {
+                return this.addSharp();
+            }
+        }
+        else {
+            if (this.accidental.semitones === -1) {
+                return this.addSharp();
+            }
+            else if (this.isBorE()) {
+                this.removeAccidental();
+                return this.next().addSharp();
+            }
+            else {
+                this.removeAccidental();
+                return this.next();
+            }
+        }
+    }
+    flattenChromatically() {
+        if (!this.hasAccidental()) {
+            if (this.isCorF()) {
+                return this.previous();
+            }
+            else {
+                return this.addFlat();
+            }
+        }
+        else {
+            if (this.accidental.semitones === 1) {
+                return this.addFlat();
+            }
+            else if (this.isCorF()) {
+                this.removeAccidental();
+                return this.previous().addFlat();
+            }
+            else {
+                this.removeAccidental();
+                return this.previous();
+            }
+        }
+    }
     // Get semitones between this note and the one passed as parameter
     getSemitonesTo(note) {
         return Note.getSemitonesBetween(this, note);

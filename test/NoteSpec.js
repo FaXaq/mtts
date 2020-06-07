@@ -137,6 +137,45 @@ describe('Note class', () => {
         })
       })
     })
+
+    it('Should be able to remove accidental', () => {
+      const note1 = new Note({
+        accidental: new Accidental({ semitones: -1 })
+      })
+      expect(note1.hasAccidental()).to.be.true
+      note1.removeAccidental()
+      expect(note1.hasAccidental()).to.be.false
+    })
+
+    describe('Chromatic modifiers', () => {
+      it('Should be able to sharpen chromatically a note', () => {
+        let note = new Note({ name: 'A' })
+        expect(note.sharpenChromatically().SPN).to.equal('A#4')
+        note = new Note({ name: 'B' })
+        expect(note.sharpenChromatically().SPN).to.equal('C5')
+        note = new Note({ name: 'A', accidental: new Accidental({ semitones: 1 }) })
+        expect(note.sharpenChromatically().SPN).to.equal('B4')
+        note = new Note({ name: 'A', accidental: new Accidental({ semitones: -1 }) })
+        expect(note.sharpenChromatically().SPN).to.equal('A4')
+        note = new Note({ name: 'B', accidental: new Accidental({ semitones: 1 }) })
+        expect(note.sharpenChromatically().SPN).to.equal('C#5')
+      })
+
+      it('Should be able to flatten chromatically a note', () => {
+        let note = new Note({ name: 'A' })
+        expect(note.flattenChromatically().SPN).to.equal('Ab4')
+        note = new Note({ name: 'C' })
+        expect(note.flattenChromatically().SPN).to.equal('B3')
+        note = new Note({ name: 'A', accidental: new Accidental({ semitones: 1 }) })
+        expect(note.flattenChromatically().SPN).to.equal('A4')
+        note = new Note({ name: 'A', accidental: new Accidental({ semitones: -1 }) })
+        expect(note.flattenChromatically().SPN).to.equal('G4')
+        note = new Note({ name: 'B', accidental: new Accidental({ semitones: 1 }) })
+        expect(note.flattenChromatically().SPN).to.equal('B4')
+        note = new Note({ name: 'F', accidental: new Accidental({ semitones: -1 }) })
+        expect(note.flattenChromatically().SPN).to.equal('Eb4')
+      })
+    })
   })
 
   describe('Information', () => {
@@ -257,21 +296,9 @@ describe('Note class', () => {
     })
   })
 
-  describe('Modifiers', () => {
-    it('Should be able to remove accidental', () => {
-      const note1 = new Note({
-        accidental: new Accidental({ semitones: -1 })
-      })
-      expect(note1.hasAccidental()).to.be.true
-      note1.removeAccidental()
-      expect(note1.hasAccidental()).to.be.false
-    })
-  })
-
   describe('Getters', () => {
     it('Should be able to calculate the frequency of a given note', () => {
       const note1 = new Note({ name: 'A' })
-      console.log(note1.SPN)
       expect(note1.frequency).to.equal(440)
     })
   })
