@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.Bar = exports.BAR_TYPE_END = exports.BAR_TYPE_START = void 0;
 const Rest_1 = require("./Rest");
 const Note_1 = require("./Note");
 const Chord_1 = require("./Chord");

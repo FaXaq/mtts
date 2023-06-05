@@ -159,6 +159,8 @@ describe('Note class', () => {
         expect(note.sharpenChromatically().SPN).to.equal('A4')
         note = new Note({ name: 'B', accidental: new Accidental({ semitones: 1 }) })
         expect(note.sharpenChromatically().SPN).to.equal('C#5')
+        note = new Note({ name: 'B' })
+        expect(note.sharpenChromatically(4).SPN).to.equal('D#5')
       })
 
       it('Should be able to flatten chromatically a note', () => {
@@ -174,6 +176,8 @@ describe('Note class', () => {
         expect(note.flattenChromatically().SPN).to.equal('B4')
         note = new Note({ name: 'F', accidental: new Accidental({ semitones: -1 }) })
         expect(note.flattenChromatically().SPN).to.equal('Eb4')
+        note = new Note({ name: 'A' })
+        expect(note.flattenChromatically(2).SPN).to.equal('G4')
       })
     })
   })

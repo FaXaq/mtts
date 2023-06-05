@@ -49,7 +49,7 @@ describe('Interval class', () => {
           name: 'C'
         })
 
-        expect(Interval.apply(note1, 'P1')).to.deep.equal(expected)
+        expect(Interval.apply(note1, 'P1').SPN).to.equal(expected.SPN)
       })
 
       it('Should work with the perfect octave', () => {
@@ -64,7 +64,7 @@ describe('Interval class', () => {
           })
         })
 
-        expect(Interval.apply(note1, 'P8')).to.deep.equal(expected)
+        expect(Interval.apply(note1, 'P8').SPN).to.deep.equal(expected.SPN)
       })
 
       it('Should work when obtaining a note with a lesser accidental', () => {

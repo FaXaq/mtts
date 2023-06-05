@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.Note = exports.BASE_FREQUENCY = exports.DEFAULT_NOTE_VALUE = exports.SEMITONES_NUMBER = exports.NOTES = void 0;
 const Pitch_1 = require("./Pitch");
 const Accidental_1 = require("./Accidental");
 const NoteValue_1 = require("./NoteValue");
@@ -71,51 +72,57 @@ class Note extends ValuedBarContent_1.ValuedBarContent {
         this.name = exports.NOTES[(this.index - 1 + exports.NOTES.length) % exports.NOTES.length];
         return this;
     }
-    sharpenChromatically() {
-        if (!this.hasAccidental()) {
-            if (this.isBorE()) {
-                return this.next();
+    sharpenChromatically(semitones = 1) {
+        for (let i = 0; i < semitones; i++) {
+            if (!this.hasAccidental()) {
+                if (this.isBorE()) {
+                    this.next();
+                }
+                else {
+                    this.addSharp();
+                }
             }
             else {
-                return this.addSharp();
+                if (this.accidental.semitones === -1) {
+                    this.addSharp();
+                }
+                else if (this.isBorE()) {
+                    this.removeAccidental();
+                    this.next().addSharp();
+                }
+                else {
+                    this.removeAccidental();
+                    this.next();
+                }
             }
         }
-        else {
-            if (this.accidental.semitones === -1) {
-                return this.addSharp();
-            }
-            else if (this.isBorE()) {
-                this.removeAccidental();
-                return this.next().addSharp();
-            }
-            else {
-                this.removeAccidental();
-                return this.next();
-            }
-        }
+        return this;
     }
-    flattenChromatically() {
-        if (!this.hasAccidental()) {
-            if (this.isCorF()) {
-                return this.previous();
+    flattenChromatically(semitones = 1) {
+        for (let i = 0; i < semitones; i++) {
+            if (!this.hasAccidental()) {
+                if (this.isCorF()) {
+                    this.previous();
+                }
+                else {
+                    this.addFlat();
+                }
             }
             else {
-                return this.addFlat();
+                if (this.accidental.semitones === 1) {
+                    this.addFlat();
+                }
+                else if (this.isCorF()) {
+                    this.removeAccidental();
+                    this.previous().addFlat();
+                }
+                else {
+                    this.removeAccidental();
+                    this.previous();
+                }
             }
         }
-        else {
-            if (this.accidental.semitones === 1) {
-                return this.addFlat();
-            }
-            else if (this.isCorF()) {
-                this.removeAccidental();
-                return this.previous().addFlat();
-            }
-            else {
-                this.removeAccidental();
-                return this.previous();
-            }
-        }
+        return this;
     }
     // Get semitones between this note and the one passed as parameter
     getSemitonesTo(note) {
@@ -175,7 +182,7 @@ class Note extends ValuedBarContent_1.ValuedBarContent {
         this._accidental = accidental;
     }
     get accidental() {
-        return this._accidental;
+        return this._accidental || new Accidental_1.Accidental();
     }
     // frequency
     // Base frequency times 2 pow (semitones to A440 / 12)

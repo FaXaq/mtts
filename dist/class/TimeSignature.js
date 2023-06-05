@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.TimeSignature = exports.BEATS_TYPE = void 0;
 var BEATS_TYPE;
 (function (BEATS_TYPE) {
     BEATS_TYPE[BEATS_TYPE["WHOLE_NOTE"] = 1] = "WHOLE_NOTE";

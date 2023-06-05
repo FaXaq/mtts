@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.Score = exports.SCORE_STAFF = void 0;
 const TimeSignature_1 = require("./TimeSignature");
 const Bar_1 = require("./Bar");
 const Note_1 = require("./Note");

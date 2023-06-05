@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.Rest = void 0;
 const ValuedBarContent_1 = require("../super/ValuedBarContent");
 const NoteValue_1 = require("./NoteValue");
 class Rest extends ValuedBarContent_1.ValuedBarContent {

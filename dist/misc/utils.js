@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.cloneInstanceObjectArray = exports.cloneObjectArray = exports.cloneInstanceObject = exports.cloneObject = exports.cloneArray = void 0;
 function cloneArray(array) {
     return Array.from(array);
 }

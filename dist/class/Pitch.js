@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.Pitch = void 0;
 class Pitch {
     constructor(params = { value: 4 }) {
         this.value = params.value;

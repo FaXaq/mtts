@@ -19,7 +19,7 @@ interface NoteParams {
 export class Note extends ValuedBarContent {
   private _name!: string;
   private _pitch!: Pitch;
-  private _accidental!: Accidental;
+  private _accidental?: Accidental;
 
   constructor (params: NoteParams = { name: 'C' }) {
     super(params)
@@ -90,44 +90,52 @@ export class Note extends ValuedBarContent {
     return this
   }
 
-  public sharpenChromatically (): Note {
-    if (!this.hasAccidental()) {
-      if (this.isBorE()) {
-        return this.next()
+  public sharpenChromatically (semitones: number = 1): Note {
+    for (let i = 0; i < semitones; i++) {
+      if (!this.hasAccidental()) {
+        if (this.isBorE()) {
+          this.next()
+        } else {
+          this.addSharp()
+        }
       } else {
-        return this.addSharp()
-      }
-    } else {
-      if (this.accidental.semitones === -1) {
-        return this.addSharp()
-      } else if (this.isBorE()) {
-        this.removeAccidental()
-        return this.next().addSharp()
-      } else {
-        this.removeAccidental()
-        return this.next()
+        if (this.accidental.semitones === -1) {
+          this.addSharp()
+        } else if (this.isBorE()) {
+          this.removeAccidental()
+          this.next().addSharp()
+        } else {
+          this.removeAccidental()
+          this.next()
+        }
       }
     }
+
+    return this
   }
 
-  public flattenChromatically (): Note {
-    if (!this.hasAccidental()) {
-      if (this.isCorF()) {
-        return this.previous()
+  public flattenChromatically (semitones: number = 1): Note {
+    for (let i = 0; i < semitones; i++) {
+      if (!this.hasAccidental()) {
+        if (this.isCorF()) {
+          this.previous()
+        } else {
+          this.addFlat()
+        }
       } else {
-        return this.addFlat()
-      }
-    } else {
-      if (this.accidental.semitones === 1) {
-        return this.addFlat()
-      } else if (this.isCorF()) {
-        this.removeAccidental()
-        return this.previous().addFlat()
-      } else {
-        this.removeAccidental()
-        return this.previous()
+        if (this.accidental.semitones === 1) {
+          this.addFlat()
+        } else if (this.isCorF()) {
+          this.removeAccidental()
+          this.previous().addFlat()
+        } else {
+          this.removeAccidental()
+          this.previous()
+        }
       }
     }
+
+    return this
   }
 
   // Get semitones between this note and the one passed as parameter
@@ -201,7 +209,7 @@ export class Note extends ValuedBarContent {
   }
 
   get accidental (): Accidental {
-    return this._accidental
+    return this._accidental || new Accidental()
   }
 
   // frequency

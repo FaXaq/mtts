@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.REVERSE_SORTED_NOTE_VALUES = exports.SORTED_NOTE_VALUES = exports.NOTE_VALUES = void 0;
 exports.NOTE_VALUES = {
     LARGE: 8,
     LONG: 4,

@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.ValuedBarContent = void 0;
 const Note_1 = require("../class/Note");
 class ValuedBarContent {
     constructor(params = {}) {

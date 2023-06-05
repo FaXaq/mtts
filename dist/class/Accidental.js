@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.Accidental = exports.ACCIDENTALS = exports.ACCIDENTAL = void 0;
 var ACCIDENTAL;
 (function (ACCIDENTAL) {
     ACCIDENTAL[ACCIDENTAL["DOUBLE_FLAT"] = -2] = "DOUBLE_FLAT";

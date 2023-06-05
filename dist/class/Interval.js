@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.Interval = exports.INTERVALS = void 0;
 const Note_1 = require("./Note");
 exports.INTERVALS = {
     P1: {

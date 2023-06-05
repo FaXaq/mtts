@@ -15,7 +15,7 @@ describe('Scale class', () => {
       expect(s.key).to.deep.equal(new Note({
         name: 'C'
       }))
-      expect(s.notes).to.deep.equal([
+      expect(s.notes.map(n => n.SPN)).to.deep.equal([
         new Note({ name: 'C' }),
         new Note({ name: 'D' }),
         new Note({ name: 'E' }),
@@ -23,7 +23,7 @@ describe('Scale class', () => {
         new Note({ name: 'G' }),
         new Note({ name: 'A' }),
         new Note({ name: 'B' })
-      ])
+      ].map(n => n.SPN))
     })
 
     it('Should reject any name unknown', () => {
@@ -62,7 +62,7 @@ describe('Scale class', () => {
         s.intervals = [new Interval('P1'), new Interval('P5')]
       }).to.not.throw()
 
-      expect(s.notes).to.deep.equal([Note.fromSPN('C4'), Note.fromSPN('G4')])
+      expect(s.notes.map(n => n.SPN)).to.deep.equal([Note.fromSPN('C4').SPN, Note.fromSPN('G4').SPN])
     })
 
     it('Should refuse something other than an array of intervals.', () => {

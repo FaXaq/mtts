@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.IntervalHandler = void 0;
 class IntervalHandler {
     compute(intervals, note) {
         const notes = [];

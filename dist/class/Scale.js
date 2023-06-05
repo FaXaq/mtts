@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.Scale = exports.SCALES = void 0;
 const Note_1 = require("./Note");
 const Interval_1 = require("./Interval");
 const IntervalHandler_1 = require("../super/IntervalHandler");

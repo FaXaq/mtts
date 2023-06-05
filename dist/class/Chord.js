@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.Chord = exports.COMPUTED_EXTENDED_CHORDS = exports.EXTENDED_CHORDS = exports.TRIADS = void 0;
 const Note_1 = require("./Note");
 const Interval_1 = require("./Interval");
 const IntervalHandler_1 = require("../super/IntervalHandler");

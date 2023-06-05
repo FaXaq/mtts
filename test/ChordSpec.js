@@ -95,7 +95,7 @@ describe('Chord class', () => {
     describe('Notes', () => {
       it('Should be able to get notes', () => {
         const c = new Chord()
-        expect(c.notes).to.deep.equals([
+        expect(c.notes.map(n => n.SPN)).to.deep.equals([
           new Note({
             name: 'C'
           }),
@@ -105,7 +105,7 @@ describe('Chord class', () => {
           new Note({
             name: 'G'
           })
-        ])
+        ].map(n => n.SPN))
       })
     })
 

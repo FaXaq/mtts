@@ -16,7 +16,7 @@ interface NoteParams {
 export declare class Note extends ValuedBarContent {
     private _name;
     private _pitch;
-    private _accidental;
+    private _accidental?;
     constructor(params?: NoteParams);
     /**
      * Adds a sharp accidental (if one is already there, adds a second one)
@@ -30,8 +30,8 @@ export declare class Note extends ValuedBarContent {
     flattenTo(n: number): Note;
     next(): Note;
     previous(): Note;
-    sharpenChromatically(): Note;
-    flattenChromatically(): Note;
+    sharpenChromatically(semitones?: number): Note;
+    flattenChromatically(semitones?: number): Note;
     getSemitonesTo(note: Note): number;
     duplicate(): Note;
     removeAccidental(): Note;
