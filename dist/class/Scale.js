@@ -41,7 +41,7 @@ exports.SCALES = {
             new Interval_1.Interval('m3'),
             new Interval_1.Interval('P4'),
             new Interval_1.Interval('P5'),
-            new Interval_1.Interval('M6'),
+            new Interval_1.Interval('m6'),
             new Interval_1.Interval('m7')
         ]
     },

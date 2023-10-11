@@ -45,7 +45,7 @@ export const SCALES: { [key: string]: IScaleDefinition } = {
       new Interval('m3'),
       new Interval('P4'),
       new Interval('P5'),
-      new Interval('M6'),
+      new Interval('m6'),
       new Interval('m7')
     ]
   },
