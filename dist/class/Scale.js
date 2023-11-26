@@ -322,6 +322,7 @@ exports.SCALES = {
     },
     LYDIAN_AUGMENTED: {
         name: 'lydian_augmented',
+        mode: 'lydian_augmented',
         intervals: [
             new Interval_1.Interval('P1'),
             new Interval_1.Interval('M2'),
@@ -359,6 +360,7 @@ exports.SCALES = {
     },
     MAJOR_LOCRIAN: {
         name: 'major_locrian',
+        mode: 'major_locrian',
         intervals: [
             new Interval_1.Interval('P1'),
             new Interval_1.Interval('M2'),
@@ -463,6 +465,7 @@ exports.SCALES = {
     },
     PHRYGIAN_DOMINANT: {
         name: 'phrygian_dominant',
+        mode: 'phrygian_dominant',
         intervals: [
             new Interval_1.Interval('P1'),
             new Interval_1.Interval('m2'),
@@ -560,6 +563,96 @@ exports.SCALES = {
             new Interval_1.Interval('P4'),
             new Interval_1.Interval('P5'),
             new Interval_1.Interval('m7')
+        ]
+    },
+    MAJOR_7_ARPEGGIO: {
+        arpeggio: true,
+        name: 'major_seven_arpeggio',
+        intervals: [
+            new Interval_1.Interval('P1'),
+            new Interval_1.Interval('M3'),
+            new Interval_1.Interval('P5'),
+            new Interval_1.Interval('M7')
+        ]
+    },
+    DOMINANT_SEVEN_ARPEGGIO: {
+        arpeggio: true,
+        name: 'dominant_seven_arpeggio',
+        intervals: [
+            new Interval_1.Interval('P1'),
+            new Interval_1.Interval('M3'),
+            new Interval_1.Interval('P5'),
+            new Interval_1.Interval('m7')
+        ]
+    },
+    MINOR_SEVEN_ARPEGGIO: {
+        arpeggio: true,
+        name: 'minor_seven_arpeggio',
+        intervals: [
+            new Interval_1.Interval('P1'),
+            new Interval_1.Interval('m3'),
+            new Interval_1.Interval('P5'),
+            new Interval_1.Interval('m7')
+        ]
+    },
+    MINOR_SEVEN_FLAT_FIVE_ARPEGGIO: {
+        arpeggio: true,
+        name: 'minor_seven_flat_five_arpeggio',
+        intervals: [
+            new Interval_1.Interval('P1'),
+            new Interval_1.Interval('m3'),
+            new Interval_1.Interval('d5'),
+            new Interval_1.Interval('m7')
+        ]
+    },
+    DOMINANT_SEVEN_SUS_FOUR_ARPEGGIO: {
+        arpeggio: true,
+        name: 'dominant_seven_sus_four_arpeggio',
+        intervals: [
+            new Interval_1.Interval('P1'),
+            new Interval_1.Interval('P4'),
+            new Interval_1.Interval('P5'),
+            new Interval_1.Interval('m7')
+        ]
+    },
+    DIMINISHED_SEVENT_ARPEGGIO: {
+        arpeggio: true,
+        name: 'diminished_seven_arpeggio',
+        intervals: [
+            new Interval_1.Interval('P1'),
+            new Interval_1.Interval('m3'),
+            new Interval_1.Interval('d5'),
+            new Interval_1.Interval('d7')
+        ]
+    },
+    MINOR_MAJOR_SEVEN_ARPEGGIO: {
+        arpeggio: true,
+        name: 'minor_major_seven_arpeggio',
+        intervals: [
+            new Interval_1.Interval('P1'),
+            new Interval_1.Interval('m3'),
+            new Interval_1.Interval('P5'),
+            new Interval_1.Interval('M7')
+        ]
+    },
+    MAJOR_SIX_ARPEGGIO: {
+        arpeggio: true,
+        name: 'major_six_arpeggio',
+        intervals: [
+            new Interval_1.Interval('P1'),
+            new Interval_1.Interval('M3'),
+            new Interval_1.Interval('P5'),
+            new Interval_1.Interval('M6')
+        ]
+    },
+    MINOR_MAJOR_SIX_ARPEGGIO: {
+        arpeggio: true,
+        name: 'minor_major_six_arpeggio',
+        intervals: [
+            new Interval_1.Interval('P1'),
+            new Interval_1.Interval('m3'),
+            new Interval_1.Interval('P5'),
+            new Interval_1.Interval('M6')
         ]
     }
 };

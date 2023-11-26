@@ -5,6 +5,7 @@ import { Chord } from './Chord';
 interface IScaleDefinition {
     name?: string;
     mode?: string;
+    arpeggio?: boolean;
     intervals: Interval[];
 }
 export declare const SCALES: {

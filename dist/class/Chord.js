@@ -75,6 +75,18 @@ exports.EXTENDED_CHORDS = {
         notation: '7sus4',
         extends: exports.TRIADS.sus4
     },
+    d7: {
+        addedTones: [new Interval_1.Interval('d7')],
+        name: 'diminished 7',
+        notation: '°7',
+        extends: exports.TRIADS.dim
+    },
+    mM7: {
+        addedTones: [new Interval_1.Interval('M7')],
+        name: 'minor major 7',
+        notation: 'mM7',
+        extends: exports.TRIADS.min
+    },
     9: {
         addedTones: [new Interval_1.Interval('m7'), new Interval_1.Interval('M9')],
         name: '7(9)',
