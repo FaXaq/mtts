@@ -92,6 +92,18 @@ export const EXTENDED_CHORDS: { [key: string]: IChordDefinition } = {
     notation: '7sus4',
     extends: TRIADS.sus4
   },
+  d7: {
+    addedTones: [new Interval('d7')],
+    name: 'diminished 7',
+    notation: '°7',
+    extends: TRIADS.dim
+  },
+  mM7: {
+    addedTones: [new Interval('M7')],
+    name: 'minor major 7',
+    notation: 'mM7',
+    extends: TRIADS.min
+  },
   9: {
     addedTones: [new Interval('m7'), new Interval('M9')],
     name: '7(9)',

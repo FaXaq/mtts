@@ -7,6 +7,7 @@ import { Chord } from './Chord'
 interface IScaleDefinition {
   name?: string
   mode?: string
+  arpeggio?: boolean
   intervals: Interval[]
 }
 
@@ -326,6 +327,7 @@ export const SCALES: { [key: string]: IScaleDefinition } = {
   },
   LYDIAN_AUGMENTED: {
     name: 'lydian_augmented',
+    mode: 'lydian_augmented',
     intervals: [
       new Interval('P1'),
       new Interval('M2'),
@@ -363,6 +365,7 @@ export const SCALES: { [key: string]: IScaleDefinition } = {
   },
   MAJOR_LOCRIAN: {
     name: 'major_locrian',
+    mode: 'major_locrian',
     intervals: [
       new Interval('P1'),
       new Interval('M2'),
@@ -467,6 +470,7 @@ export const SCALES: { [key: string]: IScaleDefinition } = {
   },
   PHRYGIAN_DOMINANT: {
     name: 'phrygian_dominant',
+    mode: 'phrygian_dominant',
     intervals: [
       new Interval('P1'),
       new Interval('m2'),
@@ -564,6 +568,96 @@ export const SCALES: { [key: string]: IScaleDefinition } = {
       new Interval('P4'),
       new Interval('P5'),
       new Interval('m7')
+    ]
+  },
+  MAJOR_7_ARPEGGIO: {
+    arpeggio: true,
+    name: 'major_seven_arpeggio',
+    intervals: [
+      new Interval('P1'),
+      new Interval('M3'),
+      new Interval('P5'),
+      new Interval('M7')
+    ]
+  },
+  DOMINANT_SEVEN_ARPEGGIO: {
+    arpeggio: true,
+    name: 'dominant_seven_arpeggio',
+    intervals: [
+      new Interval('P1'),
+      new Interval('M3'),
+      new Interval('P5'),
+      new Interval('m7')
+    ]
+  },
+  MINOR_SEVEN_ARPEGGIO: {
+    arpeggio: true,
+    name: 'minor_seven_arpeggio',
+    intervals: [
+      new Interval('P1'),
+      new Interval('m3'),
+      new Interval('P5'),
+      new Interval('m7')
+    ]
+  },
+  MINOR_SEVEN_FLAT_FIVE_ARPEGGIO: {
+    arpeggio: true,
+    name: 'minor_seven_flat_five_arpeggio',
+    intervals: [
+      new Interval('P1'),
+      new Interval('m3'),
+      new Interval('d5'),
+      new Interval('m7')
+    ]
+  },
+  DOMINANT_SEVEN_SUS_FOUR_ARPEGGIO: {
+    arpeggio: true,
+    name: 'dominant_seven_sus_four_arpeggio',
+    intervals: [
+      new Interval('P1'),
+      new Interval('P4'),
+      new Interval('P5'),
+      new Interval('m7')
+    ]
+  },
+  DIMINISHED_SEVENT_ARPEGGIO: {
+    arpeggio: true,
+    name: 'diminished_seven_arpeggio',
+    intervals: [
+      new Interval('P1'),
+      new Interval('m3'),
+      new Interval('d5'),
+      new Interval('d7')
+    ]
+  },
+  MINOR_MAJOR_SEVEN_ARPEGGIO: {
+    arpeggio: true,
+    name: 'minor_major_seven_arpeggio',
+    intervals: [
+      new Interval('P1'),
+      new Interval('m3'),
+      new Interval('P5'),
+      new Interval('M7')
+    ]
+  },
+  MAJOR_SIX_ARPEGGIO: {
+    arpeggio: true,
+    name: 'major_six_arpeggio',
+    intervals: [
+      new Interval('P1'),
+      new Interval('M3'),
+      new Interval('P5'),
+      new Interval('M6')
+    ]
+  },
+  MINOR_MAJOR_SIX_ARPEGGIO: {
+    arpeggio: true,
+    name: 'minor_major_six_arpeggio',
+    intervals: [
+      new Interval('P1'),
+      new Interval('m3'),
+      new Interval('P5'),
+      new Interval('M6')
     ]
   }
 }
