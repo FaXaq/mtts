@@ -190,8 +190,7 @@ class Chord extends ValuedBarContent_1.ValuedBarContent {
             this.intervals = this.computeIntervals();
         }
         else {
-            this.intervals =
-                (_b = params.intervals) !== null && _b !== void 0 ? _b : (0, utils_1.cloneInstanceObjectArray)(exports.TRIADS.maj.intervals);
+            this.intervals = (_b = params.intervals) !== null && _b !== void 0 ? _b : utils_1.cloneInstanceObjectArray(exports.TRIADS.maj.intervals);
             this.value = (_c = params.value) !== null && _c !== void 0 ? _c : Note_1.DEFAULT_NOTE_VALUE;
             this.notes = this.compute(this.intervals, this.root);
         }
@@ -358,6 +357,13 @@ class Chord extends ValuedBarContent_1.ValuedBarContent {
                             isAddedToneMatched = true;
                             break;
                         }
+                        else if (addedTone.value < 8) {
+                            const octaveAddedTone = addedTone.raiseOctave();
+                            if (ECAddedTone.name === octaveAddedTone.name) {
+                                isAddedToneMatched = true;
+                                break;
+                            }
+                        }
                     }
                     areAllTonesMatching = areAllTonesMatching && isAddedToneMatched;
                 }
@@ -368,4 +374,4 @@ class Chord extends ValuedBarContent_1.ValuedBarContent {
     }
 }
 exports.Chord = Chord;
-(0, applyMixins_1.applyMixins)(Chord, [IntervalHandler_1.IntervalHandler]);
+applyMixins_1.applyMixins(Chord, [IntervalHandler_1.IntervalHandler]);

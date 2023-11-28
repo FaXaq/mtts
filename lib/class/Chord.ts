@@ -449,6 +449,12 @@ export class Chord extends ValuedBarContent implements IntervalHandler {
             if (ECAddedTone.name === addedTone.name) {
               isAddedToneMatched = true
               break
+            } else if (addedTone.value < 8) {
+              const octaveAddedTone = addedTone.raiseOctave()
+              if (ECAddedTone.name === octaveAddedTone.name) {
+                isAddedToneMatched = true
+                break
+              }
             }
           }
           areAllTonesMatching = areAllTonesMatching && isAddedToneMatched

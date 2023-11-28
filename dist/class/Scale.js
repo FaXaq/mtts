@@ -762,4 +762,4 @@ class Scale {
     }
 }
 exports.Scale = Scale;
-(0, applyMixins_1.applyMixins)(Scale, [IntervalHandler_1.IntervalHandler]);
+applyMixins_1.applyMixins(Scale, [IntervalHandler_1.IntervalHandler]);

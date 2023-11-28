@@ -447,6 +447,21 @@ describe('Chord class', () => {
         })
       })
 
+      it('Should give notation for a M13 chord with all notes from the C Major scale', () => {
+        const notes = [
+          'C4',
+          'D4',
+          'E4',
+          'F4',
+          'G4',
+          'A4',
+          'B4'
+        ].map(n => Note.fromSPN(n))
+
+        const c = new Chord({ root: notes[0], notes: [...notes] })
+        expect(c.notation).to.equal('M13')
+      })
+
       describe('Error', () => {
         const c = new Chord({ root: new Note(), notes: [new Note(), new Note({ name: 'B' })] })
         expect(c.notation).to.equal('')
