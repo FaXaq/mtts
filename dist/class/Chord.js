@@ -314,7 +314,7 @@ class Chord extends ValuedBarContent_1.ValuedBarContent {
         const sameIntervals = intervals.filter(interval => octaveIntervals.findIndex(octaveInterval => interval.name === octaveInterval.name) > -1);
         if (sameIntervals.length === 0) {
             const newIntervals = [
-                ...this.intervals.filter(currentInterval => intervals.findIndex(interval => interval.name === currentInterval.name)),
+                ...this.intervals.filter(currentInterval => intervals.findIndex(interval => interval.name === currentInterval.name) === -1),
                 ...octaveIntervals
             ];
             const newChordDefinition = new Chord({

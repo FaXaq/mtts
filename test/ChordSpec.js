@@ -187,18 +187,20 @@ describe('Chord class', () => {
       })
 
       describe('Added tones to triad', () => {
-        const root = new Note({
-          name: 'C'
-        })
-        const c = new Chord({
-          root,
-          notes: [
+        it('Should write correctly added tones to a triad', () => {
+          const root = new Note({
+            name: 'C'
+          })
+          const c = new Chord({
             root,
-            Interval.apply(root, 'A4'),
-            Interval.apply(root, 'P5')
-          ]
+            notes: [
+              root,
+              Interval.apply(root, 'A4'),
+              Interval.apply(root, 'P5')
+            ]
+          })
+          expect(c.notation).to.equal('5add(+11)')
         })
-        expect(c.notation).to.equal('5add(+11)')
       })
 
       describe('Extended', () => {
