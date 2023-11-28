@@ -3,6 +3,7 @@ import { Interval } from './Interval';
 import { IntervalHandler } from '../super/IntervalHandler';
 import { NOTE_VALUE } from './NoteValue';
 import { ValuedBarContent } from '../super/ValuedBarContent';
+import { Scale } from './Scale';
 interface ITriadDefinition {
     name: string;
     intervals: Interval[];
@@ -10,6 +11,7 @@ interface ITriadDefinition {
 }
 interface IPossibleTriad extends ITriadDefinition {
     missingIntervals: Interval[];
+    matchingIntervals: Interval[];
 }
 interface IChordDefinition {
     name: string;
@@ -51,8 +53,16 @@ export declare class Chord extends ValuedBarContent implements IntervalHandler {
     get notes(): Note[];
     get _possibleTriads(): IPossibleTriad[];
     get notation(): string;
+    computeNotationWithContext(scale: Scale): string;
+    noNotationYet(): void;
     computeIntervals(): Interval[];
-    addTonesToChordNotation(chordDefinition: ITriadDefinition): string;
+    /**
+     * There is a bit of magic in this function
+     * It checks if intervals can be upped to the next octave,
+     * If it's the case, it will calculate the new chord notation
+     * If not, it will add tones at the end of the chord notation
+     */
+    addTonesToChordNotation(chordDefinition: ITriadDefinition | IChordDefinition, intervals: Interval[]): string;
     addInterval(interval: Interval): Chord;
     possibleAddedTones(triad: ITriadDefinition): Interval[];
     possibleExtendedChords(triad: ITriadDefinition): COMPUTED_EXTENDED_CHORD[];

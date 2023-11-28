@@ -239,6 +239,23 @@ export class Interval {
     return Interval.notation(this.name)
   }
 
+  raiseOctave (): Interval {
+    const interval = Interval.raiseOctave(this)
+    if (interval !== undefined) {
+      return interval
+    }
+
+    return Interval.fromSemitonesAndValue(this.semitones, this.value) as unknown as Interval
+  }
+
+  static raiseOctave (interval: Interval): Interval | undefined {
+    if (interval.value < 8) {
+      return Interval.fromSemitonesAndValue(interval.semitones + 12, interval.value + 7)
+    } else {
+      throw new Error(`Interval ${interval.name} cannot be raised to octave.`)
+    }
+  }
+
   static fromSemitones (semitones: number): Interval[] {
     const intervals: Interval[] = []
 

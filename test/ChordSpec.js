@@ -198,7 +198,7 @@ describe('Chord class', () => {
             Interval.apply(root, 'P5')
           ]
         })
-        expect(c.notation).to.equal('5add+4')
+        expect(c.notation).to.equal('5add(+11)')
       })
 
       describe('Extended', () => {
@@ -248,6 +248,200 @@ describe('Chord class', () => {
             ]
           })
           expect(c.notation).to.equal('-7/5b')
+        })
+
+        it('Should give notation for 9 chords', () => {
+          const root = new Note({
+            name: 'C'
+          })
+
+          const c = new Chord({
+            root,
+            notes: [
+              root,
+              Interval.apply(root, 'M3'),
+              Interval.apply(root, 'P5'),
+              Interval.apply(root, 'M7'),
+              Interval.apply(root, 'M9')
+            ]
+          })
+
+          expect(c.notation).to.equal('M9')
+
+          const c2 = new Chord({
+            root,
+            notes: [
+              root,
+              Interval.apply(root, 'm3'),
+              Interval.apply(root, 'P5'),
+              Interval.apply(root, 'm7'),
+              Interval.apply(root, 'M9')
+            ]
+          })
+
+          expect(c2.notation).to.equal('-9')
+
+          const c3 = new Chord({
+            root,
+            notes: [
+              root,
+              Interval.apply(root, 'M3'),
+              Interval.apply(root, 'P5'),
+              Interval.apply(root, 'm7'),
+              Interval.apply(root, 'M9')
+            ]
+          })
+
+          expect(c3.notation).to.equal('9')
+        })
+
+        it('Should give notation for 11 chords', () => {
+          const root = new Note({
+            name: 'C'
+          })
+
+          const c = new Chord({
+            root,
+            notes: [
+              root,
+              Interval.apply(root, 'M3'),
+              Interval.apply(root, 'P5'),
+              Interval.apply(root, 'M7'),
+              Interval.apply(root, 'M9'),
+              Interval.apply(root, 'P11')
+            ]
+          })
+
+          expect(c.notation).to.equal('M11')
+
+          const c2 = new Chord({
+            root,
+            notes: [
+              root,
+              Interval.apply(root, 'm3'),
+              Interval.apply(root, 'P5'),
+              Interval.apply(root, 'm7'),
+              Interval.apply(root, 'M9'),
+              Interval.apply(root, 'P11')
+            ]
+          })
+
+          expect(c2.notation).to.equal('-11')
+
+          const c3 = new Chord({
+            root,
+            notes: [
+              root,
+              Interval.apply(root, 'M3'),
+              Interval.apply(root, 'P5'),
+              Interval.apply(root, 'm7'),
+              Interval.apply(root, 'M9'),
+              Interval.apply(root, 'P11')
+            ]
+          })
+
+          expect(c3.notation).to.equal('11')
+        })
+
+        it('Should give notation for 13 chords', () => {
+          const root = new Note({
+            name: 'C'
+          })
+
+          const c = new Chord({
+            root,
+            notes: [
+              root,
+              Interval.apply(root, 'M3'),
+              Interval.apply(root, 'P5'),
+              Interval.apply(root, 'M7'),
+              Interval.apply(root, 'M9'),
+              Interval.apply(root, 'P11'),
+              Interval.apply(root, 'M13')
+            ]
+          })
+
+          expect(c.notation).to.equal('M13')
+
+          const c2 = new Chord({
+            root,
+            notes: [
+              root,
+              Interval.apply(root, 'm3'),
+              Interval.apply(root, 'P5'),
+              Interval.apply(root, 'm7'),
+              Interval.apply(root, 'M9'),
+              Interval.apply(root, 'P11'),
+              Interval.apply(root, 'M13')
+            ]
+          })
+
+          expect(c2.notation).to.equal('-13')
+
+          const c3 = new Chord({
+            root,
+            notes: [
+              root,
+              Interval.apply(root, 'M3'),
+              Interval.apply(root, 'P5'),
+              Interval.apply(root, 'm7'),
+              Interval.apply(root, 'M9'),
+              Interval.apply(root, 'P11'),
+              Interval.apply(root, 'M13')
+            ]
+          })
+
+          expect(c3.notation).to.equal('13')
+        })
+
+        it('Should give notation for 7 chords with added 11', () => {
+          const root = new Note({
+            name: 'C'
+          })
+
+          const c = new Chord({
+            root,
+            notes: [
+              root,
+              Interval.apply(root, 'M3'),
+              Interval.apply(root, 'P5'),
+              Interval.apply(root, 'M7'),
+              Interval.apply(root, 'P11')
+            ]
+          })
+
+          expect(c.notation).to.equal('M7add(11)')
+
+          const c2 = new Chord({
+            root,
+            notes: [
+              root,
+              Interval.apply(root, 'M3'),
+              Interval.apply(root, 'P5'),
+              Interval.apply(root, 'M7'),
+              Interval.apply(root, 'M2')
+            ]
+          })
+
+          expect(c2.notation).to.equal('M9')
+        })
+
+        it('Should give notation for 7 chords with no 5', () => {
+          const root = new Note({
+            name: 'C'
+          })
+
+          const c = new Chord({
+            root,
+            notes: [
+              root,
+              Interval.apply(root, 'M3'),
+              Interval.apply(root, 'M7'),
+              Interval.apply(root, 'P11')
+            ]
+          })
+
+          expect(c.notation).to.equal('')
         })
       })
 

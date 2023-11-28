@@ -13,6 +13,8 @@ export declare class Interval {
     constructor(name: string);
     apply(note: Note): Note;
     get notation(): string;
+    raiseOctave(): Interval;
+    static raiseOctave(interval: Interval): Interval | undefined;
     static fromSemitones(semitones: number): Interval[];
     static fromValue(value: number): Interval[];
     static fromSemitonesAndValue(semitones: number, value: number): Interval | undefined;

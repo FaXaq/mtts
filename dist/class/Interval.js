@@ -229,6 +229,21 @@ class Interval {
     get notation() {
         return Interval.notation(this.name);
     }
+    raiseOctave() {
+        const interval = Interval.raiseOctave(this);
+        if (interval !== undefined) {
+            return interval;
+        }
+        return Interval.fromSemitonesAndValue(this.semitones, this.value);
+    }
+    static raiseOctave(interval) {
+        if (interval.value < 8) {
+            return Interval.fromSemitonesAndValue(interval.semitones + 12, interval.value + 7);
+        }
+        else {
+            throw new Error(`Interval ${interval.name} cannot be raised to octave.`);
+        }
+    }
     static fromSemitones(semitones) {
         const intervals = [];
         Object.keys(exports.INTERVALS).forEach((k) => {

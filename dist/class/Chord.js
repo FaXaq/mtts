@@ -227,16 +227,20 @@ class Chord extends ValuedBarContent_1.ValuedBarContent {
         const triads = [];
         Object.keys(exports.TRIADS).forEach(t => {
             const missingIntervals = [];
+            const matchingIntervals = [];
             // On intervals from the current chord
             for (let i = 0; i < exports.TRIADS[t].intervals.length; i++) {
                 const foundIntervals = this.intervals.filter((interval) => {
                     return Interval_1.Interval.equals(interval, exports.TRIADS[t].intervals[i]);
                 });
+                matchingIntervals.push(...foundIntervals);
                 if (foundIntervals.length === 0) {
                     missingIntervals.push(exports.TRIADS[t].intervals[i]);
                 }
             }
-            triads.push(Object.assign(Object.assign({}, exports.TRIADS[t]), { missingIntervals }));
+            missingIntervals.filter(interval => matchingIntervals.findIndex(matchingInterval => interval.value !== matchingInterval.value) === -1);
+            triads.push(Object.assign(Object.assign({}, exports.TRIADS[t]), { missingIntervals,
+                matchingIntervals }));
         });
         return triads;
     }
@@ -254,14 +258,30 @@ class Chord extends ValuedBarContent_1.ValuedBarContent {
                 // it lacks a few intervals, find them and compute extended chord to find a match
                 const possibleExtendedChords = this.possibleExtendedChords(perfectMatchedTriad);
                 if (possibleExtendedChords.length === 0) {
-                    console.warn(`No name for this chord yet ${JSON.stringify(this)}. Adding static alterations`);
-                    return this.addTonesToChordNotation(perfectMatchedTriad);
+                    const expectedIntervals = [...this.intervals];
+                    const foundIntervals = [...perfectMatchedTriad.intervals];
+                    const missingIntervals = expectedIntervals.filter(expectedInterval => foundIntervals.findIndex(foundInterval => expectedInterval.name === foundInterval.name) === -1);
+                    this.noNotationYet();
+                    return this.addTonesToChordNotation(perfectMatchedTriad, missingIntervals);
                 }
-                return possibleExtendedChords[0].notation;
+                const longestExtendedChord = possibleExtendedChords.sort((a, b) => b.addedTones.length - a.addedTones.length)[0];
+                const expectedIntervals = [...this.intervals];
+                const foundIntervals = [...longestExtendedChord.addedTones, ...longestExtendedChord.intervals];
+                if (expectedIntervals > foundIntervals) {
+                    const missingIntervals = expectedIntervals.filter(expectedInterval => foundIntervals.findIndex(foundInterval => expectedInterval.name === foundInterval.name) === -1);
+                    return this.addTonesToChordNotation(longestExtendedChord, missingIntervals);
+                }
+                return longestExtendedChord.notation;
             }
         }
-        console.warn(`No name for this chord yet ${JSON.stringify(this)}`);
+        this.noNotationYet();
         return '';
+    }
+    computeNotationWithContext(scale) {
+        return '';
+    }
+    noNotationYet() {
+        console.warn(`No name for this chord yet ${this.root.SPN} ${JSON.stringify(this.intervals.map(i => i.name))}`);
     }
     computeIntervals() {
         const intervals = [];
@@ -277,8 +297,32 @@ class Chord extends ValuedBarContent_1.ValuedBarContent {
         });
         return intervals;
     }
-    addTonesToChordNotation(chordDefinition) {
-        return chordDefinition.notation + this.possibleAddedTones(chordDefinition).reduce((p, c) => p + `add${c.notation}`, '');
+    /**
+     * There is a bit of magic in this function
+     * It checks if intervals can be upped to the next octave,
+     * If it's the case, it will calculate the new chord notation
+     * If not, it will add tones at the end of the chord notation
+     */
+    addTonesToChordNotation(chordDefinition, intervals) {
+        const octaveIntervals = intervals.map(i => {
+            if (i.value < 8) {
+                return i.raiseOctave();
+            }
+            return i;
+        });
+        const sameIntervals = intervals.filter(interval => octaveIntervals.findIndex(octaveInterval => interval.name === octaveInterval.name) > -1);
+        if (sameIntervals.length === 0) {
+            const newIntervals = [
+                ...this.intervals.filter(currentInterval => intervals.findIndex(interval => interval.name === currentInterval.name)),
+                ...octaveIntervals
+            ];
+            const newChordDefinition = new Chord({
+                root: this.root.duplicate(),
+                intervals: newIntervals
+            });
+            return newChordDefinition.notation;
+        }
+        return `${chordDefinition.notation}${octaveIntervals.reduce((p, c) => p + `add(${c.notation})`, '')}`;
     }
     addInterval(interval) {
         this._intervals.push(interval);
@@ -303,21 +347,20 @@ class Chord extends ValuedBarContent_1.ValuedBarContent {
         return exports.COMPUTED_EXTENDED_CHORDS.filter(ec => {
             if (ec.extends.name === triad.name) {
                 // for each interval in extended chord definition check
+                let areAllTonesMatching = true;
                 for (let i = 0; i < ec.addedTones.length; i++) {
                     const ECAddedTone = ec.addedTones[i];
-                    // if there is only one added tone not found exit
-                    let flag = false;
+                    let isAddedToneMatched = false;
                     for (let j = 0; j < possibleAddedTones.length; j++) {
                         const addedTone = possibleAddedTones[j];
                         if (ECAddedTone.name === addedTone.name) {
-                            flag = true;
+                            isAddedToneMatched = true;
                             break;
                         }
                     }
-                    if (!flag)
-                        return false;
+                    areAllTonesMatching = areAllTonesMatching && isAddedToneMatched;
                 }
-                return true;
+                return areAllTonesMatching;
             }
             return false;
         });

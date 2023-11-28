@@ -147,6 +147,15 @@ describe('Interval class', () => {
         expect(Interval.apply(note1, 'P8')).to.deep.equal(expected)
       })
     })
+
+    describe('Should be able to modify interval to its next octave', () => {
+      it('Should work with an interval with value below 8', () => {
+      })
+
+      it('Should not work with an interval with value above 7', () => {
+        expect(() => { new Interval('P8').raiseOctave() }).to.throw()
+      })
+    })
   })
 
   describe('Getters', () => {
