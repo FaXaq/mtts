@@ -11,8 +11,7 @@
   "scripts": {
     "cover": "npm run build && istanbul cover node_modules/mocha/bin/_mocha test/*.js - - -R spec",
     "test": "npm run build && mocha --reporter spec",
-    "build": "tsc",
-    "preversion": "tsc && git commit -am 'autobuild'"
+    "build": "tsc"
   },
   "author": "faxaq",
   "license": "GPL-3.0-only",
