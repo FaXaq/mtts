@@ -8,6 +8,7 @@ export declare enum ACCIDENTAL {
 interface AccidentalParams {
     semitones: number;
 }
+export declare const ACCIDENTALS_NOTATION: string[];
 export declare const ACCIDENTALS: string[];
 export declare class Accidental {
     private _semitones;

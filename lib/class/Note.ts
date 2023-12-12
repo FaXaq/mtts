@@ -209,7 +209,7 @@ export class Note extends ValuedBarContent {
   }
 
   get accidental (): Accidental {
-    return this._accidental || new Accidental()
+    return this._accidental ?? new Accidental()
   }
 
   // frequency

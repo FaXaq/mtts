@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Accidental = exports.ACCIDENTALS = exports.ACCIDENTAL = void 0;
+exports.Accidental = exports.ACCIDENTALS = exports.ACCIDENTALS_NOTATION = exports.ACCIDENTAL = void 0;
 var ACCIDENTAL;
 (function (ACCIDENTAL) {
     ACCIDENTAL[ACCIDENTAL["DOUBLE_FLAT"] = -2] = "DOUBLE_FLAT";
@@ -9,6 +9,7 @@ var ACCIDENTAL;
     ACCIDENTAL[ACCIDENTAL["SHARP"] = 1] = "SHARP";
     ACCIDENTAL[ACCIDENTAL["DOUBLE_SHARP"] = 2] = "DOUBLE_SHARP";
 })(ACCIDENTAL = exports.ACCIDENTAL || (exports.ACCIDENTAL = {}));
+exports.ACCIDENTALS_NOTATION = ['b', 's'];
 exports.ACCIDENTALS = Object.keys(ACCIDENTAL).filter(p => isNaN(parseInt(p)));
 class Accidental {
     constructor(params = { semitones: 0 }) {
@@ -64,6 +65,7 @@ class Accidental {
                 return new Accidental({
                     semitones: -2
                 });
+            case 's':
             case '#':
             case '♯':
                 return new Accidental({

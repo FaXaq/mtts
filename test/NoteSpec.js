@@ -359,6 +359,8 @@ describe('Note class', () => {
         accidental: new Accidental({ semitones: -2 })
       })
       expect(note2).to.deep.equal(Note.fromSPN(note2.SPN))
+      expect('Cs2').to.deep.equal(Note.fromSPN('C#2').SPN)
+      expect('Cb2').to.deep.equal(Note.fromSPN('Cb2').SPN)
     })
   })
 })

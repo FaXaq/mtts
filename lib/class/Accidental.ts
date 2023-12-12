@@ -10,6 +10,8 @@ interface AccidentalParams {
   semitones: number
 }
 
+export const ACCIDENTALS_NOTATION = ['b', 's']
+
 export const ACCIDENTALS = Object.keys(ACCIDENTAL).filter(p =>
   isNaN(parseInt(p))
 )
@@ -82,6 +84,7 @@ export class Accidental {
           semitones: -2
         })
 
+      case 's':
       case '#':
       case '♯':
         return new Accidental({

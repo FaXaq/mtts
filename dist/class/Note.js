@@ -182,7 +182,8 @@ class Note extends ValuedBarContent_1.ValuedBarContent {
         this._accidental = accidental;
     }
     get accidental() {
-        return this._accidental || new Accidental_1.Accidental();
+        var _a;
+        return (_a = this._accidental) !== null && _a !== void 0 ? _a : new Accidental_1.Accidental();
     }
     // frequency
     // Base frequency times 2 pow (semitones to A440 / 12)
