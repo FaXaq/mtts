@@ -7,6 +7,19 @@ import { applyMixins } from '../misc/applyMixins'
 import { cloneInstanceObjectArray } from '../misc/utils'
 import { Scale } from './Scale'
 
+// TODO :
+// Investigate chord semitones notation
+// A major 7 could be written :
+// 047N
+// 0 for the root
+// 4 for the major third because it's 4 semitones above the root
+// 7 for the fifth because it's 7 semitones from the root
+// N for the major 7 because it's 11 semitones from the root
+// A minor 7 could be written :
+// 047X
+// X for the minor 7 because it's 10 semitones from the root
+// With this notation, a half diminish 13th could be written 036X259 which is easily computable.
+
 interface ITriadDefinition {
   name: string
   intervals: Interval[]
@@ -194,8 +207,16 @@ function _recursiveExtendedChordCompute (
   ])
 }
 
+interface IExtendedChordDefinition {
+  intervals: Interval[]
+  addedTones: Interval[]
+  name: string
+  notation: string
+  extends: ITriadDefinition
+}
+
 // flatten extended chords
-export const COMPUTED_EXTENDED_CHORDS = Object.keys(EXTENDED_CHORDS).map(k => {
+export const COMPUTED_EXTENDED_CHORDS: IExtendedChordDefinition[] = Object.keys(EXTENDED_CHORDS).map(k => {
   const EXTENDED_CHORD = EXTENDED_CHORDS[k]
   // recursively compute chord, to flatten added tones & initial intervals of chord
   const { intervals, addedTones } = _recursiveExtendedChordCompute(
@@ -207,6 +228,11 @@ export const COMPUTED_EXTENDED_CHORDS = Object.keys(EXTENDED_CHORDS).map(k => {
     addedTones
   }
 })
+
+const ALL_POSSIBLE_CHORD_NOTATIONS: Array<ITriadDefinition | typeof COMPUTED_EXTENDED_CHORDS[number]> = [
+  ...Object.keys(TRIADS).map(key => TRIADS[key]),
+  ...COMPUTED_EXTENDED_CHORDS
+]
 
 declare type COMPUTED_EXTENDED_CHORD = typeof COMPUTED_EXTENDED_CHORDS[number]
 
@@ -335,7 +361,7 @@ export class Chord extends ValuedBarContent implements IntervalHandler {
           const expectedIntervals = [...this.intervals]
           const foundIntervals = [...perfectMatchedTriad.intervals]
           const missingIntervals = expectedIntervals.filter(expectedInterval => foundIntervals.findIndex(foundInterval => expectedInterval.name === foundInterval.name) === -1)
-          this.noNotationYet()
+          this._noNotationYet()
           return this.addTonesToChordNotation(perfectMatchedTriad, missingIntervals)
         }
 
@@ -352,16 +378,54 @@ export class Chord extends ValuedBarContent implements IntervalHandler {
       }
     }
 
-    this.noNotationYet()
+    this._noNotationYet()
 
     return ''
+  }
+
+  static fromNotation (notation: string): Chord {
+    const chars = notation.split('')
+    let possibleRoot = new Note()
+
+    try {
+      possibleRoot = Note.fromSPN(chars[0] + '4')
+      if (chars.length > 1) {
+        possibleRoot = Note.fromSPN(chars.slice(0, 2).join('') + '4')
+      }
+      if (chars.length > 2) {
+        // root note can contain double sharp or flat
+        possibleRoot = Note.fromSPN(chars.slice(0, 3).join('') + '4')
+      }
+    } catch (err) {
+      // Silent error
+    }
+
+    const rootLength = possibleRoot.SPN.length - 1
+    const isolatedPossibleNotation = chars.slice(rootLength, chars.length).join('')
+    const foundNotation = ALL_POSSIBLE_CHORD_NOTATIONS.find(chordNotation => chordNotation.notation === isolatedPossibleNotation)
+
+    if (foundNotation !== undefined) {
+      const foundNotationIntervals = [...foundNotation.intervals]
+      if ('addedTones' in foundNotation) {
+        foundNotationIntervals.push(...foundNotation.addedTones)
+      }
+
+      return new Chord({
+        root: possibleRoot,
+        intervals: [
+          ...foundNotationIntervals
+        ]
+      })
+    }
+
+    throw new Error(`Cannot find a chord notation yet for ${notation}`)
   }
 
   computeNotationWithContext (scale: Scale): string {
     return ''
   }
 
-  noNotationYet (): void {
+  _noNotationYet (): void {
     console.warn(`No name for this chord yet ${this.root.SPN} ${JSON.stringify(this.intervals.map(i => i.name))}`)
   }
 

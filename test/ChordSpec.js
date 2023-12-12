@@ -24,6 +24,19 @@ describe('Chord class', () => {
     })
   })
 
+  describe('Static', () => {
+    it('Should be able to create a chord from notation', () => {
+      expect(() => { Chord.fromNotation('C') }).to.not.throw()
+      expect(Chord.fromNotation('C').notation).to.equal('')
+
+      expect(() => { Chord.fromNotation('Cs-') }).to.not.throw()
+      expect(Chord.fromNotation('Cs-').notation).to.equal('-')
+
+      expect(() => { Chord.fromNotation('Ebb7') }).to.not.throw()
+      expect(Chord.fromNotation('Ebb7').notation).to.equal('7')
+    })
+  })
+
   describe('Guess intervals', () => {
     it('Should guess intervals from chord notes', () => {
       const root = new Note({

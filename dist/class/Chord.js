@@ -174,6 +174,10 @@ exports.COMPUTED_EXTENDED_CHORDS = Object.keys(exports.EXTENDED_CHORDS).map(k =>
     return Object.assign(Object.assign({}, EXTENDED_CHORD), { intervals,
         addedTones });
 });
+const ALL_POSSIBLE_CHORD_NOTATIONS = [
+    ...Object.keys(exports.TRIADS).map(key => exports.TRIADS[key]),
+    ...exports.COMPUTED_EXTENDED_CHORDS
+];
 class Chord extends ValuedBarContent_1.ValuedBarContent {
     constructor(params = {
         root: new Note_1.Note({ name: 'C' }),
@@ -261,7 +265,7 @@ class Chord extends ValuedBarContent_1.ValuedBarContent {
                     const expectedIntervals = [...this.intervals];
                     const foundIntervals = [...perfectMatchedTriad.intervals];
                     const missingIntervals = expectedIntervals.filter(expectedInterval => foundIntervals.findIndex(foundInterval => expectedInterval.name === foundInterval.name) === -1);
-                    this.noNotationYet();
+                    this._noNotationYet();
                     return this.addTonesToChordNotation(perfectMatchedTriad, missingIntervals);
                 }
                 const longestExtendedChord = possibleExtendedChords.sort((a, b) => b.addedTones.length - a.addedTones.length)[0];
@@ -274,13 +278,46 @@ class Chord extends ValuedBarContent_1.ValuedBarContent {
                 return longestExtendedChord.notation;
             }
         }
-        this.noNotationYet();
+        this._noNotationYet();
         return '';
+    }
+    static fromNotation(notation) {
+        const chars = notation.split('');
+        let possibleRoot = new Note_1.Note();
+        try {
+            possibleRoot = Note_1.Note.fromSPN(chars[0] + '4');
+            if (chars.length > 1) {
+                possibleRoot = Note_1.Note.fromSPN(chars.slice(0, 2).join('') + '4');
+            }
+            if (chars.length > 2) {
+                // root note can contain double sharp or flat
+                possibleRoot = Note_1.Note.fromSPN(chars.slice(0, 3).join('') + '4');
+            }
+        }
+        catch (err) {
+            // Silent error
+        }
+        const rootLength = possibleRoot.SPN.length - 1;
+        const isolatedPossibleNotation = chars.slice(rootLength, chars.length).join('');
+        const foundNotation = ALL_POSSIBLE_CHORD_NOTATIONS.find(chordNotation => chordNotation.notation === isolatedPossibleNotation);
+        if (foundNotation !== undefined) {
+            const foundNotationIntervals = [...foundNotation.intervals];
+            if ('addedTones' in foundNotation) {
+                foundNotationIntervals.push(...foundNotation.addedTones);
+            }
+            return new Chord({
+                root: possibleRoot,
+                intervals: [
+                    ...foundNotationIntervals
+                ]
+            });
+        }
+        throw new Error(`Cannot find a chord notation yet for ${notation}`);
     }
     computeNotationWithContext(scale) {
         return '';
     }
-    noNotationYet() {
+    _noNotationYet() {
         console.warn(`No name for this chord yet ${this.root.SPN} ${JSON.stringify(this.intervals.map(i => i.name))}`);
     }
     computeIntervals() {

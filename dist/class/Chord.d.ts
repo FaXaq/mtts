@@ -25,13 +25,14 @@ export declare const TRIADS: {
 export declare const EXTENDED_CHORDS: {
     [key: string]: IChordDefinition;
 };
-export declare const COMPUTED_EXTENDED_CHORDS: {
+interface IExtendedChordDefinition {
     intervals: Interval[];
     addedTones: Interval[];
     name: string;
     notation: string;
     extends: ITriadDefinition;
-}[];
+}
+export declare const COMPUTED_EXTENDED_CHORDS: IExtendedChordDefinition[];
 declare type COMPUTED_EXTENDED_CHORD = typeof COMPUTED_EXTENDED_CHORDS[number];
 interface ChordParams {
     root: Note;
@@ -53,8 +54,9 @@ export declare class Chord extends ValuedBarContent implements IntervalHandler {
     get notes(): Note[];
     get _possibleTriads(): IPossibleTriad[];
     get notation(): string;
+    static fromNotation(notation: string): Chord;
     computeNotationWithContext(scale: Scale): string;
-    noNotationYet(): void;
+    _noNotationYet(): void;
     computeIntervals(): Interval[];
     /**
      * There is a bit of magic in this function
