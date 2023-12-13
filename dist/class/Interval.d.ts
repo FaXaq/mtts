@@ -270,6 +270,7 @@ export declare class Interval {
     constructor(name: INTERVAL_NAME);
     apply(note: Note): Note;
     get notation(): string;
+    get chordSemitonesNotation(): string;
     raiseOctave(): Interval;
     static raiseOctave(interval: Interval): Interval | undefined;
     static fromSemitones(semitones: number): Interval[];
@@ -281,4 +282,20 @@ export declare class Interval {
     static fromName(name: INTERVAL_NAME): Interval;
     static equals(interval1: Interval, interval2: Interval): boolean;
     static notation(name: string): string;
+    static chordSemitonesNotation(interval: Interval): string;
+    /**
+     * Chord semitones notation indicates the semitones of the corresponding interval by only one character.
+     * For reference :
+     * - 0 means that this is a 0 semitone interval
+     * - 1 means that this is a 1 semitone interval
+     * - 2 means that this is a 1 semitones interval
+     * ...
+     * - X means that this is a 10 semitones interval
+     * - N means that this is a 11 semitones interval
+     * And it circles back to 0.
+     * There is no such thing as 12 semitones interval, since there is only one semitone whithin one octave.
+     * @param chordSemitonesNotation
+     * @returns
+     */
+    static fromChordSemitonesNotation(chordSemitonesNotation: string): Interval[] | undefined;
 }

@@ -295,6 +295,10 @@ export class Interval {
     return Interval.notation(this.name)
   }
 
+  get chordSemitonesNotation (): string {
+    return Interval.chordSemitonesNotation(this)
+  }
+
   raiseOctave (): Interval {
     const interval = Interval.raiseOctave(this)
     if (interval !== undefined) {
@@ -418,6 +422,46 @@ export class Interval {
           default:
             return value
         }
+    }
+  }
+
+  static chordSemitonesNotation (interval: Interval): string {
+    const semitones = interval.semitones % SEMITONES_WITHIN_OCTAVE
+    if (semitones === 10) {
+      return 'X'
+    } else if (semitones === 11) {
+      return 'N'
+    }
+
+    return semitones.toString()
+  }
+
+  /**
+   * Chord semitones notation indicates the semitones of the corresponding interval by only one character.
+   * For reference :
+   * - 0 means that this is a 0 semitone interval
+   * - 1 means that this is a 1 semitone interval
+   * - 2 means that this is a 1 semitones interval
+   * ...
+   * - X means that this is a 10 semitones interval
+   * - N means that this is a 11 semitones interval
+   * And it circles back to 0.
+   * There is no such thing as 12 semitones interval, since there is only one semitone whithin one octave.
+   * @param chordSemitonesNotation
+   * @returns
+   */
+  static fromChordSemitonesNotation (chordSemitonesNotation: string): Interval[] | undefined {
+    if (chordSemitonesNotation === 'N') {
+      return Interval.fromSemitones(11)
+    }
+
+    if (chordSemitonesNotation === 'X') {
+      return Interval.fromSemitones(10)
+    }
+
+    const parsedNotation = parseInt(chordSemitonesNotation)
+    if (!Number.isNaN(parsedNotation) && parsedNotation <= 9) {
+      return Interval.fromSemitones(parsedNotation)
     }
   }
 }

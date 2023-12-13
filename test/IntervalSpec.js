@@ -36,6 +36,12 @@ describe('Interval class', () => {
       expect(Interval.fromSemitonesAndValue(2, 3)).to.not.equal(undefined)
       expect(Interval.fromSemitonesAndValue(1, 12)).to.equal(undefined)
     })
+    it('Should give intervals from chord semitones notation', () => {
+      expect(Interval.fromChordSemitonesNotation('1')).to.not.equal(undefined)
+      expect(Interval.fromChordSemitonesNotation('X')).to.not.equal(undefined)
+      expect(Interval.fromChordSemitonesNotation('N')).to.not.equal(undefined)
+      expect(Interval.fromChordSemitonesNotation('14')).to.equal(undefined)
+    })
   })
 
   describe('Get new note from interval name and initial note', () => {

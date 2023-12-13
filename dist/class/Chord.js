@@ -7,36 +7,43 @@ const ValuedBarContent_1 = require("../super/ValuedBarContent");
 const utils_1 = require("../misc/utils");
 exports.TRIADS = {
     maj: {
+        key: 'maj',
         name: 'major',
         intervals: [new Interval_1.Interval('P1'), new Interval_1.Interval('M3'), new Interval_1.Interval('P5')],
         notation: ''
     },
     min: {
+        key: 'min',
         name: 'minor',
         intervals: [new Interval_1.Interval('P1'), new Interval_1.Interval('m3'), new Interval_1.Interval('P5')],
         notation: '-'
     },
     aug: {
+        key: 'aug',
         name: 'augmented',
         intervals: [new Interval_1.Interval('P1'), new Interval_1.Interval('M3'), new Interval_1.Interval('A5')],
         notation: '+'
     },
     dim: {
+        key: 'dim',
         name: 'diminished',
         intervals: [new Interval_1.Interval('P1'), new Interval_1.Interval('m3'), new Interval_1.Interval('d5')],
         notation: '°'
     },
     sus2: {
+        key: 'sus2',
         name: 'suspended2',
         intervals: [new Interval_1.Interval('P1'), new Interval_1.Interval('M2'), new Interval_1.Interval('P5')],
         notation: 'sus2'
     },
     sus4: {
+        key: 'sus4',
         name: 'suspended4',
         intervals: [new Interval_1.Interval('P1'), new Interval_1.Interval('P4'), new Interval_1.Interval('P5')],
         notation: 'sus4'
     },
     power: {
+        key: 'power',
         name: 'power',
         intervals: [new Interval_1.Interval('P1'), new Interval_1.Interval('P5')],
         notation: '5'
@@ -44,108 +51,126 @@ exports.TRIADS = {
 };
 exports.EXTENDED_CHORDS = {
     M7: {
+        key: 'M7',
         addedTones: [new Interval_1.Interval('M7')],
         name: 'major 7',
         notation: 'M7',
         extends: exports.TRIADS.maj
     },
     7: {
+        key: '7',
         addedTones: [new Interval_1.Interval('m7')],
         name: 'dominant 7',
         notation: '7',
         extends: exports.TRIADS.maj
     },
     '-7/5b': {
+        key: '-7/5b',
         addedTones: [new Interval_1.Interval('m7')],
         name: 'minor 7 flat 5',
         notation: '-7/5b',
         extends: exports.TRIADS.dim
     },
     m7: {
+        key: 'm7',
         addedTones: [new Interval_1.Interval('m7')],
         name: 'minor 7',
         notation: '-7',
         extends: exports.TRIADS.min
     },
     '7sus4': {
+        key: '7sus4',
         addedTones: [new Interval_1.Interval('m7')],
         name: 'dominant 7 sus 4',
         notation: '7sus4',
         extends: exports.TRIADS.sus4
     },
     d7: {
+        key: 'd7',
         addedTones: [new Interval_1.Interval('d7')],
         name: 'diminished 7',
         notation: '°7',
         extends: exports.TRIADS.dim
     },
     mM7: {
+        key: 'mM7',
         addedTones: [new Interval_1.Interval('M7')],
         name: 'minor major 7',
         notation: 'mM7',
         extends: exports.TRIADS.min
     },
     9: {
+        key: '9',
         addedTones: [new Interval_1.Interval('m7'), new Interval_1.Interval('M9')],
         name: '7(9)',
         notation: '9',
         extends: exports.TRIADS.maj
     },
     M9: {
+        key: 'M9',
         addedTones: [new Interval_1.Interval('M7'), new Interval_1.Interval('M9')],
         name: 'M7(9)',
         notation: 'M9',
         extends: exports.TRIADS.maj
     },
     min9: {
+        key: 'min9',
         addedTones: [new Interval_1.Interval('m7'), new Interval_1.Interval('M9')],
         name: '-7(9)',
         notation: '-9',
         extends: exports.TRIADS.min
     },
     11: {
+        key: '11',
         addedTones: [new Interval_1.Interval('m7'), new Interval_1.Interval('M9'), new Interval_1.Interval('P11')],
         name: '7(11)',
         notation: '11',
         extends: exports.TRIADS.maj
     },
     M11: {
+        key: 'M11',
         addedTones: [new Interval_1.Interval('M7'), new Interval_1.Interval('M9'), new Interval_1.Interval('P11')],
         name: 'M7(11)',
         notation: 'M11',
         extends: exports.TRIADS.maj
     },
     m11: {
+        key: 'm11',
         addedTones: [new Interval_1.Interval('m7'), new Interval_1.Interval('M9'), new Interval_1.Interval('P11')],
         name: '-7(11)',
         notation: '-11',
         extends: exports.TRIADS.min
     },
     13: {
+        key: '13',
         addedTones: [new Interval_1.Interval('m7'), new Interval_1.Interval('M9'), new Interval_1.Interval('P11'), new Interval_1.Interval('M13')],
         name: '7(13)',
         notation: '13',
         extends: exports.TRIADS.maj
     },
     M13: {
+        key: 'M13',
         addedTones: [new Interval_1.Interval('M7'), new Interval_1.Interval('M9'), new Interval_1.Interval('P11'), new Interval_1.Interval('M13')],
         name: 'M7(13)',
         notation: 'M13',
         extends: exports.TRIADS.maj
     },
     m13: {
+        key: 'm13',
         addedTones: [new Interval_1.Interval('m7'), new Interval_1.Interval('M9'), new Interval_1.Interval('P11'), new Interval_1.Interval('M13')],
         name: '-7(13)',
         notation: '-13',
         extends: exports.TRIADS.min
     },
     6: {
+        key: '6',
         addedTones: [new Interval_1.Interval('M6')],
         name: 'major 6',
         notation: '6',
         extends: exports.TRIADS.maj
     },
     min6: {
+        key: 'min6',
         addedTones: [new Interval_1.Interval('M6')],
         name: 'minor major 6',
         notation: '-6',
@@ -169,10 +194,9 @@ exports.COMPUTED_EXTENDED_CHORDS = Object.keys(exports.EXTENDED_CHORDS).map(k =>
     const EXTENDED_CHORD = exports.EXTENDED_CHORDS[k];
     // recursively compute chord, to flatten added tones & initial intervals of chord
     const { intervals, addedTones } = _recursiveExtendedChordCompute(EXTENDED_CHORD);
-    return Object.assign(Object.assign({}, EXTENDED_CHORD), { intervals,
-        addedTones });
+    return Object.assign(Object.assign({}, EXTENDED_CHORD), { intervals: [...intervals, ...addedTones] });
 });
-const ALL_POSSIBLE_CHORD_NOTATIONS = [
+const ALL_POSSIBLE_CHORDS = [
     ...Object.keys(exports.TRIADS).map(key => exports.TRIADS[key]),
     ...exports.COMPUTED_EXTENDED_CHORDS
 ];
@@ -242,59 +266,77 @@ class Chord extends ValuedBarContent_1.ValuedBarContent {
         this._notes = notes;
         return notes;
     }
-    get _possibleTriads() {
-        const triads = [];
-        Object.keys(exports.TRIADS).forEach(t => {
-            const missingIntervals = [];
-            const matchingIntervals = [];
-            // On intervals from the current chord
-            for (let i = 0; i < exports.TRIADS[t].intervals.length; i++) {
-                const foundIntervals = this.intervals.filter((interval) => {
-                    return Interval_1.Interval.equals(interval, exports.TRIADS[t].intervals[i]);
-                });
-                matchingIntervals.push(...foundIntervals);
-                if (foundIntervals.length === 0) {
-                    missingIntervals.push(exports.TRIADS[t].intervals[i]);
-                }
-            }
-            missingIntervals.filter(interval => matchingIntervals.findIndex(matchingInterval => interval.value !== matchingInterval.value) === -1);
-            triads.push(Object.assign(Object.assign({}, exports.TRIADS[t]), { missingIntervals,
-                matchingIntervals }));
-        });
-        return triads;
-    }
     get notation() {
-        // Filter each triad defintion
-        const possibleTriads = this._possibleTriads;
-        // find a perfect match triad
-        const perfectMatchedTriad = possibleTriads.find(p => p.missingIntervals.length === 0);
-        if (perfectMatchedTriad !== undefined) {
-            if (perfectMatchedTriad.intervals.length === this.notes.length) {
-                this._definitions = possibleTriads;
-                return perfectMatchedTriad.notation;
+        const semitonesNotation = this.semitonesNotation;
+        const possibleChords = Chord.getDefinitionsFromSemitonesNotation(semitonesNotation);
+        if (possibleChords.length > 0) {
+            const chord = possibleChords[0];
+            if (chord.addedTones.length > 0) {
+                return `${chord.chordDefinition.notation}${chord.addedTones.map(i => `add(${i.notation})`).join('')}`;
             }
-            else {
-                // it lacks a few intervals, find them and compute extended chord to find a match
-                const possibleExtendedChords = this.possibleExtendedChords(perfectMatchedTriad);
-                if (possibleExtendedChords.length === 0) {
-                    const expectedIntervals = [...this.intervals];
-                    const foundIntervals = [...perfectMatchedTriad.intervals];
-                    const missingIntervals = expectedIntervals.filter(expectedInterval => foundIntervals.findIndex(foundInterval => expectedInterval.name === foundInterval.name) === -1);
-                    this._noNotationYet();
-                    return this.addTonesToChordNotation(perfectMatchedTriad, missingIntervals);
-                }
-                const longestExtendedChord = possibleExtendedChords.sort((a, b) => b.addedTones.length - a.addedTones.length)[0];
-                const expectedIntervals = [...this.intervals];
-                const foundIntervals = [...longestExtendedChord.addedTones, ...longestExtendedChord.intervals];
-                if (expectedIntervals > foundIntervals) {
-                    const missingIntervals = expectedIntervals.filter(expectedInterval => foundIntervals.findIndex(foundInterval => expectedInterval.name === foundInterval.name) === -1);
-                    return this.addTonesToChordNotation(longestExtendedChord, missingIntervals);
-                }
-                return longestExtendedChord.notation;
-            }
+            return chord.chordDefinition.notation;
+        }
+        else {
+            console.log('We need to find a way to select a chord here....');
         }
         this._noNotationYet();
         return '';
+    }
+    /**
+     * Use chord semitones notation to generate chord name.
+     * Each semitone within the chord is represented as a digit or X or N.
+     * For reference :
+     * - 0 means that this is a 0 semitone interval
+     * - 1 means that this is a 1 semitone interval
+     * - 2 means that this is a 1 semitones interval
+     * ...
+     * - X means that this is a 10 semitones interval
+     * - N means that this is a 11 semitones interval
+     * And it circles back to 0.
+     * There is no such thing as 12 semitones interval, since there is only one semitone whithin one octave.
+     * @param notation
+     * @returns
+     */
+    static getDefinitionsFromSemitonesNotation(notation) {
+        const possibleChords = ALL_POSSIBLE_CHORDS.map(chord => {
+            return {
+                chordDefinition: chord,
+                semitonesNotation: chord.intervals.map((interval) => interval.chordSemitonesNotation).join('')
+            };
+        });
+        return possibleChords
+            // Extract every fully matching chord notations
+            .filter(pc => pc.semitonesNotation.split('').every(i => notation.includes(i)))
+            // Add missing tones from each match
+            .map(pc => {
+            let addedTones = [];
+            if (notation.length > pc.semitonesNotation.length) {
+                addedTones = notation
+                    // extract missing semitones intervals from the possible chord
+                    .split('')
+                    .filter(interval => !pc.semitonesNotation.includes(interval))
+                    .map(interval => {
+                    var _a;
+                    // Find possible intervals
+                    const possibleAddedTone = Interval_1.Interval.fromChordSemitonesNotation(interval);
+                    // Remove intervals with value that are already used within the chord
+                    const filteredAddedTone = (_a = possibleAddedTone === null || possibleAddedTone === void 0 ? void 0 : possibleAddedTone.filter(pi => pc.chordDefinition.intervals.find(pci => pci.value === pi.value) === undefined)) !== null && _a !== void 0 ? _a : [];
+                    // If we're here, it means it's down to one possible added tone. We can safely add it to the chord.
+                    const addedTone = filteredAddedTone[0];
+                    // Added tones are conventionnaly marked to the octave. We need to raise them as it's not done already.
+                    if (addedTone.value < 8) {
+                        const raisedAddedTone = Interval_1.Interval.raiseOctave(addedTone);
+                        if (raisedAddedTone !== undefined) {
+                            return raisedAddedTone;
+                        }
+                    }
+                    return addedTone;
+                });
+            }
+            return Object.assign(Object.assign({}, pc), { addedTones });
+        })
+            // Sort for the one with the longest definition to be at first position
+            .sort((a, b) => b.semitonesNotation.length - a.semitonesNotation.length);
     }
     static fromNotation(notation) {
         const chars = notation.split('');
@@ -314,16 +356,12 @@ class Chord extends ValuedBarContent_1.ValuedBarContent {
         }
         const rootLength = possibleRoot.SPN.length - 1;
         const isolatedPossibleNotation = chars.slice(rootLength, chars.length).join('');
-        const foundNotation = ALL_POSSIBLE_CHORD_NOTATIONS.find(chordNotation => chordNotation.notation === isolatedPossibleNotation);
+        const foundNotation = ALL_POSSIBLE_CHORDS.find(chordNotation => chordNotation.notation === isolatedPossibleNotation);
         if (foundNotation !== undefined) {
-            const foundNotationIntervals = [...foundNotation.intervals];
-            if ('addedTones' in foundNotation) {
-                foundNotationIntervals.push(...foundNotation.addedTones);
-            }
             return new Chord({
                 root: possibleRoot,
                 intervals: [
-                    ...foundNotationIntervals
+                    ...foundNotation.intervals
                 ]
             });
         }
@@ -365,33 +403,6 @@ class Chord extends ValuedBarContent_1.ValuedBarContent {
         });
         return intervals;
     }
-    /**
-     * There is a bit of magic in this function
-     * It checks if intervals can be upped to the next octave,
-     * If it's the case, it will calculate the new chord notation
-     * If not, it will add tones at the end of the chord notation
-     */
-    addTonesToChordNotation(chordDefinition, intervals) {
-        const octaveIntervals = intervals.map(i => {
-            if (i.value < 8) {
-                return i.raiseOctave();
-            }
-            return i;
-        });
-        const sameIntervals = intervals.filter(interval => octaveIntervals.findIndex(octaveInterval => interval.name === octaveInterval.name) > -1);
-        if (sameIntervals.length === 0) {
-            const newIntervals = [
-                ...this.intervals.filter(currentInterval => intervals.findIndex(interval => interval.name === currentInterval.name) === -1),
-                ...octaveIntervals
-            ];
-            const newChordDefinition = new Chord({
-                root: this.root.duplicate(),
-                intervals: newIntervals
-            });
-            return newChordDefinition.notation;
-        }
-        return `${chordDefinition.notation}${octaveIntervals.reduce((p, c) => p + `add(${c.notation})`, '')}`;
-    }
     addInterval(interval) {
         this._intervals.push(interval);
         return this;
@@ -407,36 +418,6 @@ class Chord extends ValuedBarContent_1.ValuedBarContent {
                 }
             }
             return true;
-        });
-    }
-    possibleExtendedChords(triad) {
-        const possibleAddedTones = this.possibleAddedTones(triad);
-        return exports.COMPUTED_EXTENDED_CHORDS.filter(ec => {
-            if (ec.extends.name === triad.name) {
-                // for each interval in extended chord definition check
-                let areAllTonesMatching = true;
-                for (let i = 0; i < ec.addedTones.length; i++) {
-                    const ECAddedTone = ec.addedTones[i];
-                    let isAddedToneMatched = false;
-                    for (let j = 0; j < possibleAddedTones.length; j++) {
-                        const addedTone = possibleAddedTones[j];
-                        if (ECAddedTone.name === addedTone.name) {
-                            isAddedToneMatched = true;
-                            break;
-                        }
-                        else if (addedTone.value < 8) {
-                            const octaveAddedTone = addedTone.raiseOctave();
-                            if (ECAddedTone.name === octaveAddedTone.name) {
-                                isAddedToneMatched = true;
-                                break;
-                            }
-                        }
-                    }
-                    areAllTonesMatching = areAllTonesMatching && isAddedToneMatched;
-                }
-                return areAllTonesMatching;
-            }
-            return false;
         });
     }
 }

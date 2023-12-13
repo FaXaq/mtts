@@ -221,6 +221,7 @@ describe('Chord class', () => {
               Interval.apply(root, 'P5')
             ]
           })
+          console.log('yyy')
           expect(c.notation).to.equal('5add(+11)')
         })
       })

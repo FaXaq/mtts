@@ -4,15 +4,13 @@ import { NOTE_VALUE } from './NoteValue';
 import { ValuedBarContent } from '../super/ValuedBarContent';
 import { Scale } from './Scale';
 interface ITriadDefinition {
+    key: string;
     name: string;
     intervals: Interval[];
     notation: string;
 }
-interface IPossibleTriad extends ITriadDefinition {
-    missingIntervals: Interval[];
-    matchingIntervals: Interval[];
-}
-interface IChordDefinition {
+interface IExtendedChordDefinition {
+    key: string;
     name: string;
     notation: string;
     extends: ITriadDefinition;
@@ -22,17 +20,17 @@ export declare const TRIADS: {
     [key: string]: ITriadDefinition;
 };
 export declare const EXTENDED_CHORDS: {
-    [key: string]: IChordDefinition;
+    [key: string]: IExtendedChordDefinition;
 };
-interface IExtendedChordDefinition {
+declare type IChordDefinition = ITriadDefinition | IComputedExtendedChord;
+interface IComputedExtendedChord {
+    key: string;
     intervals: Interval[];
-    addedTones: Interval[];
     name: string;
     notation: string;
     extends: ITriadDefinition;
 }
-export declare const COMPUTED_EXTENDED_CHORDS: IExtendedChordDefinition[];
-declare type COMPUTED_EXTENDED_CHORD = typeof COMPUTED_EXTENDED_CHORDS[number];
+export declare const COMPUTED_EXTENDED_CHORDS: IComputedExtendedChord[];
 interface ChordParams {
     root: Note;
     intervals?: Interval[];
@@ -43,7 +41,7 @@ export declare class Chord extends ValuedBarContent {
     private _root;
     private _intervals;
     private _notes;
-    private _definitions;
+    private readonly _definitions;
     constructor(params?: ChordParams);
     get root(): Note;
     set root(root: Note);
@@ -51,23 +49,33 @@ export declare class Chord extends ValuedBarContent {
     set intervals(intervals: Interval[]);
     set notes(notes: Note[]);
     get notes(): Note[];
-    get _possibleTriads(): IPossibleTriad[];
     get notation(): string;
+    /**
+     * Use chord semitones notation to generate chord name.
+     * Each semitone within the chord is represented as a digit or X or N.
+     * For reference :
+     * - 0 means that this is a 0 semitone interval
+     * - 1 means that this is a 1 semitone interval
+     * - 2 means that this is a 1 semitones interval
+     * ...
+     * - X means that this is a 10 semitones interval
+     * - N means that this is a 11 semitones interval
+     * And it circles back to 0.
+     * There is no such thing as 12 semitones interval, since there is only one semitone whithin one octave.
+     * @param notation
+     * @returns
+     */
+    static getDefinitionsFromSemitonesNotation(notation: string): Array<{
+        semitonesNotation: string;
+        addedTones: Interval[];
+        chordDefinition: IChordDefinition;
+    }>;
     static fromNotation(notation: string): Chord;
     get semitonesNotation(): string;
     computeNotationWithContext(scale: Scale): string;
     _noNotationYet(): void;
     computeIntervals(): Interval[];
-    /**
-     * There is a bit of magic in this function
-     * It checks if intervals can be upped to the next octave,
-     * If it's the case, it will calculate the new chord notation
-     * If not, it will add tones at the end of the chord notation
-     */
-    addTonesToChordNotation(chordDefinition: ITriadDefinition | IChordDefinition, intervals: Interval[]): string;
     addInterval(interval: Interval): Chord;
     possibleAddedTones(triad: ITriadDefinition): Interval[];
-    possibleExtendedChords(triad: ITriadDefinition): COMPUTED_EXTENDED_CHORD[];
-    compute: (intervals: Interval[], note: Note) => Note[];
 }
 export {};

@@ -19,17 +19,14 @@ import { Scale } from './Scale'
 // With this notation, a half diminish 13th could be written 036X259 which is easily computable.
 
 interface ITriadDefinition {
+  key: string
   name: string
   intervals: Interval[]
   notation: string
 }
 
-interface IPossibleTriad extends ITriadDefinition {
-  missingIntervals: Interval[]
-  matchingIntervals: Interval[]
-}
-
-interface IChordDefinition {
+interface IExtendedChordDefinition {
+  key: string
   name: string
   notation: string
   extends: ITriadDefinition
@@ -38,146 +35,171 @@ interface IChordDefinition {
 
 export const TRIADS: { [key: string]: ITriadDefinition } = {
   maj: {
+    key: 'maj',
     name: 'major',
     intervals: [new Interval('P1'), new Interval('M3'), new Interval('P5')],
     notation: ''
   },
   min: {
+    key: 'min',
     name: 'minor',
     intervals: [new Interval('P1'), new Interval('m3'), new Interval('P5')],
     notation: '-'
   },
   aug: {
+    key: 'aug',
     name: 'augmented',
     intervals: [new Interval('P1'), new Interval('M3'), new Interval('A5')],
     notation: '+'
   },
   dim: {
+    key: 'dim',
     name: 'diminished',
     intervals: [new Interval('P1'), new Interval('m3'), new Interval('d5')],
     notation: '°'
   },
   sus2: {
+    key: 'sus2',
     name: 'suspended2',
     intervals: [new Interval('P1'), new Interval('M2'), new Interval('P5')],
     notation: 'sus2'
   },
   sus4: {
+    key: 'sus4',
     name: 'suspended4',
     intervals: [new Interval('P1'), new Interval('P4'), new Interval('P5')],
     notation: 'sus4'
   },
   power: {
+    key: 'power',
     name: 'power',
     intervals: [new Interval('P1'), new Interval('P5')],
     notation: '5'
   }
 }
 
-export const EXTENDED_CHORDS: { [key: string]: IChordDefinition } = {
+export const EXTENDED_CHORDS: { [key: string]: IExtendedChordDefinition } = {
   M7: {
+    key: 'M7',
     addedTones: [new Interval('M7')],
     name: 'major 7',
     notation: 'M7',
     extends: TRIADS.maj
   },
   7: {
+    key: '7',
     addedTones: [new Interval('m7')],
     name: 'dominant 7',
     notation: '7',
     extends: TRIADS.maj
   },
   '-7/5b': {
+    key: '-7/5b',
     addedTones: [new Interval('m7')],
     name: 'minor 7 flat 5',
     notation: '-7/5b',
     extends: TRIADS.dim
   },
   m7: {
+    key: 'm7',
     addedTones: [new Interval('m7')],
     name: 'minor 7',
     notation: '-7',
     extends: TRIADS.min
   },
   '7sus4': {
+    key: '7sus4',
     addedTones: [new Interval('m7')],
     name: 'dominant 7 sus 4',
     notation: '7sus4',
     extends: TRIADS.sus4
   },
   d7: {
+    key: 'd7',
     addedTones: [new Interval('d7')],
     name: 'diminished 7',
     notation: '°7',
     extends: TRIADS.dim
   },
   mM7: {
+    key: 'mM7',
     addedTones: [new Interval('M7')],
     name: 'minor major 7',
     notation: 'mM7',
     extends: TRIADS.min
   },
   9: {
+    key: '9',
     addedTones: [new Interval('m7'), new Interval('M9')],
     name: '7(9)',
     notation: '9',
     extends: TRIADS.maj
   },
   M9: {
+    key: 'M9',
     addedTones: [new Interval('M7'), new Interval('M9')],
     name: 'M7(9)',
     notation: 'M9',
     extends: TRIADS.maj
   },
   min9: {
+    key: 'min9',
     addedTones: [new Interval('m7'), new Interval('M9')],
     name: '-7(9)',
     notation: '-9',
     extends: TRIADS.min
   },
   11: {
+    key: '11',
     addedTones: [new Interval('m7'), new Interval('M9'), new Interval('P11')],
     name: '7(11)',
     notation: '11',
     extends: TRIADS.maj
   },
   M11: {
+    key: 'M11',
     addedTones: [new Interval('M7'), new Interval('M9'), new Interval('P11')],
     name: 'M7(11)',
     notation: 'M11',
     extends: TRIADS.maj
   },
   m11: {
+    key: 'm11',
     addedTones: [new Interval('m7'), new Interval('M9'), new Interval('P11')],
     name: '-7(11)',
     notation: '-11',
     extends: TRIADS.min
   },
   13: {
+    key: '13',
     addedTones: [new Interval('m7'), new Interval('M9'), new Interval('P11'), new Interval('M13')],
     name: '7(13)',
     notation: '13',
     extends: TRIADS.maj
   },
   M13: {
+    key: 'M13',
     addedTones: [new Interval('M7'), new Interval('M9'), new Interval('P11'), new Interval('M13')],
     name: 'M7(13)',
     notation: 'M13',
     extends: TRIADS.maj
   },
   m13: {
+    key: 'm13',
     addedTones: [new Interval('m7'), new Interval('M9'), new Interval('P11'), new Interval('M13')],
     name: '-7(13)',
     notation: '-13',
     extends: TRIADS.min
   },
   6: {
+    key: '6',
     addedTones: [new Interval('M6')],
     name: 'major 6',
     notation: '6',
     extends: TRIADS.maj
   },
   min6: {
+    key: 'min6',
     addedTones: [new Interval('M6')],
     name: 'minor major 6',
     notation: '-6',
@@ -186,7 +208,7 @@ export const EXTENDED_CHORDS: { [key: string]: IChordDefinition } = {
 }
 
 function _recursiveExtendedChordCompute (
-  chord: ITriadDefinition | IChordDefinition,
+  chord: ITriadDefinition | IExtendedChordDefinition,
   addedTones: Interval[] = []
 ): {
     intervals: Interval[]
@@ -199,22 +221,24 @@ function _recursiveExtendedChordCompute (
     }
   }
 
-  return _recursiveExtendedChordCompute((chord as IChordDefinition).extends, [
-    ...(chord as IChordDefinition).addedTones,
+  return _recursiveExtendedChordCompute((chord as IExtendedChordDefinition).extends, [
+    ...(chord as IExtendedChordDefinition).addedTones,
     ...addedTones
   ])
 }
 
-interface IExtendedChordDefinition {
+type IChordDefinition = ITriadDefinition | IComputedExtendedChord
+
+interface IComputedExtendedChord {
+  key: string
   intervals: Interval[]
-  addedTones: Interval[]
   name: string
   notation: string
   extends: ITriadDefinition
 }
 
 // flatten extended chords
-export const COMPUTED_EXTENDED_CHORDS: IExtendedChordDefinition[] = Object.keys(EXTENDED_CHORDS).map(k => {
+export const COMPUTED_EXTENDED_CHORDS: IComputedExtendedChord[] = Object.keys(EXTENDED_CHORDS).map(k => {
   const EXTENDED_CHORD = EXTENDED_CHORDS[k]
   // recursively compute chord, to flatten added tones & initial intervals of chord
   const { intervals, addedTones } = _recursiveExtendedChordCompute(
@@ -222,17 +246,14 @@ export const COMPUTED_EXTENDED_CHORDS: IExtendedChordDefinition[] = Object.keys(
   )
   return {
     ...EXTENDED_CHORD,
-    intervals,
-    addedTones
+    intervals: [...intervals, ...addedTones]
   }
 })
 
-const ALL_POSSIBLE_CHORD_NOTATIONS: Array<ITriadDefinition | typeof COMPUTED_EXTENDED_CHORDS[number]> = [
+const ALL_POSSIBLE_CHORDS: IChordDefinition[] = [
   ...Object.keys(TRIADS).map(key => TRIADS[key]),
   ...COMPUTED_EXTENDED_CHORDS
 ]
-
-declare type COMPUTED_EXTENDED_CHORD = typeof COMPUTED_EXTENDED_CHORDS[number]
 
 interface ChordParams {
   root: Note
@@ -245,7 +266,7 @@ export class Chord extends ValuedBarContent {
   private _root!: Note;
   private _intervals!: Interval[];
   private _notes: Note[] = [];
-  private _definitions: ITriadDefinition[] = [];
+  private readonly _definitions: ITriadDefinition[] = [];
 
   constructor (
     params: ChordParams = {
@@ -326,79 +347,91 @@ export class Chord extends ValuedBarContent {
     return notes
   }
 
-  get _possibleTriads (): IPossibleTriad[] {
-    const triads: IPossibleTriad[] = []
-    Object.keys(TRIADS).forEach(t => {
-      const missingIntervals: Interval[] = []
-      const matchingIntervals: Interval[] = []
-      // On intervals from the current chord
-      for (let i = 0; i < TRIADS[t].intervals.length; i++) {
-        const foundIntervals: Interval[] = this.intervals.filter(
-          (interval: Interval) => {
-            return Interval.equals(interval, TRIADS[t].intervals[i])
-          }
-        )
-
-        matchingIntervals.push(...foundIntervals)
-
-        if (foundIntervals.length === 0) {
-          missingIntervals.push(TRIADS[t].intervals[i])
-        }
-      }
-
-      missingIntervals.filter(interval => matchingIntervals.findIndex(matchingInterval => interval.value !== matchingInterval.value) === -1)
-
-      triads.push({
-        ...TRIADS[t],
-        missingIntervals,
-        matchingIntervals
-      })
-    })
-
-    return triads
-  }
-
   get notation (): string {
-    // Filter each triad defintion
-    const possibleTriads: IPossibleTriad[] = this._possibleTriads
+    const semitonesNotation = this.semitonesNotation
+    const possibleChords = Chord.getDefinitionsFromSemitonesNotation(semitonesNotation)
 
-    // find a perfect match triad
-    const perfectMatchedTriad = possibleTriads.find(
-      p => p.missingIntervals.length === 0
-    )
-
-    if (perfectMatchedTriad !== undefined) {
-      if (perfectMatchedTriad.intervals.length === this.notes.length) {
-        this._definitions = possibleTriads
-        return perfectMatchedTriad.notation
-      } else {
-        // it lacks a few intervals, find them and compute extended chord to find a match
-        const possibleExtendedChords = this.possibleExtendedChords(perfectMatchedTriad)
-
-        if (possibleExtendedChords.length === 0) {
-          const expectedIntervals = [...this.intervals]
-          const foundIntervals = [...perfectMatchedTriad.intervals]
-          const missingIntervals = expectedIntervals.filter(expectedInterval => foundIntervals.findIndex(foundInterval => expectedInterval.name === foundInterval.name) === -1)
-          this._noNotationYet()
-          return this.addTonesToChordNotation(perfectMatchedTriad, missingIntervals)
-        }
-
-        const longestExtendedChord = possibleExtendedChords.sort((a, b) => b.addedTones.length - a.addedTones.length)[0]
-        const expectedIntervals = [...this.intervals]
-        const foundIntervals = [...longestExtendedChord.addedTones, ...longestExtendedChord.intervals]
-
-        if (expectedIntervals > foundIntervals) {
-          const missingIntervals = expectedIntervals.filter(expectedInterval => foundIntervals.findIndex(foundInterval => expectedInterval.name === foundInterval.name) === -1)
-          return this.addTonesToChordNotation(longestExtendedChord, missingIntervals)
-        }
-
-        return longestExtendedChord.notation
+    if (possibleChords.length > 0) {
+      const chord = possibleChords[0]
+      if (chord.addedTones.length > 0) {
+        return `${chord.chordDefinition.notation}${chord.addedTones.map(i => `add(${i.notation})`).join('')}`
       }
+      return chord.chordDefinition.notation
+    } else {
+      console.log('We need to find a way to select a chord here....')
     }
 
     this._noNotationYet()
 
     return ''
+  }
+
+  /**
+   * Use chord semitones notation to generate chord name.
+   * Each semitone within the chord is represented as a digit or X or N.
+   * For reference :
+   * - 0 means that this is a 0 semitone interval
+   * - 1 means that this is a 1 semitone interval
+   * - 2 means that this is a 1 semitones interval
+   * ...
+   * - X means that this is a 10 semitones interval
+   * - N means that this is a 11 semitones interval
+   * And it circles back to 0.
+   * There is no such thing as 12 semitones interval, since there is only one semitone whithin one octave.
+   * @param notation
+   * @returns
+   */
+  static getDefinitionsFromSemitonesNotation (notation: string): Array<{
+    semitonesNotation: string
+    addedTones: Interval[]
+    chordDefinition: IChordDefinition
+  }> {
+    const possibleChords = ALL_POSSIBLE_CHORDS.map(chord => {
+      return {
+        chordDefinition: chord,
+        semitonesNotation: chord.intervals.map((interval) => interval.chordSemitonesNotation).join('')
+      }
+    })
+
+    return possibleChords
+      // Extract every fully matching chord notations
+      .filter(pc => pc.semitonesNotation.split('').every(i => notation.includes(i)))
+      // Add missing tones from each match
+      .map(pc => {
+        let addedTones: Interval[] = []
+        if (notation.length > pc.semitonesNotation.length) {
+          addedTones = notation
+            // extract missing semitones intervals from the possible chord
+            .split('')
+            .filter(interval => !pc.semitonesNotation.includes(interval))
+            .map(interval => {
+              // Find possible intervals
+              const possibleAddedTone = Interval.fromChordSemitonesNotation(interval)
+              // Remove intervals with value that are already used within the chord
+              const filteredAddedTone = possibleAddedTone
+                ?.filter(pi => pc.chordDefinition.intervals.find(pci => pci.value === pi.value) === undefined) ?? []
+
+              // If we're here, it means it's down to one possible added tone. We can safely add it to the chord.
+              const addedTone = filteredAddedTone[0]
+              // Added tones are conventionnaly marked to the octave. We need to raise them as it's not done already.
+              if (addedTone.value < 8) {
+                const raisedAddedTone = Interval.raiseOctave(addedTone)
+                if (raisedAddedTone !== undefined) {
+                  return raisedAddedTone
+                }
+              }
+
+              return addedTone
+            })
+        }
+
+        return {
+          ...pc,
+          addedTones
+        }
+      })
+      // Sort for the one with the longest definition to be at first position
+      .sort((a, b) => b.semitonesNotation.length - a.semitonesNotation.length)
   }
 
   static fromNotation (notation: string): Chord {
@@ -420,18 +453,13 @@ export class Chord extends ValuedBarContent {
 
     const rootLength = possibleRoot.SPN.length - 1
     const isolatedPossibleNotation = chars.slice(rootLength, chars.length).join('')
-    const foundNotation = ALL_POSSIBLE_CHORD_NOTATIONS.find(chordNotation => chordNotation.notation === isolatedPossibleNotation)
+    const foundNotation = ALL_POSSIBLE_CHORDS.find(chordNotation => chordNotation.notation === isolatedPossibleNotation)
 
     if (foundNotation !== undefined) {
-      const foundNotationIntervals = [...foundNotation.intervals]
-      if ('addedTones' in foundNotation) {
-        foundNotationIntervals.push(...foundNotation.addedTones)
-      }
-
       return new Chord({
         root: possibleRoot,
         intervals: [
-          ...foundNotationIntervals
+          ...foundNotation.intervals
         ]
       })
     }
@@ -481,35 +509,6 @@ export class Chord extends ValuedBarContent {
     return intervals
   }
 
-  /**
-   * There is a bit of magic in this function
-   * It checks if intervals can be upped to the next octave,
-   * If it's the case, it will calculate the new chord notation
-   * If not, it will add tones at the end of the chord notation
-   */
-  addTonesToChordNotation (chordDefinition: ITriadDefinition | IChordDefinition, intervals: Interval[]): string {
-    const octaveIntervals = intervals.map(i => {
-      if (i.value < 8) {
-        return i.raiseOctave()
-      }
-      return i
-    })
-    const sameIntervals = intervals.filter(interval => octaveIntervals.findIndex(octaveInterval => interval.name === octaveInterval.name) > -1)
-    if (sameIntervals.length === 0) {
-      const newIntervals = [
-        ...this.intervals.filter(currentInterval => intervals.findIndex(interval => interval.name === currentInterval.name) === -1),
-        ...octaveIntervals
-      ]
-      const newChordDefinition = new Chord({
-        root: this.root.duplicate(),
-        intervals: newIntervals
-      })
-      return newChordDefinition.notation
-    }
-
-    return `${chordDefinition.notation}${octaveIntervals.reduce((p, c) => p + `add(${c.notation})`, '')}`
-  }
-
   addInterval (interval: Interval): Chord {
     this._intervals.push(interval)
     return this
@@ -530,38 +529,4 @@ export class Chord extends ValuedBarContent {
       return true
     })
   }
-
-  possibleExtendedChords (triad: ITriadDefinition): COMPUTED_EXTENDED_CHORD[] {
-    const possibleAddedTones = this.possibleAddedTones(triad)
-    return COMPUTED_EXTENDED_CHORDS.filter(ec => {
-      if (ec.extends.name === triad.name) {
-        // for each interval in extended chord definition check
-        let areAllTonesMatching = true
-        for (let i = 0; i < ec.addedTones.length; i++) {
-          const ECAddedTone = ec.addedTones[i]
-          let isAddedToneMatched = false
-          for (let j = 0; j < possibleAddedTones.length; j++) {
-            const addedTone = possibleAddedTones[j]
-            if (ECAddedTone.name === addedTone.name) {
-              isAddedToneMatched = true
-              break
-            } else if (addedTone.value < 8) {
-              const octaveAddedTone = addedTone.raiseOctave()
-              if (ECAddedTone.name === octaveAddedTone.name) {
-                isAddedToneMatched = true
-                break
-              }
-            }
-          }
-          areAllTonesMatching = areAllTonesMatching && isAddedToneMatched
-        }
-        return areAllTonesMatching
-      }
-
-      return false
-    })
-  }
-
-  // IntervalHandler mixin
-  compute!: (intervals: Interval[], note: Note) => Note[];
 }
