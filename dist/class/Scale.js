@@ -3,8 +3,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Scale = exports.SCALES = void 0;
 const Note_1 = require("./Note");
 const Interval_1 = require("./Interval");
-const IntervalHandler_1 = require("../super/IntervalHandler");
-const applyMixins_1 = require("../misc/applyMixins");
 const Chord_1 = require("./Chord");
 exports.SCALES = {
     MAJOR: {
@@ -685,8 +683,6 @@ class Scale {
         }
         // sort intervals by semitones
         this._intervals = intervals.sort((ia, ib) => ia.semitones - ib.semitones);
-        // each time intevals changes, compute notes of the scale
-        this.notes = this.compute(this.intervals, this.key);
     }
     get name() {
         var _a;
@@ -726,7 +722,7 @@ class Scale {
         this._notes = notes;
     }
     get notes() {
-        return this._notes;
+        return this._intervals.map(interval => Interval_1.Interval.apply(this._key, interval.name));
     }
     // Return all 7th chords from the scale if it is diatonic
     get scaleChords() {
@@ -762,4 +758,3 @@ class Scale {
     }
 }
 exports.Scale = Scale;
-applyMixins_1.applyMixins(Scale, [IntervalHandler_1.IntervalHandler]);

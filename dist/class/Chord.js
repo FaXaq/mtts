@@ -3,9 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Chord = exports.COMPUTED_EXTENDED_CHORDS = exports.EXTENDED_CHORDS = exports.TRIADS = void 0;
 const Note_1 = require("./Note");
 const Interval_1 = require("./Interval");
-const IntervalHandler_1 = require("../super/IntervalHandler");
 const ValuedBarContent_1 = require("../super/ValuedBarContent");
-const applyMixins_1 = require("../misc/applyMixins");
 const utils_1 = require("../misc/utils");
 exports.TRIADS = {
     maj: {
@@ -396,7 +394,6 @@ class Chord extends ValuedBarContent_1.ValuedBarContent {
     }
     addInterval(interval) {
         this._intervals.push(interval);
-        this.notes = this.compute(this.intervals, this.root);
         return this;
     }
     possibleAddedTones(triad) {
@@ -444,4 +441,3 @@ class Chord extends ValuedBarContent_1.ValuedBarContent {
     }
 }
 exports.Chord = Chord;
-applyMixins_1.applyMixins(Chord, [IntervalHandler_1.IntervalHandler]);

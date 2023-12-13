@@ -1,9 +1,7 @@
 import { Note, DEFAULT_NOTE_VALUE } from './Note'
 import { Interval, SEMITONES_WITHIN_OCTAVE } from './Interval'
-import { IntervalHandler } from '../super/IntervalHandler'
 import { NOTE_VALUE } from './NoteValue'
 import { ValuedBarContent } from '../super/ValuedBarContent'
-import { applyMixins } from '../misc/applyMixins'
 import { cloneInstanceObjectArray } from '../misc/utils'
 import { Scale } from './Scale'
 
@@ -243,7 +241,7 @@ interface ChordParams {
   notes?: Note[]
 }
 
-export class Chord extends ValuedBarContent implements IntervalHandler {
+export class Chord extends ValuedBarContent {
   private _root!: Note;
   private _intervals!: Interval[];
   private _notes: Note[] = [];
@@ -514,7 +512,6 @@ export class Chord extends ValuedBarContent implements IntervalHandler {
 
   addInterval (interval: Interval): Chord {
     this._intervals.push(interval)
-    this.notes = this.compute(this.intervals, this.root)
     return this
   }
 
@@ -568,5 +565,3 @@ export class Chord extends ValuedBarContent implements IntervalHandler {
   // IntervalHandler mixin
   compute!: (intervals: Interval[], note: Note) => Note[];
 }
-
-applyMixins(Chord, [IntervalHandler])

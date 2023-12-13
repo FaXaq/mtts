@@ -1,6 +1,5 @@
 import { Note } from './Note';
 import { Interval } from './Interval';
-import { IntervalHandler } from '../super/IntervalHandler';
 import { Chord } from './Chord';
 interface IScaleDefinition {
     name?: string;
@@ -17,7 +16,7 @@ interface IScaleParams {
     intervals?: Interval[];
     mode?: string;
 }
-export declare class Scale implements IntervalHandler {
+export declare class Scale {
     private _key;
     private _notes;
     private _intervals;
@@ -34,6 +33,5 @@ export declare class Scale implements IntervalHandler {
     get notes(): Note[];
     get scaleChords(): Chord[];
     static getDefintionsFromIntervals(intervals: Interval[]): IScaleDefinition[];
-    compute: (intervals: Interval[], note: Note) => Note[];
 }
 export {};

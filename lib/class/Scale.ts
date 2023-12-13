@@ -1,7 +1,5 @@
 import { Note } from './Note'
 import { Interval } from './Interval'
-import { IntervalHandler } from '../super/IntervalHandler'
-import { applyMixins } from '../misc/applyMixins'
 import { Chord } from './Chord'
 
 interface IScaleDefinition {
@@ -669,7 +667,7 @@ interface IScaleParams {
   mode?: string
 }
 
-export class Scale implements IntervalHandler {
+export class Scale {
   private _key!: Note;
   private _notes: Note[] = [];
   private _intervals: Interval[] = [];
@@ -701,8 +699,6 @@ export class Scale implements IntervalHandler {
     }
     // sort intervals by semitones
     this._intervals = intervals.sort((ia, ib) => ia.semitones - ib.semitones)
-    // each time intevals changes, compute notes of the scale
-    this.notes = this.compute(this.intervals, this.key)
   }
 
   get name (): string {
@@ -750,7 +746,7 @@ export class Scale implements IntervalHandler {
   }
 
   get notes (): Note[] {
-    return this._notes
+    return this._intervals.map(interval => Interval.apply(this._key, interval.name))
   }
 
   // Return all 7th chords from the scale if it is diatonic
@@ -787,9 +783,4 @@ export class Scale implements IntervalHandler {
       }
     }).map(n => SCALES[n])
   }
-
-  // IntervalHandler mixin
-  compute!: (intervals: Interval[], note: Note) => Note[];
 }
-
-applyMixins(Scale, [IntervalHandler])

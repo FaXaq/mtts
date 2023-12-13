@@ -1,6 +1,5 @@
 import { Note } from './Note';
 import { Interval } from './Interval';
-import { IntervalHandler } from '../super/IntervalHandler';
 import { NOTE_VALUE } from './NoteValue';
 import { ValuedBarContent } from '../super/ValuedBarContent';
 import { Scale } from './Scale';
@@ -40,7 +39,7 @@ interface ChordParams {
     value?: NOTE_VALUE;
     notes?: Note[];
 }
-export declare class Chord extends ValuedBarContent implements IntervalHandler {
+export declare class Chord extends ValuedBarContent {
     private _root;
     private _intervals;
     private _notes;
