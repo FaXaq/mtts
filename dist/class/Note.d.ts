@@ -3,7 +3,6 @@ import { Accidental } from './Accidental';
 import { NOTE_VALUE } from './NoteValue';
 import { ValuedBarContent } from '../super/ValuedBarContent';
 export declare const NOTES: string[];
-export declare const SEMITONES_NUMBER: number;
 export declare const DEFAULT_NOTE_VALUE: NOTE_VALUE;
 export declare const BASE_FREQUENCY: number;
 interface NoteParams {
@@ -49,6 +48,12 @@ export declare class Note extends ValuedBarContent {
     get SPN(): string;
     static validateName(name: string): boolean;
     static getSemitonesBetween(note1: Note, note2: Note): number;
+    /**
+     * Get semitones between notes, ALWAYS considering destination note is ABOVE root and within one octave.
+     * @param note1 The root from which you want to start counting semitones
+     * @param note2 The destination note
+     */
+    static getNormalizedSemitonesBetween(note1: Note, note2: Note): number;
     static getIndexDifferenceBetween(note1: Note, note2: Note): number;
     /**
      * To Scientific Pitch Notation

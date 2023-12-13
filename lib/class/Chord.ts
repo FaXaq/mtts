@@ -1,5 +1,5 @@
-import { Note, DEFAULT_NOTE_VALUE, SEMITONES_NUMBER } from './Note'
-import { Interval } from './Interval'
+import { Note, DEFAULT_NOTE_VALUE } from './Note'
+import { Interval, SEMITONES_WITHIN_OCTAVE } from './Interval'
 import { IntervalHandler } from '../super/IntervalHandler'
 import { NOTE_VALUE } from './NoteValue'
 import { ValuedBarContent } from '../super/ValuedBarContent'
@@ -260,12 +260,10 @@ export class Chord extends ValuedBarContent implements IntervalHandler {
     if (params.notes !== undefined && params.notes.length > 0) {
       this.notes = params.notes
       this.value = params.value ?? DEFAULT_NOTE_VALUE
-      this.intervals = this.computeIntervals()
     } else {
       this.intervals =
         params.intervals ?? cloneInstanceObjectArray(TRIADS.maj.intervals)
       this.value = params.value ?? DEFAULT_NOTE_VALUE
-      this.notes = this.compute(this.intervals, this.root)
     }
   }
 
@@ -288,6 +286,7 @@ export class Chord extends ValuedBarContent implements IntervalHandler {
   }
 
   set intervals (intervals: Interval[]) {
+    const notes: Note[] = []
     intervals.forEach(i => {
       if (!(i instanceof Interval)) {
         throw new Error(
@@ -296,16 +295,37 @@ export class Chord extends ValuedBarContent implements IntervalHandler {
           )} is not an Interval.`
         )
       }
+      notes.push(Interval.apply(this._root, i.name))
     })
+    this._notes = notes
     this._intervals = intervals
   }
 
   set notes (notes: Note[]) {
+    const lowestNote = notes.sort((n1, n2) => n1.frequency - n2.frequency)[0]
+    const semitonesAndValues = notes.map(note => ({
+      semitones: Note.getNormalizedSemitonesBetween(this._root, note),
+      value: Note.getIndexDifferenceBetween(this._root, note)
+    }))
+    const intervals = semitonesAndValues.map(({ semitones, value }, i) => {
+      const interval = Interval.fromSemitonesAndValue(semitones, value)
+      if (interval === undefined) {
+        throw new Error(`Chord.notes (setter) : Trying to set a note within chord with semitones (${semitones}) and value (${value}). Note: ${notes[i].SPN} against root ${this._root.SPN}.`)
+      }
+      return interval
+    })
+
+    this._root = lowestNote
+    this._intervals = intervals
     this._notes = notes
   }
 
   get notes (): Note[] {
-    return this._notes
+    const notes = this._intervals.map(interval => (
+      Interval.apply(this._root, interval.name)
+    ))
+    this._notes = notes
+    return notes
   }
 
   get _possibleTriads (): IPossibleTriad[] {
@@ -421,6 +441,21 @@ export class Chord extends ValuedBarContent implements IntervalHandler {
     throw new Error(`Cannot find a chord notation yet for ${notation}`)
   }
 
+  get semitonesNotation (): string {
+    const semitones = []
+    for (const note of this.notes) {
+      const semitoneFromRoot = Note.getSemitonesBetween(this._root, note)
+      if (semitoneFromRoot === 10) {
+        semitones.push('X')
+      } else if (semitoneFromRoot === 11) {
+        semitones.push('N')
+      } else {
+        semitones.push(semitoneFromRoot)
+      }
+    }
+    return semitones.join('')
+  }
+
   computeNotationWithContext (scale: Scale): string {
     return ''
   }
@@ -438,7 +473,7 @@ export class Chord extends ValuedBarContent implements IntervalHandler {
       const semitonesBetweenNotes = Note.getSemitonesBetween(this.root, n)
       const possibleInterval = Interval.fromSemitonesAndValue(
         semitonesBetweenNotes < 0
-          ? (semitonesBetweenNotes % SEMITONES_NUMBER) + SEMITONES_NUMBER
+          ? (semitonesBetweenNotes % SEMITONES_WITHIN_OCTAVE) + SEMITONES_WITHIN_OCTAVE
           : semitonesBetweenNotes,
         Note.getIndexDifferenceBetween(this.root, n)
       )

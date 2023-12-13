@@ -1,12 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Note = exports.BASE_FREQUENCY = exports.DEFAULT_NOTE_VALUE = exports.SEMITONES_NUMBER = exports.NOTES = void 0;
+exports.Note = exports.BASE_FREQUENCY = exports.DEFAULT_NOTE_VALUE = exports.NOTES = void 0;
 const Pitch_1 = require("./Pitch");
 const Accidental_1 = require("./Accidental");
 const NoteValue_1 = require("./NoteValue");
 const ValuedBarContent_1 = require("../super/ValuedBarContent");
+const Interval_1 = require("./Interval");
 exports.NOTES = ['C', 'D', 'E', 'F', 'G', 'A', 'B'];
-exports.SEMITONES_NUMBER = 12;
 exports.DEFAULT_NOTE_VALUE = NoteValue_1.NOTE_VALUES.QUARTER;
 exports.BASE_FREQUENCY = 440;
 class Note extends ValuedBarContent_1.ValuedBarContent {
@@ -218,6 +218,21 @@ class Note extends ValuedBarContent_1.ValuedBarContent {
         semitones +=
             (note2.hasAccidental() ? note2.accidental.semitones : 0) -
                 (note1.hasAccidental() ? note1.accidental.semitones : 0);
+        return semitones;
+    }
+    /**
+     * Get semitones between notes, ALWAYS considering destination note is ABOVE root and within one octave.
+     * @param note1 The root from which you want to start counting semitones
+     * @param note2 The destination note
+     */
+    static getNormalizedSemitonesBetween(note1, note2) {
+        let semitones = Note.getSemitonesBetween(note1, note2);
+        if (semitones < 0) {
+            semitones += Interval_1.SEMITONES_WITHIN_OCTAVE;
+        }
+        if (semitones > Interval_1.SEMITONES_WITHIN_OCTAVE) {
+            semitones = semitones % Interval_1.SEMITONES_WITHIN_OCTAVE;
+        }
         return semitones;
     }
     static getIndexDifferenceBetween(note1, note2) {

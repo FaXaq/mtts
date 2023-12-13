@@ -2,7 +2,7 @@ import { Note, NOTES, BASE_FREQUENCY } from './class/Note'
 import { Pitch } from './class/Pitch'
 import { Accidental, ACCIDENTAL, ACCIDENTALS } from './class/Accidental'
 import { Scale, SCALES } from './class/Scale'
-import { INTERVALS, Interval } from './class/Interval'
+import { INTERVALS, Interval, INTERVAL_NAME } from './class/Interval'
 import { TRIADS, Chord, EXTENDED_CHORDS } from './class/Chord'
 import { NOTE_VALUE, NOTE_VALUES } from './class/NoteValue'
 import { Rest } from './class/Rest'
@@ -27,6 +27,7 @@ export {
   SCALES,
   Interval,
   INTERVALS,
+  INTERVAL_NAME,
   Chord,
   EXTENDED_CHORDS,
   TRIADS,

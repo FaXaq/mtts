@@ -2,9 +2,9 @@ import { Pitch } from './Pitch'
 import { Accidental, ACCIDENTAL } from './Accidental'
 import { NOTE_VALUE, NOTE_VALUES } from './NoteValue'
 import { ValuedBarContent } from '../super/ValuedBarContent'
+import { SEMITONES_WITHIN_OCTAVE } from './Interval'
 
 export const NOTES: string[] = ['C', 'D', 'E', 'F', 'G', 'A', 'B']
-export const SEMITONES_NUMBER: number = 12
 export const DEFAULT_NOTE_VALUE: NOTE_VALUE = NOTE_VALUES.QUARTER
 export const BASE_FREQUENCY: number = 440
 
@@ -251,6 +251,21 @@ export class Note extends ValuedBarContent {
       (note2.hasAccidental() ? note2.accidental.semitones : 0) -
       (note1.hasAccidental() ? note1.accidental.semitones : 0)
 
+    return semitones
+  }
+
+  /**
+   * Get semitones between notes, ALWAYS considering destination note is ABOVE root and within one octave.
+   * @param note1 The root from which you want to start counting semitones
+   * @param note2 The destination note
+   */
+  static getNormalizedSemitonesBetween (note1: Note, note2: Note): number {
+    let semitones = Note.getSemitonesBetween(note1, note2)
+    if (semitones < 0) {
+      semitones += SEMITONES_WITHIN_OCTAVE
+    } if (semitones > SEMITONES_WITHIN_OCTAVE) {
+      semitones = semitones % SEMITONES_WITHIN_OCTAVE
+    }
     return semitones
   }
 

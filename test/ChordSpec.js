@@ -93,15 +93,24 @@ describe('Chord class', () => {
       it('Should be able to set intervals', () => {
         const c = new Chord()
         expect(() => {
-          c.intervals = [...Object.keys(INTERVALS).map(k =>
-            new Interval(k)
-          )]
+          c.intervals = [...Object.keys(INTERVALS).map(k => (
+            new Interval(INTERVALS[k].name)
+          ))]
         }).to.not.throw()
       })
 
       it('Should check that intervals are defined in INTERVALS', () => {
         const c = new Chord()
         expect(() => { c.intervals = ['TEST'] }).to.throw()
+      })
+
+      it('Should infer notes values from setting intervals', () => {
+        const c = new Chord()
+        c.intervals = [
+          new Interval(INTERVALS.P1.name),
+          new Interval(INTERVALS.P5.name)
+        ]
+        expect(c.notes.map(note => note.SPN)).to.deep.equal(['C4', 'G4'])
       })
     })
 
@@ -478,6 +487,32 @@ describe('Chord class', () => {
       describe('Error', () => {
         const c = new Chord({ root: new Note(), notes: [new Note(), new Note({ name: 'B' })] })
         expect(c.notation).to.equal('')
+      })
+    })
+
+    describe('semitonesNotation', () => {
+      it('Should be able to extract semitones notation from a chord', () => {
+        expect(new Chord().semitonesNotation).to.equal('047')
+      })
+
+      it('Should be able to extract semitones notation from a chord, with set intervals', () => {
+        const c = new Chord()
+        c.intervals = [
+          new Interval(INTERVALS.P1.name),
+          new Interval(INTERVALS.m3.name),
+          new Interval(INTERVALS.P5.name)
+        ]
+        expect(c.semitonesNotation).to.equal('037')
+      })
+
+      it('Should be able to extract semitones notation from a chord, with set notes', () => {
+        const c = new Chord()
+        c.notes = [
+          Note.fromSPN('C4'),
+          Note.fromSPN('Eb4'),
+          Note.fromSPN('G4')
+        ]
+        expect(c.semitonesNotation).to.equal('037')
       })
     })
   })

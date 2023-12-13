@@ -5,223 +5,279 @@ interface IInterval {
   semitones: number
 }
 
-export const INTERVALS: { [key: string]: IInterval } = {
+export const SEMITONES_WITHIN_OCTAVE = 12
+
+export const INTERVALS = {
   P1: {
+    name: 'P1',
     value: 1,
     semitones: 0
   },
   d2: {
+    name: 'd2',
     value: 2,
     semitones: 0
   },
   m2: {
+    name: 'm2',
     value: 2,
     semitones: 1
   },
   A1: {
+    name: 'A1',
     value: 1,
     semitones: 1
   },
   M2: {
+    name: 'M2',
     value: 2,
     semitones: 2
   },
   d3: {
+    name: 'd3',
     value: 3,
     semitones: 2
   },
   m3: {
+    name: 'm3',
     value: 3,
     semitones: 3
   },
   A2: {
+    name: 'A2',
     value: 2,
     semitones: 3
   },
   M3: {
+    name: 'M3',
     value: 3,
     semitones: 4
   },
   d4: {
+    name: 'd4',
     value: 4,
     semitones: 4
   },
   P4: {
+    name: 'P4',
     value: 4,
     semitones: 5
   },
   A3: {
+    name: 'A3',
     value: 3,
     semitones: 5
   },
   d5: {
+    name: 'd5',
     value: 5,
     semitones: 6
   },
   A4: {
+    name: 'A4',
     value: 4,
     semitones: 6
   },
   P5: {
+    name: 'P5',
     value: 5,
     semitones: 7
   },
   d6: {
+    name: 'd6',
     value: 6,
     semitones: 7
   },
   m6: {
+    name: 'm6',
     value: 6,
     semitones: 8
   },
   A5: {
+    name: 'A5',
     value: 5,
     semitones: 8
   },
   M6: {
+    name: 'M6',
     value: 6,
     semitones: 9
   },
   d7: {
+    name: 'd7',
     value: 7,
     semitones: 9
   },
   m7: {
+    name: 'm7',
     value: 7,
     semitones: 10
   },
   A6: {
+    name: 'A6',
     value: 6,
     semitones: 10
   },
   M7: {
+    name: 'M7',
     value: 7,
     semitones: 11
   },
   d8: {
+    name: 'd8',
     value: 8,
     semitones: 11
   },
   P8: {
+    name: 'P8',
     value: 8,
     semitones: 12
   },
   A7: {
+    name: 'A7',
     value: 7,
     semitones: 12
   },
   d9: {
+    name: 'd9',
     value: 9,
     semitones: 12
   },
   m9: {
+    name: 'm9',
     value: 9,
     semitones: 13
   },
   A8: {
+    name: 'A8',
     value: 8,
     semitones: 13
   },
   M9: {
+    name: 'M9',
     value: 9,
     semitones: 14
   },
   d10: {
+    name: 'd10',
     value: 10,
     semitones: 14
   },
   m10: {
+    name: 'm10',
     value: 10,
     semitones: 15
   },
   A9: {
+    name: 'A9',
     value: 9,
     semitones: 15
   },
   M10: {
+    name: 'M10',
     value: 10,
     semitones: 16
   },
   d11: {
+    name: 'd11',
     value: 11,
     semitones: 16
   },
   A10: {
+    name: 'A10',
     value: 10,
     semitones: 17
   },
   P11: {
+    name: 'P11',
     value: 11,
     semitones: 17
   },
   d12: {
+    name: 'd12',
     value: 12,
     semitones: 18
   },
   A11: {
+    name: 'A11',
     value: 11,
     semitones: 18
   },
   P12: {
+    name: 'P12',
     value: 12,
     semitones: 19
   },
   d13: {
+    name: 'd13',
     value: 13,
     semitones: 19
   },
   m13: {
+    name: 'm13',
     value: 13,
     semitones: 20
   },
   A12: {
+    name: 'A12',
     value: 12,
     semitones: 20
   },
   M13: {
+    name: 'M13',
     value: 13,
     semitones: 21
   },
   d14: {
+    name: 'd14',
     value: 14,
     semitones: 21
   },
   m14: {
+    name: 'm14',
     value: 14,
     semitones: 22
   },
   A13: {
+    name: 'A13',
     value: 13,
     semitones: 22
   },
   M14: {
+    name: 'M14',
     value: 14,
     semitones: 23
   },
   d15: {
+    name: 'd15',
     value: 15,
     semitones: 23
   },
   P15: {
+    name: 'P15',
     value: 15,
     semitones: 24
   },
   A14: {
+    name: 'A14',
     value: 14,
     semitones: 24
   },
   A15: {
+    name: 'A15',
     value: 15,
     semitones: 25
   }
 }
 
+export type INTERVAL_NAME = keyof typeof INTERVALS
+
 export class Interval {
-  name: string;
+  name: INTERVAL_NAME;
   semitones: number;
   value: number;
 
-  constructor (name: string) {
+  constructor (name: INTERVAL_NAME) {
     if (INTERVALS[name] !== undefined) {
       this.name = name
       this.semitones = INTERVALS[name].semitones
@@ -259,9 +315,11 @@ export class Interval {
   static fromSemitones (semitones: number): Interval[] {
     const intervals: Interval[] = []
 
-    Object.keys(INTERVALS).forEach((k: string) => {
-      if (INTERVALS[k].semitones === semitones) {
-        intervals.push(new Interval(k))
+    Object.keys(INTERVALS).forEach((k) => {
+      // Forced caste because of Object.keys
+      const typedKey = k as unknown as INTERVAL_NAME
+      if (INTERVALS[typedKey].semitones === semitones) {
+        intervals.push(new Interval(typedKey))
       }
     })
 
@@ -271,9 +329,10 @@ export class Interval {
   static fromValue (value: number): Interval[] {
     const intervals: Interval[] = []
 
-    Object.keys(INTERVALS).forEach((k: string) => {
-      if (INTERVALS[k].value === value) {
-        intervals.push(new Interval(k))
+    Object.keys(INTERVALS).forEach(k => {
+      const typedKey = k as unknown as INTERVAL_NAME
+      if (INTERVALS[typedKey].value === value) {
+        intervals.push(new Interval(typedKey))
       }
     })
 
@@ -320,7 +379,7 @@ export class Interval {
     return INTERVALS[name].value
   }
 
-  static fromName (name: string): Interval {
+  static fromName (name: INTERVAL_NAME): Interval {
     return new Interval(name)
   }
 
@@ -329,7 +388,7 @@ export class Interval {
   }
 
   static notation (name: string): string {
-    if (INTERVALS[name] === undefined) {
+    if (!(name in INTERVALS)) {
       throw new Error(`No interval known with that name : ${name}. Cannot get its notation.`)
     }
 

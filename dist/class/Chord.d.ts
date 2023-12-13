@@ -55,6 +55,7 @@ export declare class Chord extends ValuedBarContent implements IntervalHandler {
     get _possibleTriads(): IPossibleTriad[];
     get notation(): string;
     static fromNotation(notation: string): Chord;
+    get semitonesNotation(): string;
     computeNotationWithContext(scale: Scale): string;
     _noNotationYet(): void;
     computeIntervals(): Interval[];

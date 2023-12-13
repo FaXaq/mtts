@@ -191,12 +191,10 @@ class Chord extends ValuedBarContent_1.ValuedBarContent {
         if (params.notes !== undefined && params.notes.length > 0) {
             this.notes = params.notes;
             this.value = (_a = params.value) !== null && _a !== void 0 ? _a : Note_1.DEFAULT_NOTE_VALUE;
-            this.intervals = this.computeIntervals();
         }
         else {
             this.intervals = (_b = params.intervals) !== null && _b !== void 0 ? _b : utils_1.cloneInstanceObjectArray(exports.TRIADS.maj.intervals);
             this.value = (_c = params.value) !== null && _c !== void 0 ? _c : Note_1.DEFAULT_NOTE_VALUE;
-            this.notes = this.compute(this.intervals, this.root);
         }
     }
     get root() {
@@ -214,18 +212,37 @@ class Chord extends ValuedBarContent_1.ValuedBarContent {
         return this._intervals;
     }
     set intervals(intervals) {
+        const notes = [];
         intervals.forEach(i => {
             if (!(i instanceof Interval_1.Interval)) {
                 throw new Error(`Trying to set interval for chords, but ${JSON.stringify(i)} is not an Interval.`);
             }
+            notes.push(Interval_1.Interval.apply(this._root, i.name));
         });
+        this._notes = notes;
         this._intervals = intervals;
     }
     set notes(notes) {
+        const lowestNote = notes.sort((n1, n2) => n1.frequency - n2.frequency)[0];
+        const semitonesAndValues = notes.map(note => ({
+            semitones: Note_1.Note.getNormalizedSemitonesBetween(this._root, note),
+            value: Note_1.Note.getIndexDifferenceBetween(this._root, note)
+        }));
+        const intervals = semitonesAndValues.map(({ semitones, value }, i) => {
+            const interval = Interval_1.Interval.fromSemitonesAndValue(semitones, value);
+            if (interval === undefined) {
+                throw new Error(`Chord.notes (setter) : Trying to set a note within chord with semitones (${semitones}) and value (${value}). Note: ${notes[i].SPN} against root ${this._root.SPN}.`);
+            }
+            return interval;
+        });
+        this._root = lowestNote;
+        this._intervals = intervals;
         this._notes = notes;
     }
     get notes() {
-        return this._notes;
+        const notes = this._intervals.map(interval => (Interval_1.Interval.apply(this._root, interval.name)));
+        this._notes = notes;
+        return notes;
     }
     get _possibleTriads() {
         const triads = [];
@@ -314,6 +331,22 @@ class Chord extends ValuedBarContent_1.ValuedBarContent {
         }
         throw new Error(`Cannot find a chord notation yet for ${notation}`);
     }
+    get semitonesNotation() {
+        const semitones = [];
+        for (const note of this.notes) {
+            const semitoneFromRoot = Note_1.Note.getSemitonesBetween(this._root, note);
+            if (semitoneFromRoot === 10) {
+                semitones.push('X');
+            }
+            else if (semitoneFromRoot === 11) {
+                semitones.push('N');
+            }
+            else {
+                semitones.push(semitoneFromRoot);
+            }
+        }
+        return semitones.join('');
+    }
     computeNotationWithContext(scale) {
         return '';
     }
@@ -327,7 +360,7 @@ class Chord extends ValuedBarContent_1.ValuedBarContent {
             // TODO: find algorithm to be sure semitone value is not currently in the chord
             const semitonesBetweenNotes = Note_1.Note.getSemitonesBetween(this.root, n);
             const possibleInterval = Interval_1.Interval.fromSemitonesAndValue(semitonesBetweenNotes < 0
-                ? (semitonesBetweenNotes % Note_1.SEMITONES_NUMBER) + Note_1.SEMITONES_NUMBER
+                ? (semitonesBetweenNotes % Interval_1.SEMITONES_WITHIN_OCTAVE) + Interval_1.SEMITONES_WITHIN_OCTAVE
                 : semitonesBetweenNotes, Note_1.Note.getIndexDifferenceBetween(this.root, n));
             if (possibleInterval !== undefined)
                 intervals.push(possibleInterval);

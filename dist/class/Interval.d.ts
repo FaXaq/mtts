@@ -1,16 +1,273 @@
 import { Note } from './Note';
-interface IInterval {
-    value: number;
-    semitones: number;
-}
+export declare const SEMITONES_WITHIN_OCTAVE = 12;
 export declare const INTERVALS: {
-    [key: string]: IInterval;
+    P1: {
+        name: string;
+        value: number;
+        semitones: number;
+    };
+    d2: {
+        name: string;
+        value: number;
+        semitones: number;
+    };
+    m2: {
+        name: string;
+        value: number;
+        semitones: number;
+    };
+    A1: {
+        name: string;
+        value: number;
+        semitones: number;
+    };
+    M2: {
+        name: string;
+        value: number;
+        semitones: number;
+    };
+    d3: {
+        name: string;
+        value: number;
+        semitones: number;
+    };
+    m3: {
+        name: string;
+        value: number;
+        semitones: number;
+    };
+    A2: {
+        name: string;
+        value: number;
+        semitones: number;
+    };
+    M3: {
+        name: string;
+        value: number;
+        semitones: number;
+    };
+    d4: {
+        name: string;
+        value: number;
+        semitones: number;
+    };
+    P4: {
+        name: string;
+        value: number;
+        semitones: number;
+    };
+    A3: {
+        name: string;
+        value: number;
+        semitones: number;
+    };
+    d5: {
+        name: string;
+        value: number;
+        semitones: number;
+    };
+    A4: {
+        name: string;
+        value: number;
+        semitones: number;
+    };
+    P5: {
+        name: string;
+        value: number;
+        semitones: number;
+    };
+    d6: {
+        name: string;
+        value: number;
+        semitones: number;
+    };
+    m6: {
+        name: string;
+        value: number;
+        semitones: number;
+    };
+    A5: {
+        name: string;
+        value: number;
+        semitones: number;
+    };
+    M6: {
+        name: string;
+        value: number;
+        semitones: number;
+    };
+    d7: {
+        name: string;
+        value: number;
+        semitones: number;
+    };
+    m7: {
+        name: string;
+        value: number;
+        semitones: number;
+    };
+    A6: {
+        name: string;
+        value: number;
+        semitones: number;
+    };
+    M7: {
+        name: string;
+        value: number;
+        semitones: number;
+    };
+    d8: {
+        name: string;
+        value: number;
+        semitones: number;
+    };
+    P8: {
+        name: string;
+        value: number;
+        semitones: number;
+    };
+    A7: {
+        name: string;
+        value: number;
+        semitones: number;
+    };
+    d9: {
+        name: string;
+        value: number;
+        semitones: number;
+    };
+    m9: {
+        name: string;
+        value: number;
+        semitones: number;
+    };
+    A8: {
+        name: string;
+        value: number;
+        semitones: number;
+    };
+    M9: {
+        name: string;
+        value: number;
+        semitones: number;
+    };
+    d10: {
+        name: string;
+        value: number;
+        semitones: number;
+    };
+    m10: {
+        name: string;
+        value: number;
+        semitones: number;
+    };
+    A9: {
+        name: string;
+        value: number;
+        semitones: number;
+    };
+    M10: {
+        name: string;
+        value: number;
+        semitones: number;
+    };
+    d11: {
+        name: string;
+        value: number;
+        semitones: number;
+    };
+    A10: {
+        name: string;
+        value: number;
+        semitones: number;
+    };
+    P11: {
+        name: string;
+        value: number;
+        semitones: number;
+    };
+    d12: {
+        name: string;
+        value: number;
+        semitones: number;
+    };
+    A11: {
+        name: string;
+        value: number;
+        semitones: number;
+    };
+    P12: {
+        name: string;
+        value: number;
+        semitones: number;
+    };
+    d13: {
+        name: string;
+        value: number;
+        semitones: number;
+    };
+    m13: {
+        name: string;
+        value: number;
+        semitones: number;
+    };
+    A12: {
+        name: string;
+        value: number;
+        semitones: number;
+    };
+    M13: {
+        name: string;
+        value: number;
+        semitones: number;
+    };
+    d14: {
+        name: string;
+        value: number;
+        semitones: number;
+    };
+    m14: {
+        name: string;
+        value: number;
+        semitones: number;
+    };
+    A13: {
+        name: string;
+        value: number;
+        semitones: number;
+    };
+    M14: {
+        name: string;
+        value: number;
+        semitones: number;
+    };
+    d15: {
+        name: string;
+        value: number;
+        semitones: number;
+    };
+    P15: {
+        name: string;
+        value: number;
+        semitones: number;
+    };
+    A14: {
+        name: string;
+        value: number;
+        semitones: number;
+    };
+    A15: {
+        name: string;
+        value: number;
+        semitones: number;
+    };
 };
+export declare type INTERVAL_NAME = keyof typeof INTERVALS;
 export declare class Interval {
-    name: string;
+    name: INTERVAL_NAME;
     semitones: number;
     value: number;
-    constructor(name: string);
+    constructor(name: INTERVAL_NAME);
     apply(note: Note): Note;
     get notation(): string;
     raiseOctave(): Interval;
@@ -21,8 +278,7 @@ export declare class Interval {
     static getSemitones(name: keyof typeof INTERVALS): number;
     static apply(note: Note, name: keyof typeof INTERVALS): Note;
     static getValue(name: keyof typeof INTERVALS): number;
-    static fromName(name: string): Interval;
+    static fromName(name: INTERVAL_NAME): Interval;
     static equals(interval1: Interval, interval2: Interval): boolean;
     static notation(name: string): string;
 }
-export {};
