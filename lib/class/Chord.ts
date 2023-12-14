@@ -349,16 +349,24 @@ export class Chord extends ValuedBarContent {
 
   get notation (): string {
     const semitonesNotation = this.semitonesNotation
-    const possibleChords = Chord.getDefinitionsFromSemitonesNotation(semitonesNotation)
-
-    if (possibleChords.length > 0) {
-      const chord = possibleChords[0]
+    const fullyMatchingChordDefinitions = Chord.getDefinitionsFromSemitonesNotation(semitonesNotation)
+    const partialMatchingChordDefinitions = Chord.getDefinitionsFromPartialSemitonesNotation(semitonesNotation)
+    // If we have perfect matched triad, it means it's either :
+    // - A triad
+    // - An extended chord
+    // - A chord with added tones
+    if (fullyMatchingChordDefinitions.length > 0) {
+      const chord = fullyMatchingChordDefinitions[0]
       if (chord.addedTones.length > 0) {
         return `${chord.chordDefinition.notation}${chord.addedTones.map(i => `add(${i.notation})`).join('')}`
       }
       return chord.chordDefinition.notation
     } else {
-      console.log('We need to find a way to select a chord here....')
+      // If not, it's probably a chord with ommited intervals
+      if (partialMatchingChordDefinitions.length > 0) {
+        const chord = partialMatchingChordDefinitions[0]
+        return `${chord.chordDefinition.notation}${chord.missingTones.map(i => ` no(${i.notation})`).join('')}`
+      }
     }
 
     this._noNotationYet()
@@ -378,11 +386,11 @@ export class Chord extends ValuedBarContent {
    * - N means that this is a 11 semitones interval
    * And it circles back to 0.
    * There is no such thing as 12 semitones interval, since there is only one semitone whithin one octave.
+   * This function returns every chord defintion which matches FULLY the semitones notation, with added tones.
    * @param notation
    * @returns
    */
   static getDefinitionsFromSemitonesNotation (notation: string): Array<{
-    semitonesNotation: string
     addedTones: Interval[]
     chordDefinition: IChordDefinition
   }> {
@@ -432,6 +440,53 @@ export class Chord extends ValuedBarContent {
       })
       // Sort for the one with the longest definition to be at first position
       .sort((a, b) => b.semitonesNotation.length - a.semitonesNotation.length)
+  }
+
+  /**
+   * Use chord semitones notation to generate chord name.
+   * Each semitone within the chord is represented as a digit or X or N.
+   * For reference :
+   * - 0 means that this is a 0 semitone interval
+   * - 1 means that this is a 1 semitone interval
+   * - 2 means that this is a 1 semitones interval
+   * ...
+   * - X means that this is a 10 semitones interval
+   * - N means that this is a 11 semitones interval
+   * And it circles back to 0.
+   * There is no such thing as 12 semitones interval, since there is only one semitone whithin one octave.
+   * This function returns every chord defintion which matches PARTIALY the semitones notation, with missing intervals.
+   * @param notation
+   * @returns
+   */
+  static getDefinitionsFromPartialSemitonesNotation (notation: string): Array<{
+    missingTones: Interval[]
+    chordDefinition: IChordDefinition
+  }> {
+    const possibleChords = ALL_POSSIBLE_CHORDS.map(chord => ({
+      chordDefinition: chord,
+      semitonesNotation: chord.intervals.map((interval) => interval.chordSemitonesNotation).join('')
+    }))
+
+    return possibleChords
+      // Extract every fully matching chord notations
+      .filter(pc => notation.split('').every(i => pc.semitonesNotation.includes(i)))
+      // Add missing tones from each match
+      .map(pc => {
+        const missingTones: Interval[] = []
+
+        for (const interval of pc.chordDefinition.intervals) {
+          if (!notation.includes(interval.chordSemitonesNotation)) {
+            missingTones.push(interval)
+          }
+        }
+
+        return {
+          ...pc,
+          missingTones
+        }
+      })
+      // Sort for the one with the longest definition to be at first position
+      .sort((a, b) => a.missingTones.length - b.missingTones.length)
   }
 
   static fromNotation (notation: string): Chord {

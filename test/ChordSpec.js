@@ -221,7 +221,6 @@ describe('Chord class', () => {
               Interval.apply(root, 'P5')
             ]
           })
-          console.log('yyy')
           expect(c.notation).to.equal('5add(+11)')
         })
       })
@@ -461,12 +460,29 @@ describe('Chord class', () => {
             notes: [
               root,
               Interval.apply(root, 'M3'),
+              Interval.apply(root, 'M7')
+            ]
+          })
+
+          expect(c.notation).to.equal('M7 no(5)')
+        })
+
+        it('Should give notation for 7 chords with no 5 and added 11', () => {
+          const root = new Note({
+            name: 'C'
+          })
+
+          const c = new Chord({
+            root,
+            notes: [
+              root,
+              Interval.apply(root, 'M3'),
               Interval.apply(root, 'M7'),
               Interval.apply(root, 'P11')
             ]
           })
 
-          expect(c.notation).to.equal('')
+          expect(c.notation).to.equal('M11 no(5) no(9)')
         })
       })
 
@@ -485,9 +501,9 @@ describe('Chord class', () => {
         expect(c.notation).to.equal('M13')
       })
 
-      describe('Error', () => {
+      it('Should dyads chords', () => {
         const c = new Chord({ root: new Note(), notes: [new Note(), new Note({ name: 'B' })] })
-        expect(c.notation).to.equal('')
+        expect(c.notation).to.equal('M7 no(3) no(5)')
       })
     })
 

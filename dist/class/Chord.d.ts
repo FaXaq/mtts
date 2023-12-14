@@ -62,12 +62,32 @@ export declare class Chord extends ValuedBarContent {
      * - N means that this is a 11 semitones interval
      * And it circles back to 0.
      * There is no such thing as 12 semitones interval, since there is only one semitone whithin one octave.
+     * This function returns every chord defintion which matches FULLY the semitones notation, with added tones.
      * @param notation
      * @returns
      */
     static getDefinitionsFromSemitonesNotation(notation: string): Array<{
-        semitonesNotation: string;
         addedTones: Interval[];
+        chordDefinition: IChordDefinition;
+    }>;
+    /**
+     * Use chord semitones notation to generate chord name.
+     * Each semitone within the chord is represented as a digit or X or N.
+     * For reference :
+     * - 0 means that this is a 0 semitone interval
+     * - 1 means that this is a 1 semitone interval
+     * - 2 means that this is a 1 semitones interval
+     * ...
+     * - X means that this is a 10 semitones interval
+     * - N means that this is a 11 semitones interval
+     * And it circles back to 0.
+     * There is no such thing as 12 semitones interval, since there is only one semitone whithin one octave.
+     * This function returns every chord defintion which matches PARTIALY the semitones notation, with missing intervals.
+     * @param notation
+     * @returns
+     */
+    static getDefinitionsFromPartialSemitonesNotation(notation: string): Array<{
+        missingTones: Interval[];
         chordDefinition: IChordDefinition;
     }>;
     static fromNotation(notation: string): Chord;
